@@ -1,0 +1,84 @@
+/* @import url(//fonts.googleapis.com/earlyaccess/notosanslaoui.css); */
+/* @import url(//fonts.googleapis.com/earlyaccess/notosanslao.css); */
+
+/*
+ * Lao Sans Pro (Lao) http://www.google.com/fonts/earlyaccess
+ */
+ @font-face {
+    font-family: 'Phetsarath';
+    font-style: normal;
+    font-weight: 400;
+    src: url('~assets/fonts/Phetsarath_OT.ttf')
+}
+
+@font-face {
+    font-family: 'Phetsarath-Bold';
+    font-style: normal;
+    font-weight: 700 !important;
+    src: url('~assets/fonts/Phetsarath_OT_Bold.ttf')
+}
+@font-face {
+    font-family: 'notolooped';
+    font-style: normal;
+    font-weight: 400;
+
+    src: url('~assets/fonts/NotoSansLaoLooped-Regular.ttf')
+}
+
+@font-face {
+    font-family: 'notolooped-bold';
+    font-style: normal;
+    font-weight: 700 !important;
+    // src: url('./../assets/fonts/NotoSansLaoLooped-Bold.ttf')
+    src: url('~assets/fonts/NotoSansLaoLooped-Bold.ttf')
+}
+
+$navigation-drawer-border-width: 0;
+
+$primary-color: #ff5722;
+
+.v-navigation-drawer__border {
+    display: none;
+}
+
+$body-font-family: 'notolooped';
+$title-font: 'notolooped';
+
+body {
+    font-family: 'notolooped', sans-serif;
+}
+
+
+.v-application {
+    font-family: $body-font-family, sans-serif !important;
+
+    .title {
+        font-family: $title-font, sans-serif !important;
+    }
+
+    span {
+        font-family: $body-font-family, sans-serif !important;
+    }
+
+}
+
+
+span {
+    font-family: $body-font-family, sans-serif !important;
+}
+
+.swal2-container {
+    font-family: 'notolooped', Avenir, Helvetica, Arial, sans-serif;
+}
+
+label.required {
+    &::after {
+        content: '*';
+        color: red;
+    }
+}
+
+.required label::after {
+    content: '*';
+    color: red;
+}

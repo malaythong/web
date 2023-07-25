@@ -1,0 +1,12 @@
+query MyQuery {
+  forum {
+    detail
+    iamge
+    id
+    tag_id
+    topic
+    updated_at
+    created_at
+    create_by
+  }
+}

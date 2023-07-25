@@ -24,13 +24,14 @@ export default {
       src: '@/plugins/intitial_app.js',
       mode: 'client',
     },
+   // { src: "~/plugins/apollo-cache.js" },'~/plugins/apollo-cache.js', 
   ],
 
   components: true,
 
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/pwa'],
 
-  modules: ['@nuxtjs/firebase', '@nuxtjs/apollo', '@nuxtjs/i18n'],
+  modules: [ '@nuxtjs/apollo', '@nuxtjs/i18n'],
 
   i18n: {
     // fallbackLocale: 'en',
@@ -51,83 +52,121 @@ export default {
     lazy: false,
     defaultLocale: 'en',
   },
-
   apollo: {
-    cookieAttributes: {
-      expires: 7,
-    },
-
-    defaultOptions: {
-      $query: {
-        loadingKey: 'loading',
-        fetchPolicy: 'no-cache',
-        errorPolicy: 'all',
-      },
-    },
+   // errorHandler: '~/plugins/apollo-error-handler.js',
     clientConfigs: {
       default: {
-        // YOUR ENDPOINT OF YOUR APOLLO CLIENT OR HASURA ENDPOINT
-        httpEndpoint: 'https://big-baboon-88.hasura.app/v1/graphql',
-        wsEndpoint: 'wss://big-baboon-88.hasura.app/v1/graphql',
-        tokenName: 'access_token',
-        includeNodeModules: true,
-        authenticationType: 'Bearer',
-        httpLinkOptions: {
-          headers: {
-            'content-type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,PATCH,OPTIONS,DELETE,POST',
+        httpEndpoint: 'https://poetic-jaybird-10.hasura.app/v1/graphql',
+               wsEndpoint: 'ws://poetic-jaybird-10.hasura.app/v1/graphql',
+        wsLinkOptions: {
+          reconnect: true,
+        },
+        defaultOptions: {
+          $query: {
+            fetchPolicy: "no-cache",
+            errorPolicy: "all",
+            notifyOnNetworkStatusChange: true,
           },
         },
+        // httpLinkOptions: {
+        //   credentials: 'same-origin',
+        // },
+        httpLinkOptions: {
+                  headers: {
+                    'content-type': 'application/json',
+                    'x-hasura-admin-secret': 'TYsSW0j8voCC0607NUQNQU70nrQxHske5ipcUJX8sumBwwlyHQoYR8WukbDoznx5',
+                    // 'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET,PUT,PATCH,OPTIONS,DELETE,POST',
+                  },
+                },
+        tokenName: 'token',
+        authenticationType: 'Bearer',
+        persisting: false,
+        // websocketsOnly: true,
       },
     },
   },
+  // apollo: {
+  //   cookieAttributes: {
+  //     expires: 7,
+  //   },
+
+  //   defaultOptions: {
+  //     $query: {
+  //       loadingKey: 'loading',
+  //       fetchPolicy: 'no-cache',
+  //       errorPolicy: 'all',
+  //     },
+  //   },
+  //   clientConfigs: {
+  //     default: {
+  //       // YOUR ENDPOINT OF YOUR APOLLO CLIENT OR HASURA ENDPOINT
+  //       // httpEndpoint: 'https://big-baboon-88.hasura.app/v1/graphql',
+  //       // wsEndpoint: 'wss://big-baboon-88.hasura.app/v1/graphql',
+  //       httpEndpoint: 'https://poetic-jaybird-10.hasura.app/v1/graphql',
+  //       wsEndpoint: 'ws://poetic-jaybird-10.hasura.app/v1/graphql',
+  //       tokenName: 'access_token',
+  //       includeNodeModules: true,
+  //       authenticationType: 'Bearer',
+  //       httpLinkOptions: {
+  //         headers: {
+  //           'content-type': 'application/json',
+  //           'Access-Control-Allow-Origin': '*',
+  //           'Access-Control-Allow-Methods': 'GET,PUT,PATCH,OPTIONS,DELETE,POST',
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
 
   //FIREBASE INNITAL APP
-  firebase: {
-    // YOUR FIREBASE CONFIG
-    lazy: false,
-    config: {
-      apiKey: '',
-      authDomain: '',
-      projectId: '',
-      storageBucket: '',
-      messagingSenderId: '',
-      appId: '',
-    },
-    services: {
-      auth: {
-        // persistence: 'local',
-        initialize: {
-          onAuthStateChangedAction: 'onAuthStateChanged',
-        },
-        ssr: true,
-      },
-    },
-  },
+  // firebase: {
+  //   // YOUR FIREBASE CONFIG
+  //   lazy: false,
+  //   config: {
+  //     apiKey: '',
+  //     authDomain: '',
+  //     projectId: '',
+  //     storageBucket: '',
+  //     messagingSenderId: '',
+  //     appId: '',
+  //   },
+  //   services: {
+  //     auth: {
+  //       // persistence: 'local',
+  //       initialize: {
+  //         onAuthStateChangedAction: 'onAuthStateChanged',
+  //       },
+  //       ssr: true,
+  //     },
+  //   },
+  // },
 
   pwa: {
+    // workbox: {
+    //  // importScripts: ['/firebase-auth-sw.js'],
+    //   dev: process.env.NODE_ENV === 'development',
+    // },
     workbox: {
-      importScripts: ['/firebase-auth-sw.js'],
-      dev: process.env.NODE_ENV === 'development',
+      icon: false,
+      // manifest: false,
+      // importScripts: ["/firebase-auth-sw.js"],
+      // dev: process.env.NODE_ENV === "development",
     },
   },
 
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
-      // dark: false,
+      dark: false,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        },
         light: {
+          primary: "#595CBC",
+          secondary: colors.grey.darken1,
+          accent: colors.shades.black,
+          error: "#DA5644",
+        },
+        dark: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,

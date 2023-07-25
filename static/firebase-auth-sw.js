@@ -6,7 +6,7 @@ importScripts(
 importScripts(
   'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth-compat.js'
 )
-firebase.initializeApp({"apiKey":"AIzaSyAt5qx2oIZtXGsmcT-NxsXnxJu1aHf-e-U","authDomain":"blacklist-242fb.firebaseapp.com","projectId":"blacklist-242fb","storageBucket":"blacklist-242fb.appspot.com","messagingSenderId":"1004308029758","appId":"1:1004308029758:web:2ae37a779bc8af6fc90c6f"})
+firebase.initializeApp({"apiKey":"","authDomain":"","projectId":"","storageBucket":"","messagingSenderId":"","appId":""})
 
 // Initialize authService
 const authService = firebase.auth()
