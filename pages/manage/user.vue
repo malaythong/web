@@ -23,7 +23,7 @@
                         <v-card-title>
                             <v-row>
                                 <v-col class=" d-flex justify-center" no-gutters>
-                                    <h4>ແກ້ໄຂຂໍ້ມູນຜູ້ໃຊ້</h4>
+                                    <h4>ເພິ່ມຂໍ້ມູນຜູ້ໃຊ້</h4>
                                 </v-col>
                             </v-row>
                         </v-card-title>
@@ -166,7 +166,7 @@ export default {
                 //   src: false,
                 value: 'profile',
             },
-            { text: 'ລະຫັດສະມາຊຶກ', value: 'userId' },
+            { text: 'ລະຫັດສະມາຊິກ', value: 'userId' },
             { text: 'ຊື່ຜູ້ໃຊ້', value: 'userName' },
             { text: 'ເພດ', value: 'gender' },
             { text: 'ອີເມວ', value: 'email' },

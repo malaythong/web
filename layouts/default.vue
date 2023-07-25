@@ -2,7 +2,7 @@
   <v-app dark>
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item v-for="(item, i) in items.slice(0, 5)" :key="i" :to="item.to" router exact>
+        <v-list-item v-for="(item, i) in items.slice(0, 13)" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -47,7 +47,7 @@
         </template>
 
         <v-list>
-          <v-list-item v-for="(item, i) in items.slice(5, 9)" :key="i" :to="item.to" router exact @click="test(i)">
+          <v-list-item v-for="(item, i) in items.slice(13, 17)" :key="i" :to="item.to" router exact @click="test(i)">
 
             <v-list-item-title>
               <span>{{ item.list }}</span>
@@ -82,7 +82,7 @@ export default {
       items: [
         {
           icon: "mdi-home",
-          title: "ໜ້າຫຼັຫ",
+          title: "ໜ້າຫຼັກ",
           to: "/content",
         },
         {
@@ -102,8 +102,48 @@ export default {
         },
         {
           icon: "mdi-face-agent",
-          title: "ຕິດຕໍ່ທິມງານ",
+          title: "ຕິດຕໍ່ທີມງານ",
           to: "/report/contact_admin",
+        },
+        {
+          icon: "mdi-view-dashboard",
+          title: "Dashboard",
+          to: "/report/dashboard",
+        },
+        {
+          icon: "mdi-account-supervisor",
+          title: "ຈັດການຂໍ້ມູນຜູ້ໃຊ້",
+          to: "/manage/user",
+        },
+        {
+          icon: "mdi-forum",
+          title: "ຈັດການຂໍ້ມູນກະທູ້",
+          to: "/manage/forum",
+        },
+        {
+          icon: "mdi-tag",
+          title: "ຈັດການຂໍ້ມູນແທັກ",
+          to: "/manage/tag",
+        },
+        {
+          icon: "mdi-shape",
+          title: "ຈັດການຂໍ້ມູນໝວດໝູ່",
+          to: "/manage/categories",
+        },
+        {
+          icon: "mdi-forum-outline",
+          title: "ລາຍງານຂໍ້ມູນກະທູ້",
+          to: "/report/forum",
+        },
+        {
+          icon: "mdi-tag-outline",
+          title: "ລາຍງານຂໍ້ມູນແທັກ",
+          to: "/report/tag",
+        },
+        {
+          icon: "mdi-account-multiple-outline",
+          title: "ລາຍງານມູນຜູ້ໃຊ້",
+          to: "/report/user",
         },
         {
           list: "ບັນຊີ",

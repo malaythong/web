@@ -17,9 +17,9 @@
                         class="uploaded-image rounded-lg"
                       ></v-img>
                     </v-avatar>
-                    <p class="ml-2 mt-2">{{post.title }}</p>
-                    <p class="ml-6 mt-2">{{ post.post_by }}</p>
-                    <p class="ml-6 mt-2">{{ post.date }}</p>
+                    <p class="ml-2 mt-2">{{post.topic }}</p>
+                    <p class="ml-6 mt-2">{{ post.create_by }}</p>
+                    <p class="ml-6 mt-2">{{ post.created_at }}</p>
                     </v-row
                   >
                 </v-col>

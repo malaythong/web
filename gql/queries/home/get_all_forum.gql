@@ -1,12 +1,12 @@
-query MyQuery {
+query getForumAll {
   forum {
-    detail
-    iamge
+    updated_at
+    topic
     id
     tag_id
-    topic
-    updated_at
-    created_at
+    iamge
+    detail
     create_by
+    created_at
   }
 }

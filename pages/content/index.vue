@@ -57,26 +57,6 @@ export default {
         { tab: "ແນະນຳ", content: Second },
         { tab: "ນິຍົມ", content: Third },
       ],
-      posts: [
-        {
-          title: "First Post",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet lobortis sem, et fringilla ligula tristique in.",
-          //cover: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg'
-        },
-        {
-          title: "Second Post",
-          content:
-            "Sed eu odio ac felis tincidunt volutpat non vitae lacus. Aenean dapibus, tellus vitae ultrices luctus, purus felis volutpat ipsum, nec volutpat purus ex id justo.",
-          cover: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-        },
-        {
-          title: "Third Post",
-          content:
-            "Nunc accumsan libero non mauris laoreet, non lacinia lectus maximus. Etiam sagittis ipsum a volutpat auctor.",
-          cover: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-        },
-      ],
     };
   },
   computed: {},

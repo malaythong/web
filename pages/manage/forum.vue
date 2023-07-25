@@ -1,28 +1,38 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" sort-by="topic" class="elevation-1">
+  <v-data-table
+    :headers="headers"
+    :items="data"
+    sort-by="topic"
+    class="elevation-1"
+  >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title style="color: primary" class="font-weight-black ">ຈັດການຂໍ້ມູນກະທູ້</v-toolbar-title>
+        <v-toolbar-title style="color: primary" class="font-weight-black"
+          >ຈັດການຂໍ້ມູນກະທູ້</v-toolbar-title
+        >
         <v-divider class="mx-4" inset vertical></v-divider>
 
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary ml-6 font-weight-bold" dark class="mb-2" v-bind="attrs" v-on="on">
+            <v-btn
+              color="primary ml-6 font-weight-bold"
+              dark
+              class="mb-2"
+              v-bind="attrs"
+              v-on="on"
+            >
               + ເພີ່ມໃໝ່
             </v-btn>
           </template>
           <v-card id="card">
             <v-row>
-              <v-col class=" d-flex justify-end mr-3 pt-6">
-                <v-icon color="primary" @click="close">
-                  mdi-close
-                </v-icon>
+              <v-col class="d-flex justify-end mr-3 pt-6">
+                <v-icon color="primary" @click="close"> mdi-close </v-icon>
               </v-col>
-
             </v-row>
             <v-card-title>
               <v-row>
-                <v-col class=" d-flex justify-center mb-3" no-gutters>
+                <v-col class="d-flex justify-center mb-3" no-gutters>
                   <h4>{{ formTitle }}</h4>
                 </v-col>
               </v-row>
@@ -36,7 +46,12 @@
                       <v-subheader>ລະຫັດກະທູ້:</v-subheader>
                     </v-col>
                     <v-col cols="12" sm="8">
-                      <v-text-field single-line outlined v-model="editedItem.id" label="0001"></v-text-field>
+                      <v-text-field
+                        single-line
+                        outlined
+                        v-model="editedItem.id"
+                        label="0001"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -44,7 +59,12 @@
                       <v-subheader>ຫົວຂໍ້ກະທູ້:</v-subheader>
                     </v-col>
                     <v-col cols="12" sm="8">
-                      <v-text-field single-line outlined v-model="editedItem.topic" label="Text"></v-text-field>
+                      <v-text-field
+                        single-line
+                        outlined
+                        v-model="editedItem.topic"
+                        label="Text"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -52,13 +72,23 @@
                       <v-subheader>ເນື້ອໃນກະທູ້:</v-subheader>
                     </v-col>
                     <v-col cols="12" sm="8">
-                      <v-textarea single-line outlined v-model="editedItem.detail" label="Text"></v-textarea>
+                      <v-textarea
+                        single-line
+                        outlined
+                        v-model="editedItem.detail"
+                        label="Text"
+                      ></v-textarea>
                     </v-col>
                     <v-col cols="3">
                       <v-subheader>ຮູບພາບ:</v-subheader>
                     </v-col>
                     <v-col cols="6" md="9" class="d-flex align-center">
-                      <input type="file" ref="fileInput" accept="image/*" @change="editedItem.image" />
+                      <input
+                        type="file"
+                        ref="fileInput"
+                        accept="image/*"
+                        @change="editedItem.image"
+                      />
                     </v-col>
                   </v-row>
                 </v-row>
@@ -66,8 +96,13 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-col class="d-flex  justify-center">
-                <v-btn color="primary" class="ml-6 font-weight-bold" dark @click="save">
+              <v-col class="d-flex justify-center">
+                <v-btn
+                  color="primary"
+                  class="ml-6 font-weight-bold"
+                  dark
+                  @click="save"
+                >
                   + ເພີ່ມໃໝ່
                 </v-btn>
               </v-col>
@@ -76,10 +111,14 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete this item?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="closeDelete"
+                >Cancel</v-btn
+              >
               <v-btn color="error" text @click="deleteItemConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
@@ -87,21 +126,23 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.image="{ item }">
-      <v-img :src="item.image" :alt="item.text" max-width="50" max-height="50" />
+    <template v-slot:[`item.detail`]="{ item }">
+      {{ limit(item.detail) }}
     </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
+    <template v-slot:[`item.image`]="{ item }">
+      <v-img
+        :src="item.image"
+        :alt="item.text"
+        max-width="50"
+        max-height="50"
+      />
+    </template>
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">
-        Reset
-      </v-btn>
+      <v-btn color="primary" @click="initialize"> Reset </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -111,6 +152,7 @@ export default {
     selectedFile: null,
     dialog: false,
     dialogDelete: false,
+    data: [],
     headers: [
       {
         text: 'ລະຫັດກະທູ້',
@@ -122,11 +164,11 @@ export default {
       { text: 'ຫົວຂໍ້ກະທູ້', value: 'topic' },
       { text: 'ລາຍລະອຽດ', value: 'detail' },
       { text: 'ຮູບພາບ', value: 'image' },
-      { text: 'ຕອບກັບ', value: 'fat' },
-      { text: 'ການອ່ານ', value: 'carbs' },
-      { text: 'ຜູ້ສ້າງ', value: 'protein' },
-      { text: 'ສ້າງວັນທີ', value: 'carbs' },
-      { text: 'ເຄື່ອນໄຫວລ້າສູດ', value: 'protein' },
+      { text: 'ຕອບກັບ', value: 'comment' },
+      { text: 'ການອ່ານ', value: 'read' },
+      { text: 'ຜູ້ສ້າງ', value: 'create_by' },
+      { text: 'ສ້າງວັນທີ', value: 'created_at' },
+      { text: 'ເຄື່ອນໄຫວລ້າສຸດ', value: 'updated_at' },
       { text: 'ຈັດການ', value: 'actions', sortable: false },
     ],
     desserts: [],
@@ -136,7 +178,7 @@ export default {
       topic: '',
       detail: '',
       image: '',
-      fat: 0,
+      comment: 0,
       carbs: 0,
       protein: 0,
     },
@@ -145,7 +187,7 @@ export default {
       topic: '',
       detail: '',
       image: '',
-      fat: 0,
+      comment: 0,
       carbs: 0,
       protein: 0,
     },
@@ -168,9 +210,30 @@ export default {
 
   created() {
     this.initialize()
+    this.getData()
   },
 
   methods: {
+    getData() {
+      this.$apollo
+        .query({
+          query: require('~/gql/queries/home/get_all_forum.gql'),
+        })
+        .then((res) => {
+          this.data = res?.data?.forum
+          console.log(
+            '🚀 ~ file: forum.vue:182 ~ getData ~  this.data:',
+            this.data
+          )
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    limit(string = '', limit = 100) {
+      return string.substring(0, limit) + '...'
+    },
+
     initialize() {
       this.desserts = [
         {
@@ -253,6 +316,10 @@ export default {
       })
     },
 
+    formatDatetime(datetime) {
+      return format(new Date(datetime), 'yyyy-MM-dd HH:mm:ss');
+    },
+
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
@@ -262,10 +329,9 @@ export default {
       this.close()
     },
     onFileChange(event) {
-      this.selectedFile = event.target.files[0];
+      this.selectedFile = event.target.files[0]
     },
-    uploadImageToServer() {
-    },
+    uploadImageToServer() {},
   },
 }
 </script>
