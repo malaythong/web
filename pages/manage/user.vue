@@ -131,13 +131,13 @@
                 </v-dialog>
             </v-toolbar>
         </template>
-        <template v-slot:item.profile="{ item }">
+        <template v-slot:[`item.profile`]="{ item }">
             <v-avatar>
                 <v-img :src="item.profile" :alt="item.text" max-width="45" max-height="45" />
             </v-avatar>
 
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
             </v-icon>
@@ -161,9 +161,6 @@ export default {
         headers: [
             {
                 text: 'ຮູບໂປຣໄຟຣ',
-                //   align: 'start',
-                //   sortable: false,
-                //   src: false,
                 value: 'profile',
             },
             { text: 'ລະຫັດສະມາຊິກ', value: 'userId' },
