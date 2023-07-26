@@ -1,0 +1,54 @@
+query MyQuery($userId: Int) {
+  forum_histories(where: {user_id: {_eq: $userId}}) {
+    forum {
+      detail
+      iamge
+      id
+      tag_id
+      topic
+      updated_at
+      created_at
+      create_by
+      user {
+        email
+        id
+        profile
+        username
+        role
+      }
+      forum_details {
+        id
+        tag_id
+        forum_id
+        tag {
+          id
+          name
+          created_at
+          category_id
+          category {
+            id
+            name
+          }
+        }
+      }
+      comments_aggregate {
+        aggregate {
+          count(columns: detail)
+        }
+      }
+      ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
+        form_id
+        id
+        score
+        user_id
+      }
+       
+       ratings_aggregate (where: {user_id: {_eq: $userId}}){
+      aggregate {
+        count(columns: id)
+      }
+    }
+    }
+    user_id
+  }
+}

@@ -82,7 +82,7 @@ export default {
       items: [
         {
           icon: "mdi-home",
-          title: "ໜ້າຫຼັຫ",
+          title: "ໜ້າຫຼັກ",
           to: "/content",
         },
         {

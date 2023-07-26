@@ -72,11 +72,16 @@
       <v-row justify="center">
         <v-col cols="12" sm="8">
           <v-card elevation="0">
+            <ratingDialog
+            v-model="dialog"
+          
+           
+          />
             <v-card-title class="text-center ">
               <v-row><h2 class="primary--text">ປະຫວັດການເຂົ້າອ່ານ</h2></v-row>
             </v-card-title>
             <v-card-text class="mx-0 ma-0 pa-0 mt-4">
-              <v-card v-for="(post, index) in posts" :key="index" class="mb-3">
+              <v-card v-for="(post, index) in getData" :key="index" class="mb-3">
                 <v-row no-gutters>
                   <v-col cols="10">
                     <v-row no-gutters class="mt-2">
@@ -87,9 +92,14 @@
                           class="uploaded-image rounded-lg"
                         ></v-img>
                       </v-avatar>
-                      <p class="ml-2 mt-2">{{ post.title }}</p>
+                      <p class="ml-2 mt-2">{{post.forum.forum_details[0]?.tag?.category?.name }}</p>
+                    <p class="ml-6 mt-2">ໂດຍ {{ post.forum.user?.username }}</p>
+                    <p class="ml-6 mt-2" v-if="checkDate(post.forum.created_at)  === 0" >ມື້ນີ້.</p>
+                    <p class="ml-6 mt-2" v-else-if="checkDate(post.forum.created_at) === 1"> 1 ມື້ກ່ອນ.</p>
+      <p class="ml-6 mt-2" v-else> {{ checkDate(post.forum.created_at) }} ມື້ກ່ອນ.</p>
+                      <!-- <p class="ml-2 mt-2">{{ post.forum }}</p>
                       <p class="ml-6 mt-2">{{ post.post_by }}</p>
-                      <p class="ml-6 mt-2">{{ post.date }}</p>
+                      <p class="ml-6 mt-2">{{ post.date }}</p> -->
                       </v-row
                     >
                   </v-col>
@@ -102,34 +112,38 @@
                   <v-col cols="4"> </v-col> -->
                   <v-col no-gutters cols="2">
                     <v-row no-gutters class="mt-2 d-flex justify-end">
-                      <v-icon class="mr-4" @click=""
+                      <v-icon v-if="post.forum.ratings_aggregate.aggregate.count!=0" color="primary" class="mr-4" 
                         >mdi-thumb-up-outline</v-icon
-                      ></v-row
+                      >
+                    <v-icon v-else  class="mr-4" @click="dialog = true"
+                        >mdi-thumb-up-outline</v-icon
+                      >
+                      </v-row
                     >
                   </v-col>
                 </v-row>
-                <v-row no-gutters>
+                <v-row @click="goToForum(post.forum.id)" no-gutters>
                   <!-- <v-col cols="4">
                       <v-img :src="post.cover" height="100%" width="100%"></v-img>
                     </v-col> -->
                   <v-col cols="12">
-                    <v-card-title>{{ post.title }}</v-card-title>
+                    <v-card-title>{{ post.forum.topic }}</v-card-title>
                     <!-- <v-card-text>{{ post.content }}</v-card-text> -->
                     <!-- <v-card-actions>
                         <v-btn text color="primary">Read More</v-btn>
                       </v-card-actions> -->
                   </v-col>
                 </v-row>
-                <v-row no-gutters class="d-flex justify-center">
+                <v-row @click="goToForum(post.forum.id)" no-gutters class="d-flex justify-center">
                   <v-col cols="10" sm="4">
-                    <v-img :src="post.cover" height="100%" width="100%"></v-img>
+                    <v-img :src="post.forum.iamge" height="100%" width="100%"></v-img>
                   </v-col>
                 </v-row>
-                <v-row no-gutters>
+                <v-row @click="goToForum(post.forum.id)" no-gutters>
                   <v-col cols="0"> </v-col>
                   <v-col cols="12">
                    <v-row no-gutters class="mt-4 d-flex justify-end">  <v-icon class="mr-2">mdi-message-text-outline</v-icon>
-                      <p class="mr-4 mt-2">{{ post.comment }} ຄວາມຄິດເຫັນ</p></v-row> 
+                      <p class="mr-4 mt-3">{{ post.forum.comments_aggregate.aggregate.count}} ຄວາມຄິດເຫັນ</p></v-row> 
                   </v-col>
                 </v-row>
               </v-card>
@@ -142,9 +156,13 @@
   </template>
   
   <script>
+  import ratingDialog from "~/components/dialog_rating.vue"
   export default {
+    components:{ratingDialog},
     data() {
       return {
+        dialog:false,
+        getData:{},
         items: [
           { tab: "ທັງໝົດ", content: "Policy" },
           { tab: "ແນະນຳ", content: "CancelHistory" },
@@ -192,7 +210,48 @@
         return require("@/assets/images/message-circle.png");
       },
     },
+    mounted(){
+    this.getDataAll()
+    //this.queryData()
+  },
     methods: {
+      checkDate(createdAtDate) {
+      const createdAt = new Date(createdAtDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const timeDiff = today.getTime() - createdAt.getTime();
+      const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+      return daysDiff;
+    },
+      getDataAll() {
+      console.log("run test")
+            this.$apollo.query({
+                query: require('~/gql/queries/history/get_history.gql')
+                  .MyQuery,
+                fetchPolicy: 'no-cache',
+                variables: {
+            
+            //id: this.$route.query.id,
+            userId:1,
+          },
+              })
+              .then((result) => {
+                console.log("run result",result.data.forum_histories)
+                this.getData = result.data.forum_histories
+              //  console.log("run",getData)
+               
+               
+              })
+              .catch((error) => {
+                console.log(error)
+               
+              })
+          },
+          goToForum(id) {
+      this.$router.push("/content/Forum?id="+id);
+    },
       goToCreatePost() {
         // Add your navigation logic to the create post page here
         console.log("Create Post clicked");
