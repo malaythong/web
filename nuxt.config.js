@@ -58,10 +58,10 @@ export default {
     clientConfigs: {
       default: {
         httpEndpoint: 'https://poetic-jaybird-10.hasura.app/v1/graphql',
-               wsEndpoint: 'ws://poetic-jaybird-10.hasura.app/v1/graphql',
-        wsLinkOptions: {
-          reconnect: true,
-        },
+             //  wsEndpoint: 'ws://poetic-jaybird-10.hasura.app/v1/graphql',
+        // wsLinkOptions: {
+        //   reconnect: true,
+        // },
         defaultOptions: {
           $query: {
             fetchPolicy: "no-cache",

@@ -3,7 +3,7 @@
             <v-card>
                 <v-card-title>Rate This Item</v-card-title>
                 <v-card-text class="d-flex justify-center">
-                    <v-rating v-model="rating" icon-label="custom icon label text {0} of {1}" size="64"></v-rating>
+                    <v-rating v-model="ratingDialog" icon-label="custom icon label text {0} of {1}" size="64"></v-rating>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn text @click="closeRatingDialog">Close</v-btn>
@@ -29,7 +29,7 @@ export default {
             this.ratingDialog = false;
         },
         submitRating() {
-            console.log('Rating submitted:', this.rating);
+            console.log('Rating submitted:', this.ratingDialog);
             this.ratingDialog = false;
         },
     },

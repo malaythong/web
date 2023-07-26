@@ -1,0 +1,5 @@
+mutation MyMutation($formId:Int,$score:Int,$userId:Int) {
+  insert_rating(objects: {form_id: $formId, score: $score, user_id: $userId}) {
+    affected_rows
+  }
+}
