@@ -113,8 +113,8 @@ export default {
     },
   },
   mounted(){
-    this.getDataAll()
-    //this.queryData()
+   //this.getDataAll()
+    this.queryData()
   },
   methods: {
     saveStatus(newStatus) {
@@ -143,9 +143,9 @@ export default {
       return daysDiff;
     },
    
-    getDataAll() {
+    async getDataAll() {
       console.log("run test")
-            this.$apollo.query({
+           await this.$apollo.query({
                 query: require('~/gql/queries/home/get_all_forum.gql')
                   .MyQuery,
                 fetchPolicy: 'no-cache',
@@ -162,7 +162,7 @@ export default {
                
               })
           },
-          updateData(dataTables) {
+          updateData2(dataTables) {
             console.log(`data tables:`, dataTables)
       this.data = dataTables
             this.$apollo.query({
@@ -200,16 +200,54 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-          query MyQuery {
+         query getForumAll {
   forum {
-    detail
-    iamge
+    updated_at
+    topic
     id
     tag_id
-    topic
-    updated_at
+    iamge
+    detail
     created_at
     create_by
+    user {
+      email
+      id
+      profile
+      username
+      role
+    }
+    forum_details {
+      id
+      tag_id
+      forum_id
+      tag {
+        id
+        name
+        created_at
+        category_id
+        category {
+          id
+          name
+        }
+      }
+    }
+    comments_aggregate {
+      aggregate {
+        count(columns: detail)
+      }
+    }
+    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+        form_id
+        id
+        score
+        user_id
+      }
+       ratings_aggregate {
+      aggregate {
+        count(columns: id)
+      }
+    }
   }
 }
 
@@ -217,7 +255,75 @@ export default {
         })
 
         //TRY TO SEE IN console.log()
-        console.log(res.data)
+        console.log(res.data.forum)
+        this.getData = res.data.forum
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async updateData(dataTables) {
+      console.log(`data tables:`, dataTables)
+      this.data = dataTables
+      try {
+        const res = await this.$apollo.query({
+          query: gql`
+         query getForumAll {
+  forum {
+    updated_at
+    topic
+    id
+    tag_id
+    iamge
+    detail
+    created_at
+    create_by
+    user {
+      email
+      id
+      profile
+      username
+      role
+    }
+    forum_details {
+      id
+      tag_id
+      forum_id
+      tag {
+        id
+        name
+        created_at
+        category_id
+        category {
+          id
+          name
+        }
+      }
+    }
+    comments_aggregate {
+      aggregate {
+        count(columns: detail)
+      }
+    }
+    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+        form_id
+        id
+        score
+        user_id
+      }
+       ratings_aggregate {
+      aggregate {
+        count(columns: id)
+      }
+    }
+  }
+}
+
+          `,
+        })
+
+        //TRY TO SEE IN console.log()
+        console.log(res.data.forum)
+        this.getData = res.data.forum
       } catch (e) {
         console.error(e)
       }

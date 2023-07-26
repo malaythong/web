@@ -7,6 +7,7 @@ query getForumAll {
     iamge
     detail
     create_by
+    created_at
     user {
       email
       id
