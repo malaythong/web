@@ -35,18 +35,18 @@ query MyQuery($id: Int) {
         count(columns: detail)
       }
     }
-     ratings(where: {user_id: {_eq: 1}}, limit: 1) {
-        form_id
-        id
-        score
-        user_id
-      }
-       ratings_aggregate {
+    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+      forum_id
+      id
+      score
+      user_id
+    }
+    ratings_aggregate {
       aggregate {
         count(columns: id)
       }
     }
-    comments {
+    comments(order_by: {created_at: desc}) {
       detail
       created_at
       forum_id

@@ -74,7 +74,10 @@
           <v-card elevation="0">
             <ratingDialog
             v-model="dialog"
-          
+            :forumId="userTemp"
+          :object="selectedCard"
+          @updateData="updateData"
+          @save-status="saveStatus"
            
           />
             <v-card-title class="text-center ">
@@ -115,7 +118,7 @@
                       <v-icon v-if="post.forum.ratings_aggregate.aggregate.count!=0" color="primary" class="mr-4" 
                         >mdi-thumb-up-outline</v-icon
                       >
-                    <v-icon v-else  class="mr-4" @click="dialog = true"
+                    <v-icon v-else  class="mr-4" @click="openDialog(post),getUserId(post.forum.id)"
                         >mdi-thumb-up-outline</v-icon
                       >
                       </v-row
@@ -161,6 +164,7 @@
     components:{ratingDialog},
     data() {
       return {
+        selectedCard: null,
         dialog:false,
         getData:{},
         items: [
@@ -168,38 +172,7 @@
           { tab: "ແນະນຳ", content: "CancelHistory" },
           { tab: "ນິຍົມ", content: "CancelHistory2" },
         ],
-        posts: [
-          {
-            title: "ການສຶກສາ",
-            header: "ແບບຟອມການລົງທະບຽນເຂົ້າເສັງ ມຊ ຊື້ຢູ່ໃສ?",
-            date: "2 ມື້ກ່ອນ",
-            comment: 10,
-            post_by: "ໂດຍ ວຽງເທບ3344",
-            content:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet lobortis sem, et fringilla ligula tristique in.",
-            //cover: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg'
-          },
-          {
-            title: "ກິລາ",
-            header: "Game",
-            date: "3 ມື້ກ່ອນ",
-            comment: 20,
-            post_by: "ໂດຍ Toxin3344",
-            content:
-              "Sed eu odio ac felis tincidunt volutpat non vitae lacus. Aenean dapibus, tellus vitae ultrices luctus, purus felis volutpat ipsum, nec volutpat purus ex id justo.",
-            cover: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          },
-          {
-            title: "ເກມ",
-            header: "Song",
-            date: "4 ມື້ກ່ອນ",
-            comment: 30,
-            post_by: "ໂດຍ Bill3344",
-            content:
-              "Nunc accumsan libero non mauris laoreet, non lacinia lectus maximus. Etiam sagittis ipsum a volutpat auctor.",
-            cover: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          },
-        ],
+        userTemp:1,
       };
     },
     computed: {
@@ -215,8 +188,35 @@
     //this.queryData()
   },
     methods: {
-      checkDate(createdAtDate) {
-      const createdAt = new Date(createdAtDate);
+      saveStatus(newStatus) {
+      if (this.selectedCard) {
+        this.selectedCard.ratings_aggregate.aggregate.count = newStatus;
+      }
+     // this.closeDialog();
+    },
+      openDialog(post) {
+
+      this.selectedCard = post.forum;
+      this.dialog = true;
+    },
+      getUserId(id){
+      console.log("id",id)
+        this.userTemp = id
+        console.log("id temp",this.userTemp)
+    },
+    checkDate(createdAtDate) {
+      const dateParts = (new Date(createdAtDate).toLocaleDateString("en-GB")).split("/");
+      if (dateParts.length !== 3) {
+        // Handle invalid date format
+        this.result = null;
+        return;
+      }
+
+      const day = parseInt(dateParts[0]);
+      const month = parseInt(dateParts[1]) - 1; // Month is zero-indexed in JavaScript
+      const year = parseInt(dateParts[2]);
+
+      const createdAt = new Date(year, month, day);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -225,6 +225,42 @@
 
       return daysDiff;
     },
+    //   checkDate(createdAtDate) {
+    //   const createdAt = new Date(createdAtDate);
+    //   const today = new Date();
+    //   today.setHours(0, 0, 0, 0);
+
+    //   const timeDiff = today.getTime() - createdAt.getTime();
+    //   const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    //   return daysDiff;
+    // },
+    updateData(dataTables) {
+      console.log(`data tables:`, dataTables)
+      this.data = dataTables
+      console.log("run test")
+            this.$apollo.query({
+                query: require('~/gql/queries/history/get_history.gql')
+                  .MyQuery,
+                fetchPolicy: 'no-cache',
+                variables: {
+            
+            //id: this.$route.query.id,
+            userId:1,
+          },
+              })
+              .then((result) => {
+                console.log("run result",result.data.forum_histories)
+                this.getData = result.data.forum_histories
+              //  console.log("run",getData)
+               
+               
+              })
+              .catch((error) => {
+                console.log(error)
+               
+              })
+          },
       getDataAll() {
       console.log("run test")
             this.$apollo.query({

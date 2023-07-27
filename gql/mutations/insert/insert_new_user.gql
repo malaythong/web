@@ -1,0 +1,11 @@
+mutation MyMutation($email: String, $password: String, $username: String,$role:String) {
+  insert_user(objects: {email: $email, password: $password, username: $username,role:$role}) {
+    affected_rows
+    returning {
+      id
+      email
+      username
+      role
+    }
+  }
+}

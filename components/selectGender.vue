@@ -12,7 +12,7 @@
                 <v-card-title>
                     <v-row>
                         <v-col class=" d-flex justify-center" no-gutters>
-                            <h3>ກ່ຽວກັບທ່ານ</h3>
+                            <h3>ກ່ຽວກັບທ່ານ {{ id }}</h3>
                         </v-col>
                     </v-row>
                 </v-card-title>
@@ -41,15 +41,73 @@
 </template>
   
 <script>
+import Swal from "sweetalert2";
+  import update_gender from "~/gql/mutations/update/update_gender.gql";
+  import gql from 'graphql-tag'
 export default {
+    props: {
+      
+      value: Boolean,
+     id:null
+    },
     data() {
         return {
-            genderDialog: true,
+           // genderDialog: true,
             selectedGender: null,
-            genderOptions: ["Female", "Male", "LQBTQ+"],
+            genderOptions: ["ຍິງ", "ຊາຍ", "LQBTQ+"],
+           
         };
     },
+//     created() {
+//     // Get the data from Local Storage when the component is created
+//     this.retrievedData = localStorage.getItem("userData");
+//     this.localeId = localStorage.getItem("userDatId");
+//         this.localeUsername = localStorage.getItem("userDataUserName");
+//         this.localeEmail = localStorage.getItem("userDataEmail");
+//         this.localeRole = localStorage.getItem("userDataRole");
+//   },
     methods: {
+        register() {
+         // console.log("test obid",this.object.id)
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            ${update_gender.MyMutation}
+          `,
+          variables: { 
+           
+            username: this.username,
+            role:"user"
+         
+          },
+          fetchPolicy: "no-cache",
+          
+        }).then((result) => {
+          console.log(result.data.insert_user.returning[0])
+          this.userData = result.data.insert_user.returning[0]
+          this.localeId = result.data.insert_user.returning[0].id,
+          this.localeUsername = result.data.insert_user.returning[0].username,
+          this.localeEmail = result.data.insert_user.returning[0].email,
+          this.localeRole = result.data.insert_user.returning[0].role
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "ສ້າງຂໍ້ມູນຜູ້ໃຊ້ສຳເລັດ",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.saveData()
+           // this.$emit('updateData', result.data.forum)
+        })
+        .catch((error) => {
+     console.log(error)
+     Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'ບັນຊີ Email ນີ້ ເຄີຍຖືກສ້າງແລ້ວ',
+        });
+    });
+    },
         selectGender(option) {
             this.selectedGender = option;
             console.log('Selected gender:', this.selectedGender);
@@ -59,6 +117,16 @@ export default {
             this.genderDialog = false
         },
     },
+    computed:{
+        genderDialog: {
+        get() {
+          return this.value;
+        },
+        set(value) {
+          this.$emit("input", value);
+        },
+      },
+    }
 };
 </script>
   

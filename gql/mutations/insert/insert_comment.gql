@@ -1,0 +1,5 @@
+mutation MyMutation($detail:String,$forum_id:Int,$user_id:Int) {
+  insert_comment(objects: {detail: $detail, forum_id: $forum_id, user_id: $user_id}) {
+    affected_rows
+  }
+}
