@@ -1,12 +1,12 @@
 <template>
     <div>
-        <v-dialog v-model="genderDialog" max-width="500">
+        <v-dialog v-model="genderDialog" max-width="500" persistent>
             <v-card id="card">
                 <v-row>
                     <v-col class=" d-flex justify-end mr-3 pt-6">
-                        <v-icon color="primary" @click="close">
+                        <!-- <v-icon color="primary" @click="close">
                             mdi-close
-                        </v-icon>
+                        </v-icon> -->
                     </v-col>
                 </v-row>
                 <v-card-title>
@@ -67,7 +67,7 @@ export default {
 //         this.localeRole = localStorage.getItem("userDataRole");
 //   },
     methods: {
-        register() {
+        saveGender() {
          // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
@@ -76,27 +76,29 @@ export default {
           `,
           variables: { 
            
-            username: this.username,
-            role:"user"
+            gender: this.selectedGender,
+            id:this.id
          
           },
           fetchPolicy: "no-cache",
           
         }).then((result) => {
-          console.log(result.data.insert_user.returning[0])
-          this.userData = result.data.insert_user.returning[0]
-          this.localeId = result.data.insert_user.returning[0].id,
-          this.localeUsername = result.data.insert_user.returning[0].username,
-          this.localeEmail = result.data.insert_user.returning[0].email,
-          this.localeRole = result.data.insert_user.returning[0].role
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "ສ້າງຂໍ້ມູນຜູ້ໃຊ້ສຳເລັດ",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          this.saveData()
+          console.log(result.data)
+          const dialogTag = true;
+            this.$emit("openTag", dialogTag);
+        //   this.userData = result.data.insert_user.returning[0]
+        //   this.localeId = result.data.insert_user.returning[0].id,
+        //   this.localeUsername = result.data.insert_user.returning[0].username,
+        //   this.localeEmail = result.data.insert_user.returning[0].email,
+        //   this.localeRole = result.data.insert_user.returning[0].role
+        //   Swal.fire({
+        //     position: "center",
+        //     icon: "success",
+        //     title: "ສ້າງຂໍ້ມູນຜູ້ໃຊ້ສຳເລັດ",
+        //     showConfirmButton: false,
+        //     timer: 1500,
+        //   });
+         // this.saveData()
            // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
@@ -112,6 +114,7 @@ export default {
             this.selectedGender = option;
             console.log('Selected gender:', this.selectedGender);
             this.genderDialog = false
+            this.saveGender()
         },
         close() {
             this.genderDialog = false

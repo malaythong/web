@@ -1,0 +1,5 @@
+mutation MyMutation($id: Int,$tag:jsonb) {
+  update_user(where: {id: {_eq: $id}}, _set: {interest: $tag}) {
+    affected_rows
+  }
+}

@@ -1,0 +1,10 @@
+query MyQuery ($password:String,$username:String){
+  user(where: {password: {_eq: $password}, username: {_eq: $username}}) {
+    username
+    role
+    interest
+    gender
+    id
+    email
+  }
+}

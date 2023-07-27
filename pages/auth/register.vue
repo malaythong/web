@@ -1,54 +1,71 @@
 <template>
     <v-container>
-      <v-row justify="center">
+      <v-form lazy-validation ref="form" v-model="valid">
+      <v-row justify="center" >
+       
         <v-col cols="12" sm="8" md="6">
           <v-card>
             <genDialog
             v-model="dialog"
          :id="localeId"
+         @openTag="openTag"
+          />
+          <tagDialog
+            v-model="dialogTag"
+         :id="localeId"
+         @gotoMain="gotoMain"
           />
             <v-card-title class="text-center">
               <h2>Register</h2>
-              <p>{{ localeId }}:{{ localeUsername }}:{{ localeEmail }}:{{ localeRole }}</p>
+              <!-- <p>{{ localeId }}:{{ localeUsername }}:{{ localeEmail }}:{{ localeRole }}</p> -->
              
             </v-card-title>
             <v-card-text>
               <v-form @submit="ລົງທະບຽນ">
                 <v-text-field
+                :rules="[rules.required]"
                   v-model="email"
                   label="ອີເມວ"
-                  type="ອີເມວ"
-                  required
+                 
+                  
                 ></v-text-field>
 
                 <v-text-field
+                :rules="[rules.required]"
                   v-model="username"
                   label="ຊື່ຜູ້ໃຊ້"
-                  required
+                  
                 ></v-text-field>
                 
                 <v-text-field
+                :rules="[rules.required]"
                   v-model="password"
                   label="ລະຫັດຜ່ານ"
-                  type="ລະຫັດຜ່ານ"
-                  required
+                 
+                  
                 ></v-text-field>
                 <v-text-field
+                :rules="[rules.required]"
                   v-model="confirmPassword"
                   label="ໃສ່ລະຫັດຜ່ານອີກຄັ້ງ"
-                  type="ລະຫັດຜ່ານ"
-                  required
+                 
+                  
                 ></v-text-field>
-                <v-btn color="primary" block @click="register()">ດຳເນີນການຕໍ່</v-btn>
-                <v-btn @click="dialog=true">dialog</v-btn>
+                <v-btn color="primary"  block @click="myMethod()">ດຳເນີນການຕໍ່</v-btn>
+                <center >
+                  <h4 v-if="valid==false" class="red--text mt-2">!! ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບຖ້ວນ !!</h4>
+                </center>
+                <!-- <v-btn @click="dialog=true">dialog</v-btn><v-btn @click="dialogTag=true">tag</v-btn> -->
               </v-form>
             </v-card-text>
             <v-card-actions>
-              <router-link to="/login">ມີບັນຊີແລ້ວ ເຂົ້າສູ່ລະບົບ</router-link>
+              <a @click="gotoLogin" class="ml-2">ມີບັນຊີແລ້ວ ເຂົ້າສູ່ລະບົບ</a>
             </v-card-actions>
           </v-card>
         </v-col>
+     
       </v-row>
+    </v-form>
     </v-container>
   </template>
   
@@ -56,22 +73,32 @@
   import Swal from "sweetalert2";
   import insert_new_user from "~/gql/mutations/insert/insert_new_user.gql";
   import genDialog from "~/components/selectGender.vue"
+  import tagDialog from "~/components/interestItem.vue"
   import gql from 'graphql-tag'
   export default {
-    components:{genDialog},
+    components:{genDialog,tagDialog},
     data() {
       return {
+        valid: true,
         dialog:false,
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+        dialogTag:false,
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
         userData:{},
         retrievedData:null,
         localeId:null,
         localeUsername:null,
         localeEmail:null,
         localeRole:null,
+        rules: {
+        requiredName: (value) =>
+          !!value ||  'name_is_required',
+        required: (value) =>
+          !!value || 'ⓘ validate_fill_data .',
+      
+      },
       }
     },
     created() {
@@ -83,7 +110,34 @@
         this.localeRole = localStorage.getItem("userDataRole");
   },
     methods: {
+      myMethod() {
+      if (
+        this.email === "" ||
+        this.password=== "" ||
+        this.username === ""
+       
+       
+      ) {
+        console.log("0111");
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: '!! ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບຖ້ວນ !!',
+        });
+        return this.validate();
+        
+      } else {
+        console.log("0222");
+        return this.register();
+      } 
+    },
+      validate() {
+      console.log("validate");
+      this.valid=false
+      this.$refs.form.validate();
+    },
       register() {
+        this.valid=true
          // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
@@ -106,13 +160,13 @@
           this.localeUsername = result.data.insert_user.returning[0].username,
           this.localeEmail = result.data.insert_user.returning[0].email,
           this.localeRole = result.data.insert_user.returning[0].role
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "ສ້າງຂໍ້ມູນຜູ້ໃຊ້ສຳເລັດ",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          // Swal.fire({
+          //   position: "center",
+          //   icon: "success",
+          //   title: "ສ້າງຂໍ້ມູນຜູ້ໃຊ້ສຳເລັດ",
+          //   showConfirmButton: false,
+          //   timer: 1500,
+          // });
           this.saveData()
           this.dialog=true
            // this.$emit('updateData', result.data.forum)
@@ -125,6 +179,16 @@
           text: 'ບັນຊີ Email ນີ້ ເຄີຍຖືກສ້າງແລ້ວ',
         });
     });
+    },
+    openTag(dialogTag){
+      this.dialogTag = dialogTag
+    },
+    gotoMain(){
+     
+      this.$router.push("/content");
+    },
+    gotoLogin(){
+      this.$router.push("/auth/login");
     },
     saveData() {
       console.log("test use locale storage", this.userData)

@@ -45,6 +45,15 @@
         localeRole : null
       }
     },
+    saveData() {
+      console.log("test use locale storage", this.userData)
+      // Save the data to Local Storage
+      localStorage.setItem("userData", this.userData);
+      localStorage.setItem("userDatId", this.localeId);
+      localStorage.setItem("userDataUserName", this.localeUsername);
+      localStorage.setItem("userDataEmail", this.localeEmail);
+      localStorage.setItem("userDataRole", this.localeRole);
+    },
     created() {
     // Get the data from Local Storage when the component is created
     this.retrievedData = localStorage.getItem("userData");

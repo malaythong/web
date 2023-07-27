@@ -1,0 +1,7 @@
+query MyQuery {
+  tag {
+    id
+    name
+    category_id
+  }
+}
