@@ -41,6 +41,7 @@ import gql from "graphql-tag";
     methods: {
        
         InsertRate() {
+          console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`

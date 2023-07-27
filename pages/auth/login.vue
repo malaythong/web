@@ -5,6 +5,7 @@
           <v-card>
             <v-card-title>
               <h2>ລົງຊື່ເຂົ້າໃຊ້</h2>
+              <p> {{ localeId }} : {{ localeUsername }} : {{ localeEmail }} : {{ localeRole }}</p>
             </v-card-title>
             <v-card-text>
               <v-form @submit="login">
@@ -36,9 +37,31 @@
     data() {
       return {
         username: '',
-        password: ''
+        password: '',
+        retrievedData: null,
+        localeId : null,
+        localeUsername : null,
+        localeEmail : null,
+        localeRole : null
       }
     },
+    saveData() {
+      console.log("test use locale storage", this.userData)
+      // Save the data to Local Storage
+      localStorage.setItem("userData", this.userData);
+      localStorage.setItem("userDatId", this.localeId);
+      localStorage.setItem("userDataUserName", this.localeUsername);
+      localStorage.setItem("userDataEmail", this.localeEmail);
+      localStorage.setItem("userDataRole", this.localeRole);
+    },
+    created() {
+    // Get the data from Local Storage when the component is created
+    this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        this.localeUsername = localStorage.getItem("userDataUserName");
+        this.localeEmail = localStorage.getItem("userDataEmail");
+        this.localeRole = localStorage.getItem("userDataRole");
+  },
     methods: {
       login() {
         // Add your login logic here

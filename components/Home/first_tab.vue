@@ -133,7 +133,18 @@ export default {
         console.log("id temp",this.userTemp)
     },
     checkDate(createdAtDate) {
-      const createdAt = new Date(createdAtDate);
+      const dateParts = (new Date(createdAtDate).toLocaleDateString("en-GB")).split("/");
+      if (dateParts.length !== 3) {
+        // Handle invalid date format
+        this.result = null;
+        return;
+      }
+
+      const day = parseInt(dateParts[0]);
+      const month = parseInt(dateParts[1]) - 1; // Month is zero-indexed in JavaScript
+      const year = parseInt(dateParts[2]);
+
+      const createdAt = new Date(year, month, day);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -238,7 +249,7 @@ export default {
       }
     }
     ratings(where: {user_id: {_eq: 1}}, limit: 1) {
-        form_id
+        forum_id
         id
         score
         user_id
@@ -305,7 +316,7 @@ export default {
       }
     }
     ratings(where: {user_id: {_eq: 1}}, limit: 1) {
-        form_id
+        forum_id
         id
         score
         user_id

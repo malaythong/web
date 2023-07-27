@@ -6,7 +6,10 @@
           <v-card elevation="0">
             <ratingDialog
             v-model="dialog"
-          
+            :forumId="userTemp"
+          :object="selectedCard"
+          @updateData="updateData"
+          @save-status="saveStatus"
            
           />
             <v-card-text class="mx-0 ma-0 pa-0 mt-4">
@@ -45,7 +48,7 @@
                         >mdi-thumb-up-outline</v-icon
                       >
                   
-                    <v-icon v-else class="mr-4" @click="dialog = true"
+                    <v-icon v-else class="mr-4" @click="openDialog(getData),getUserId(getData.id)"
                       >mdi-thumb-up-outline</v-icon
                     >
                       </v-row
@@ -81,7 +84,7 @@
                 <v-row no-gutters>
                   <v-col cols="1"> </v-col>
                   <v-col cols="10">
-                   <v-row no-gutters class="mt-4 d-flex justify-start">   <v-textarea outlined hide-details="auto"></v-textarea></v-row> 
+                   <v-row no-gutters class="mt-4 d-flex justify-start">   <v-textarea v-model="textComment" outlined hide-details="auto"></v-textarea></v-row> 
                      
                   </v-col>
                   <v-col cols="1"> </v-col>
@@ -89,7 +92,7 @@
                 <v-row  no-gutters>
                   <v-col no-gutters cols="1"> </v-col>
                   <v-col no-gutters cols="10">
-                   <v-row no-gutters class="mt-1 mb-8 d-flex justify-end">   <v-btn color="primary">ສົ່ງຄຳຄິດເຫັນ</v-btn></v-row> 
+                   <v-row no-gutters class="mt-1 mb-8 d-flex justify-end">   <v-btn @click="InsertComment()" color="primary">ສົ່ງຄຳຄິດເຫັນ</v-btn></v-row> 
                      
                   </v-col>
                   <v-col no-gutters cols="1"> </v-col>
@@ -154,16 +157,20 @@
   </template>
   
   <script>
+  import insert_comment from "~/gql/mutations/insert/insert_comment.gql";
   import gql from 'graphql-tag'
   import ratingDialog from "~/components/dialog_rating.vue"
   export default {
     components:{ratingDialog},
     data() {
       return {
+        textComment:null,
+        userTemp:1,
         dialog:false,
         getData:{
           forum_details:{}
         },
+        selectedCard: null,
         items: [
           { tab: "ທັງໝົດ", content: "Policy" },
           { tab: "ແນະນຳ", content: "CancelHistory" },
@@ -219,8 +226,64 @@
     //this.queryData()
   },
     methods: {
-      checkDate(createdAtDate) {
-      const createdAt = new Date(createdAtDate);
+      InsertComment() {
+         // console.log("test obid",this.object.id)
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            ${insert_comment.MyMutation}
+          `,
+          variables: { 
+            // formId:this.forumId,
+            // score:this.rating,
+            // user_id:this.userId,
+            forum_id:this.$route.query.id,
+            detail:this.textComment,
+            user_id:1,
+         
+          },
+          fetchPolicy: "no-cache",
+          
+        }).then((result) => {
+            console.log("seccess")
+           
+          
+          this.getDataAll()
+          this.textComment=null
+           // this.$emit('updateData', result.data.forum)
+        })
+        .catch((error) => {
+     console.log(error)
+    });
+    },
+      saveStatus(newStatus) {
+      if (this.selectedCard) {
+        this.selectedCard.ratings_aggregate.aggregate.count = newStatus;
+      }
+     // this.closeDialog();
+    },
+    openDialog(post) {
+      this.selectedCard = post;
+      this.dialog = true;
+    },
+      getUserId(id){
+      console.log("id",id)
+        this.userTemp = id
+        console.log("id temp",this.userTemp)
+    },
+    checkDate(createdAtDate) {
+      const dateParts = (new Date(createdAtDate).toLocaleDateString("en-GB")).split("/");
+      if (dateParts.length !== 3) {
+        // Handle invalid date format
+        this.result = null;
+        return;
+      }
+
+      const day = parseInt(dateParts[0]);
+      const month = parseInt(dateParts[1]) - 1; // Month is zero-indexed in JavaScript
+      const year = parseInt(dateParts[2]);
+
+      const createdAt = new Date(year, month, day);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
@@ -229,7 +292,43 @@
 
       return daysDiff;
     },
+    //   checkDate(createdAtDate) {
+    //   const createdAt = new Date(createdAtDate);
+    //   const today = new Date();
+    //   today.setHours(0, 0, 0, 0);
+
+    //   const timeDiff = today.getTime() - createdAt.getTime();
+    //   const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    //   return daysDiff;
+    // },
       getDataAll() {
+      console.log("run test")
+            this.$apollo.query({
+                query: require('~/gql/queries/home/get_forum_by_id.gql')
+                  .MyQuery,
+                fetchPolicy: 'no-cache',
+                variables: {
+            
+            id: this.$route.query.id,
+          },
+                
+              })
+              .then((result) => {
+                console.log("run result",result.data.forum)
+                this.getData = result.data.forum[0]
+              //  console.log("run",getData)
+               
+               
+              })
+              .catch((error) => {
+                console.log(error)
+               
+              })
+          },
+          updateData(dataTables) {
+            console.log(`data tables:`, dataTables)
+      this.data = dataTables
       console.log("run test")
             this.$apollo.query({
                 query: require('~/gql/queries/home/get_forum_by_id.gql')
