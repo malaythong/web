@@ -68,12 +68,6 @@
             </v-row>
             </v-card>
           </v-card-text>
-          <v-card-actions>
-            <v-btn text color="primary" @click="goToCreatePost"
-              >Create Post</v-btn
-            >
-            <!-- <ratingD v-model="ratingDialog"></ratingD> -->
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>

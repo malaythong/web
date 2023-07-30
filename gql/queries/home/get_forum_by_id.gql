@@ -1,5 +1,5 @@
 query MyQuery($id: Int) {
-  forum(where: {id: {_eq: $id}}) {
+  forum(where: { id: { _eq: $id } }) {
     detail
     iamge
     id
@@ -35,7 +35,7 @@ query MyQuery($id: Int) {
         count(columns: detail)
       }
     }
-    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+    ratings(where: { user_id: { _eq: 1 } }, limit: 1) {
       forum_id
       id
       score
@@ -46,7 +46,7 @@ query MyQuery($id: Int) {
         count(columns: id)
       }
     }
-    comments(order_by: {created_at: desc}) {
+    comments(order_by: { created_at: desc }) {
       detail
       created_at
       forum_id

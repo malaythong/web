@@ -72,7 +72,7 @@ export default {
           `,
           variables: { 
             id: this.id,
-            tag: this.interest2,
+            tag: this.interestOptions,
            
          
           },
@@ -110,19 +110,19 @@ export default {
           },
           chipClicked(interest) {
       // Check if the clicked interest ID is already in the selectedInterestIds array
-      const isAlreadySelected = this.interest2.includes(interest.id);
+      const isAlreadySelected = this.interestOptions.includes(interest.id);
 
       if (isAlreadySelected) {
         // If the interest ID is already selected, remove it from the array
-        this.interest2 = this.interest2.filter(
+        this.interestOptions = this.interestOptions.filter(
           (id) => id !== interest.id
         );
       } else {
         // If the interest ID is not already selected, push it to the selectedInterestIds array
-        this.interest2.push(interest.id);
+        this.interestOptions.push(interest.id);
       }
 
-      console.log("Selected interest IDs:", this.interest2);
+      console.log("Selected interest IDs:", this.interestOptions);
     },
         submitInterest() {
             console.log('Interests submitted:', this.interest);

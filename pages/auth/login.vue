@@ -5,7 +5,7 @@
           <v-card>
             <v-card-title>
               <h2>ລົງຊື່ເຂົ້າໃຊ້</h2>
-              <p> {{ localeId }} : {{ localeUsername }} : {{ localeEmail }} : {{ localeRole }}</p>
+              <p> {{ localeId }}  {{ localeUsername }}  {{ localeEmail }} {{ localeRole }}</p>
             </v-card-title>
             <v-card-text>
               <v-form @submit="login">

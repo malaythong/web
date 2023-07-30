@@ -1,0 +1,38 @@
+query Dashborad{
+  user_aggregate {
+    aggregate {
+      count(columns: username)
+    }
+  }
+  tag_aggregate {
+    aggregate {
+      count
+    }
+  }
+  forum_aggregate {
+    aggregate {
+      count(distinct: false)
+    }
+  }
+  comment_aggregate {
+    aggregate {
+      count
+    }
+  }
+  forum {
+    topic
+    ratings_aggregate {
+      aggregate {
+        count
+      }
+    }
+    comments_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+  tag(order_by: {forum_details_aggregate: {count: desc}}) {
+    name
+  }
+}
