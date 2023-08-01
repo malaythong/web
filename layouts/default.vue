@@ -9,7 +9,7 @@
     >
       <v-list>
         <v-list-item
-          v-for="(item, i) in items.slice(0, 13)"
+          v-for="(item, i) in checkRole.slice(0, 13)"
           :key="i"
           :to="item.to"
           router
@@ -28,7 +28,7 @@
       <edit_profile v-model="dialog"></edit_profile>
       <settingAccount v-model="dialogg"></settingAccount>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>{{ items.title }}</v-toolbar-title>
+      <v-toolbar-title>{{ checkRole.title }}</v-toolbar-title>
       <v-text-field
         label="Search"
         placeholder="ຊື່ກະທູ້, ຊື່ແທັກ, ໝວດໝູ່"
@@ -106,6 +106,44 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      itemsUser: [
+        {
+          icon: 'mdi-home',
+          title: 'ໜ້າຫຼັກ',
+          to: '/content',
+        },
+        {
+          icon: 'mdi-comment-plus',
+          title: 'ສ້າງກະທູ້ໃໝ່',
+          to: '/content/create',
+        },
+        {
+          icon: 'mdi-clock',
+          title: 'ປະຫວັດການເຂົ້າອ່ານ',
+          to: '/content/feed',
+        },
+        {
+          icon: 'mdi-tag',
+          title: 'ແທັກ',
+          to: '/info/tag',
+        },
+        {
+          list: 'ບັນຊີ',
+          to: '/info/profile',
+        },
+        {
+          list: 'ຈັດການບັນຊີ',
+          to: '',
+        },
+        {
+          list: 'ຕັ້ງຄ່າ',
+          to: '',
+        },
+        {
+          list: 'ອອກຈາກລະບົບ',
+          to: '/manage/setting',
+        },
+      ],
       items: [
         {
           icon: 'mdi-home',
@@ -189,13 +227,38 @@ export default {
           to: '/manage/setting',
         },
       ],
+      unknow:[],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Report',
       dialog: false,
       dialogg: false,
+      localeId:null,
+      localeRole:null
     }
+  },
+  created() {
+    // Get the data from Local Storage when the component is created
+   // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        // this.localeUsername = localStorage.getItem("userDataUserName");
+        // this.localeEmail = localStorage.getItem("userDataEmail");
+     this.localeRole = localStorage.getItem("userDataRole");
+        
+  },
+  computed:{
+    checkRole(){
+      if(this.localeRole==="user"){
+        return this.itemsUser
+      }
+      else if(this.localeRole==="admin"){
+        return this.items
+      } 
+      else {
+        return this.unknow
+      }
+    },
   },
   methods: {
     test(i) {

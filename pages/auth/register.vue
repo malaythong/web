@@ -147,7 +147,7 @@
           variables: { 
             email: this.email.toUpperCase(),
             password: this.password,
-            username: this.username,
+            username: this.username.toUpperCase(),
             role:"user"
          
           },

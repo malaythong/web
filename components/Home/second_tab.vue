@@ -8,8 +8,9 @@
             v-model="dialog"
           :forumId="userTemp"
           :object="selectedCard"
-          @updateData="updateData"
+          @updateData="queryData"
           @save-status="saveStatus"
+          :userId="localeId"
           />
           <!-- <Rating v-model="ratingDialog" /> -->
           <v-card-text class="mx-0 ma-0 pa-0 mt-12">
@@ -101,6 +102,7 @@ export default {
       ],
       
       ratingDialog: false,
+      localeId:null,
     };
     
   },
@@ -111,6 +113,15 @@ export default {
     comment() {
       return require("@/assets/images/message-circle.png");
     },
+  },
+  created() {
+    // Get the data from Local Storage when the component is created
+   // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        // this.localeUsername = localStorage.getItem("userDataUserName");
+        // this.localeEmail = localStorage.getItem("userDataEmail");
+        // this.localeRole = localStorage.getItem("userDataRole");
+        
   },
   mounted(){
    //this.getDataAll()
@@ -211,7 +222,7 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-         query getForumAll {
+         query getForumAll($userId:Int) {
   forum (order_by: {ratings_aggregate: {count: asc}}) {
     updated_at
     topic
@@ -248,13 +259,13 @@ export default {
         count(columns: detail)
       }
     }
-    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+    ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
         forum_id
         id
         score
         user_id
       }
-       ratings_aggregate {
+       ratings_aggregate(where: {user_id: {_eq: $userId}}) {
       aggregate {
         count(columns: id)
       }
@@ -263,6 +274,11 @@ export default {
 }
 
           `,
+          variables: {
+            
+            
+            userId:this.localeId
+          },
         })
 
         //TRY TO SEE IN console.log()
@@ -272,13 +288,13 @@ export default {
         console.error(e)
       }
     },
-    async updateData(dataTables) {
-      console.log(`data tables:`, dataTables)
-      this.data = dataTables
+    async updateData() {
+      // console.log(`data tables:`, dataTables)
+      // this.data = dataTables
       try {
         const res = await this.$apollo.query({
           query: gql`
-         query getForumAll {
+         query getForumAll($userId:Int) {
   forum (order_by: {ratings_aggregate: {count: asc}}) {
     updated_at
     topic
@@ -315,13 +331,13 @@ export default {
         count(columns: detail)
       }
     }
-    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+    ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
         forum_id
         id
         score
         user_id
       }
-       ratings_aggregate {
+       ratings_aggregate (where: {user_id: {_eq: $userId}}){
       aggregate {
         count(columns: id)
       }
@@ -330,6 +346,11 @@ export default {
 }
 
           `,
+          variables: {
+            
+            
+            userId:this.localeId
+          },
         })
 
         //TRY TO SEE IN console.log()
