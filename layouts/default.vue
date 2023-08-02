@@ -136,10 +136,6 @@ export default {
           to: '',
         },
         {
-          list: 'ຕັ້ງຄ່າ',
-          to: '',
-        },
-        {
           list: 'ອອກຈາກລະບົບ',
           to: '/manage/setting',
         },
@@ -218,10 +214,7 @@ export default {
           list: 'ຈັດການບັນຊີ',
           to: '',
         },
-        {
-          list: 'ຕັ້ງຄ່າ',
-          to: '',
-        },
+       
         {
           list: 'ອອກຈາກລະບົບ',
           to: '/manage/setting',

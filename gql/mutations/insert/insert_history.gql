@@ -1,0 +1,5 @@
+mutation MyMutation ($forumId:Int,$userId:Int){
+  insert_forum_histories(objects: {forum_id: $forumId, user_id: $userId}) {
+    affected_rows
+  }
+}
