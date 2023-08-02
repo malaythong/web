@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3 class="d-flex justify-center ">ແທັກທີ່ກຳລັງນິຍົມ</h3>
     <apexchart
       type="bar"
       height="350"
@@ -17,7 +18,7 @@ export default {
     return {
       series: [
         {
-          data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+          data: [5, 4, 4, 3, 1],
         },
       ],
       chartOptions: {
@@ -36,16 +37,11 @@ export default {
         },
         xaxis: {
           categories: [
-            'South Korea',
-            'Canada',
-            'United Kingdom',
-            'Netherlands',
-            'Italy',
-            'France',
-            'Japan',
-            'United States',
-            'China',
-            'Germany',
+            'ການຮຽນ',
+            'ອາຊີບ',
+            'ປັນຫາຄອບຄົວ',
+            'ຄວາມຮັກ',
+            'ການສຶກສາ',
           ],
         },
       },

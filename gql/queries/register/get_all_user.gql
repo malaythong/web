@@ -1,0 +1,11 @@
+query MyQuery {
+  user(where: {status: {_gte: 1, _lte: 2}}) {
+    profile
+    id
+    username
+    gender
+    email
+    password
+    role
+  }
+}

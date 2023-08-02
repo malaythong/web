@@ -1,0 +1,5 @@
+mutation MyMutation ($id:Int){
+  update_user(where: {id: {_eq: $id}}, _set: {status:3}) {
+    affected_rows
+  }
+}

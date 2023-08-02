@@ -15,6 +15,7 @@
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/firebase": "^8.2.2",
     "@nuxtjs/i18n": "^7.3.1",
+    "@vue/apollo-composable": "^4.0.0-beta.8",
     "@vue/compiler-sfc": "^3.3.4",
     "apexcharts": "^3.41.0",
     "core-js": "^3.25.3",

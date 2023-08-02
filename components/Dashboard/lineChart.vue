@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3 class="d-flex justify-center ">ຈຳນວນການເຂົ້າອ່ານກະທູ້ໃນແຕ່ລະວັນ</h3>
     <apexchart type="line" height="350" :options="chartOptions" :series="chartSeries" />
   </div>
 </template>
@@ -15,17 +16,17 @@ export default {
           id: 'apexchart-example',
         },
         xaxis: {
-          categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+          categories: ['20/07', '21/07', '22/07', '23/07', '24/07', '25/07', '26/07'],
         },
       },
       chartSeries: [
         {
           name: 'Series 1',
-          data: [30, 40, 35, 50, 49, 60, 70],
+          data: [1, 2, 5, 4, 5, 3, 7],
         },
       ],
       series: [{
-            data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+            data: [0, 1, 3, 2, 5, 3, 4, 6, 7, 3]
           }],
           
     }

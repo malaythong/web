@@ -144,6 +144,12 @@
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize"> Reset </v-btn>
     </template>
+    <template v-slot:[`item.created_at`]="{ item }">
+      {{ formatDateTime(item.created_at) }}
+    </template>
+    <template v-slot:[`item.updated_at`]="{ item }">
+      {{ formatDateTime(item.updated_at) }}
+    </template>
   </v-data-table>
 </template>
 <script>
@@ -230,7 +236,7 @@ export default {
           console.log(err)
         })
     },
-    limit(string = '', limit = 100) {
+    limit(string = '', limit = 50) {
       return string.substring(0, limit) + '...'
     },
 
@@ -316,9 +322,15 @@ export default {
       })
     },
 
-    formatDatetime(datetime) {
-      return format(new Date(datetime), 'yyyy-MM-dd HH:mm:ss');
-    },
+    formatDateTime(dateTimeString) {
+        const dateObj = new Date(dateTimeString)
+        const day = String(dateObj.getDate()).padStart(2, '0')
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0')
+        const year = String(dateObj.getFullYear())
+        const hours = String(dateObj.getHours()).padStart(2, '0')
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0')
+        return `${day}-${month}-${year} ${hours}:${minutes}`
+      },
 
     save() {
       if (this.editedIndex > -1) {

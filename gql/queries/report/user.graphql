@@ -1,0 +1,9 @@
+query allUser {
+  user {
+    id
+    username
+    email
+    gender
+    role
+  }
+}

@@ -16,7 +16,7 @@
          @gotoMain="gotoMain"
           />
             <v-card-title class="text-center">
-              <h2>Register</h2>
+              <h2>ລົງທະບຽນ</h2>
               <!-- <p>{{ localeId }}:{{ localeUsername }}:{{ localeEmail }}:{{ localeRole }}</p> -->
              
             </v-card-title>
@@ -115,8 +115,6 @@
         this.email === "" ||
         this.password=== "" ||
         this.username === ""
-       
-       
       ) {
         console.log("0111");
         Swal.fire({

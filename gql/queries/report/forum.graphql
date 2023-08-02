@@ -1,0 +1,18 @@
+query allForum {
+  forum {
+    id
+    topic
+    create_by
+    created_at
+    forum_histories_aggregate {
+      aggregate {
+        count
+      }
+    }
+    ratings_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}

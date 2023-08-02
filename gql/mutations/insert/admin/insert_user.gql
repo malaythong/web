@@ -1,0 +1,5 @@
+mutation addUser($profile: String, $gender: String, $email: String, $password: String, $username: String,$role:String) {
+  insert_user(objects: {profile: $profile, gender: $gender, email: $email, password: $password, username: $username, role: $role}) {
+    affected_rows
+  }
+}

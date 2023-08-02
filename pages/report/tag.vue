@@ -6,85 +6,7 @@
     <v-card>
       <v-card-title>
         <v-row>
-          <v-col cols="2">
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="s_date"
-                  label="ວັນທີເລີ່ມຕົ້ນ"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="s_date"
-                @input="$refs.menu.save(s_date)"
-                locale="la"
-                no-title
-                scrollable
-              >
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="$refs.menu.save(s_date)"
-                  >OK</v-btn
-                >
-              </v-date-picker>
-            </v-menu>
-          </v-col>
-
-          <v-col cols="2">
-            <v-menu
-              ref="menu2"
-              v-model="menu2"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="en_date"
-                  label="ວັນທີ່ສິ້ນສຸດ"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="en_date"
-                @input="$refs.menu2.save(en_date)"
-                locale="la"
-                no-title
-                scrollable
-              >
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu2 = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  text
-                  color="primary
-                  "
-                  @click="$refs.menu2.save(en_date)"
-                  >OK</v-btn
-                >
-              </v-date-picker>
-            </v-menu>
-          </v-col>
           <v-col cols="5">
-            <!-- search bar -->
             <v-text-field
               v-model="search"
               label="Search"
@@ -94,31 +16,12 @@
             ></v-text-field>
           </v-col>
 
-          <v-col
-            ><v-btn
-              height="55"
-              outlined
-              color="primary mr-4"
-              @click="searchDate"
-            >
-              <v-icon> mdi-magnify</v-icon> ຄົ້ນຫາ</v-btn
-            ></v-col
-          >
-          <v-col align="end">
-            <v-btn @click="downloadExcel" height="55" outlined color="primary">
-              <v-icon> mdi-tray-arrow-down</v-icon> ດາວໂຫລດ</v-btn
-            >
+          <v-col>
+            <v-btn height="55" outlined color="primary" @click="searchDate">
+              <v-icon>mdi-magnify</v-icon> ຄົ້ນຫາ
+            </v-btn>
           </v-col>
         </v-row>
-
-        <!-- <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          outlined
-          hide-details
-        ></v-text-field> -->
       </v-card-title>
 
       <v-data-table
@@ -129,143 +32,56 @@
     </v-card>
   </div>
 </template>
+
 <script>
+import gql from 'graphql-tag';
+
 export default {
   data() {
     return {
       search: '',
-      menu: false,
-      menu2: false,
-      s_date: '',
-      en_date: '',
-
+      data: [], // Initialize data as an empty array
       headers: [
-        {
-          text: 'ລະຫັດແທັກ',
-          align: 'start',
-          sortable: false,
-          value: 'name',
-        },
-        { text: 'ຊື່ແທັກ', value: 'calories' },
-        { text: 'ໝວດໝູ່', value: 'fat' },
-        { text: 'ການນຳໃຊ້', value: 'carbs' },
+        // Define table headers with label and corresponding value property
+        { text: 'ID', value: 'id' },
+        { text: 'Name', value: 'name' },
+        { text: 'Category Name', value: 'categoryName' },
+        { text: 'Count', value: 'count' },
       ],
-      data: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: 1,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: 1,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: 7,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: 8,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: 16,
-        },
-      ],
-    }
+    };
+  },
+  apollo: {
+    data: {
+      query: gql`
+        query allTag {
+          tag {
+            id
+            name
+            category {
+              name
+            }
+            forum_details_aggregate {
+              aggregate {
+                count
+              }
+            }
+          }
+        }
+      `,
+      result({ data }) {
+
+        this.data = data.tag.map((tag) => ({
+          id: tag.id,
+          name: tag.name,
+          categoryName: tag.category.name,
+          count: tag.forum_details_aggregate.aggregate.count,
+        }));
+      },
+    },
   },
   methods: {
     searchDate() {
-      console.log(this.s_date)
-      console.log(this.en_date)
-    },
-      downloadExcel() {
-      // Create a new workbook
-      const workbook = [
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
-        '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"',
-        ' xmlns:o="urn:schemas-microsoft-com:office:office"',
-        ' xmlns:x="urn:schemas-microsoft-com:office:excel"',
-        ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"',
-        ' xmlns:html="http://www.w3.org/TR/REC-html40">',
-        '<Worksheet ss:Name="Sheet1">',
-        '<Table>',
-      ]
-
-      // Add the table headers
-      const headers = Object.keys(this.data[0])
-      workbook.push('<Row>')
-      headers.forEach((header) => {
-        workbook.push(`<Cell><Data ss:Type="String">${header}</Data></Cell>`)
-      })
-      workbook.push('</Row>')
-
-      // Add the table data
-      this.data.forEach((data) => {
-        workbook.push('<Row>')
-        headers.forEach((header) => {
-          // Encode the Lao text as UTF-8
-          const encodedText = encodeURIComponent(data[header]).replace(
-            /%([0-9A-F]{2})/g,
-            (match, p1) => String.fromCharCode(`0x${p1}`)
-          )
-          workbook.push(
-            `<Cell><Data ss:Type="String">${encodedText}</Data></Cell>`
-          )
-        })
-        workbook.push('</Row>')
-      })
-
-      // Close the workbook
-      workbook.push('</Table></Worksheet></Workbook>')
-
-      // Convert the workbook to a binary Excel file
-      const excelFile = workbook.join('')
-
-      // Convert string to ArrayBuffer
-      const buf = new ArrayBuffer(excelFile.length)
-      const view = new Uint8Array(buf)
-      for (let i = 0; i < excelFile.length; i++) {
-        view[i] = excelFile.charCodeAt(i) & 0xff
-      }
-
-      // Save the file
-      const blob = new Blob([buf], { type: 'application/vnd.ms-excel' })
-      const filename = `report-tag ${new Date().toLocaleDateString()}.xls`
-      if (window.navigator.msSaveOrOpenBlob) {
-        // For IE
-        window.navigator.msSaveOrOpenBlob(blob, filename)
-      } else {
-        // For other browsers
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', filename)
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      }
     },
   },
-}
+};
 </script>

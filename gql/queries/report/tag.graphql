@@ -1,0 +1,14 @@
+query allTag {
+  tag {
+    id
+    name
+    category {
+      name
+    }
+    forum_details_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}
