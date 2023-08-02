@@ -1,0 +1,5 @@
+mutation updateUser ($id: Int, $profile: String, $gender: String, $email: String, $password: String, $username: String,$role:String){
+  update_user(where: {id: {_eq: $id}}, _set: {email: $email, gender: $gender, password: $password, profile: $profile, role: $role, username: $username}) {
+    affected_rows
+  }
+}

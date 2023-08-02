@@ -234,9 +234,7 @@
             ${insert_comment.MyMutation}
           `,
           variables: { 
-            // formId:this.forumId,
-            // score:this.rating,
-            // user_id:this.userId,
+          
             forum_id:this.$route.query.id,
             detail:this.textComment,
             user_id:1,
@@ -245,7 +243,7 @@
           fetchPolicy: "no-cache",
           
         }).then((result) => {
-            console.log("seccess")
+            console.log("seccess",result)
            
           
           this.getDataAll()
