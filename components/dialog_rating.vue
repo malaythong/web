@@ -26,7 +26,7 @@ import gql from "graphql-tag";
         object:{},
       value: Boolean,
       forumId:Number,
-      userId:Number
+      userId:null
     },
     data() {
       return {
@@ -53,7 +53,7 @@ import gql from "graphql-tag";
             // user_id:this.userId,
             formId:this.object.id,
             score:this.rating,
-            userId:1,
+            userId:this.userId,
          
           },
           fetchPolicy: "no-cache",
@@ -61,7 +61,7 @@ import gql from "graphql-tag";
             console.log("seccess")
            
           
-            this.$emit('updateData', result.data.forum)
+            this.$emit('updateData')
         })
         .catch((error) => {
      console.log(error)

@@ -6,10 +6,10 @@
           <v-card elevation="1"> </v-card>
           <ratingDialog
             v-model="dialog"
-            :forumId="userTemp"
-            :object="selectedCard"
-            @updateData="updateData"
-            @save-status="saveStatus"
+          :forumId="userTemp"
+          :object="selectedCard"
+          @updateData="updateData"
+          @save-status="saveStatus"
           />
           <!-- <Rating v-model="ratingDialog" /> -->
           <v-card-text class="mx-0 ma-0 pa-0 mt-12">
@@ -118,7 +118,8 @@ export default {
       ],
 
       ratingDialog: false,
-    }
+    };
+    
   },
   computed: {
     image() {
@@ -128,8 +129,8 @@ export default {
       return require('@/assets/images/message-circle.png')
     },
   },
-  mounted() {
-    //this.getDataAll()
+  mounted(){
+   //this.getDataAll()
     this.queryData()
   },
   methods: {
@@ -223,57 +224,63 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-            query getForumAll {
-              forum(order_by: { ratings_aggregate: { count: asc } }) {
-                updated_at
-                topic
-                id
-                tag_id
-                iamge
-                detail
-                created_at
-                create_by
-                user {
-                  email
-                  id
-                  profile
-                  username
-                  role
-                }
-                forum_details {
-                  id
-                  tag_id
-                  forum_id
-                  tag {
-                    id
-                    name
-                    created_at
-                    category_id
-                    category {
-                      id
-                      name
-                    }
-                  }
-                }
-                comments_aggregate {
-                  aggregate {
-                    count(columns: detail)
-                  }
-                }
-                ratings(where: { user_id: { _eq: 1 } }, limit: 1) {
-                  forum_id
-                  id
-                  score
-                  user_id
-                }
-                ratings_aggregate {
-                  aggregate {
-                    count(columns: id)
-                  }
-                }
-              }
-            }
+         query getForumAll {
+  forum (order_by: {ratings_aggregate: {count: asc}}) {
+    updated_at
+    topic
+    id
+    tag_id
+    iamge
+    detail
+    created_at
+    create_by
+    user {
+      email
+      id
+      profile
+      username
+      role
+    }
+    forum_details {
+      id
+      tag_id
+      forum_id
+      tag {
+        id
+        name
+        created_at
+        category_id
+        category {
+          id
+          name
+        }
+      }
+    }
+    comments_aggregate {
+      aggregate {
+        count(columns: detail)
+      }
+    }
+    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+        forum_id
+        id
+        score
+        user_id
+      }
+       ratings_aggregate {
+      aggregate {
+        count(columns: id)
+      }
+    }
+  }
+}
+
           `,
+          variables: {
+            
+            
+            userId:this.localeId
+          },
         })
 
         //TRY TO SEE IN console.log()
@@ -283,63 +290,69 @@ export default {
         console.error(e)
       }
     },
-    async updateData(dataTables) {
-      console.log(`data tables:`, dataTables)
-      this.data = dataTables
+    async updateData() {
+      // console.log(`data tables:`, dataTables)
+      // this.data = dataTables
       try {
         const res = await this.$apollo.query({
           query: gql`
-            query getForumAll {
-              forum(order_by: { ratings_aggregate: { count: asc } }) {
-                updated_at
-                topic
-                id
-                tag_id
-                iamge
-                detail
-                created_at
-                create_by
-                user {
-                  email
-                  id
-                  profile
-                  username
-                  role
-                }
-                forum_details {
-                  id
-                  tag_id
-                  forum_id
-                  tag {
-                    id
-                    name
-                    created_at
-                    category_id
-                    category {
-                      id
-                      name
-                    }
-                  }
-                }
-                comments_aggregate {
-                  aggregate {
-                    count(columns: detail)
-                  }
-                }
-                ratings(where: { user_id: { _eq: 1 } }, limit: 1) {
-                  forum_id
-                  id
-                  score
-                  user_id
-                }
-                ratings_aggregate {
-                  aggregate {
-                    count(columns: id)
-                  }
-                }
-              }
-            }
+         query getForumAll {
+  forum (order_by: {ratings_aggregate: {count: asc}}) {
+    updated_at
+    topic
+    id
+    tag_id
+    iamge
+    detail
+    created_at
+    create_by
+    user {
+      email
+      id
+      profile
+      username
+      role
+    }
+    forum_details {
+      id
+      tag_id
+      forum_id
+      tag {
+        id
+        name
+        created_at
+        category_id
+        category {
+          id
+          name
+        }
+      }
+    }
+    comments_aggregate {
+      aggregate {
+        count(columns: detail)
+      }
+    }
+    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+        forum_id
+        id
+        score
+        user_id
+      }
+       ratings_aggregate {
+      aggregate {
+        count(columns: id)
+      }
+    }
+  }
+}
+
           `,
+          variables: {
+            
+            
+            userId:this.localeId
+          },
         })
 
         //TRY TO SEE IN console.log()

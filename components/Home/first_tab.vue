@@ -10,6 +10,7 @@
           :object="selectedCard"
           @updateData="updateData"
           @save-status="saveStatus"
+          :userId="localeId"
           />
           <!-- <Rating v-model="ratingDialog" /> -->
           <v-card-text class="mx-0 ma-0 pa-0 mt-12">
@@ -38,6 +39,7 @@
                   
                   <v-row no-gutters class="mt-2 d-flex justify-end">
                     <!-- <p>{{ post.ratings }}</p> -->
+                    <!-- <p>{{ post.ratings.length }}</p> -->
                     <v-icon v-if="post.ratings_aggregate.aggregate.count!=0" color="primary" class="mr-4" 
                         >mdi-thumb-up-outline</v-icon
                       >
@@ -93,7 +95,7 @@ export default {
         { tab: "ແນະນຳ", content: "CancelHistory" },
         { tab: "ນິຍົມ", content: "CancelHistory2" },
       ],
-      
+      localeId:null,
       ratingDialog: false,
     };
     
@@ -109,6 +111,15 @@ export default {
   mounted(){
    //this.getDataAll()
     this.queryData()
+  },
+  created() {
+    // Get the data from Local Storage when the component is created
+   // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        // this.localeUsername = localStorage.getItem("userDataUserName");
+        // this.localeEmail = localStorage.getItem("userDataEmail");
+        // this.localeRole = localStorage.getItem("userDataRole");
+        
   },
   methods: {
     saveStatus(newStatus) {
@@ -205,7 +216,7 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-         query getForumAll {
+         query getForumAll($userId:Int) {
   forum {
     updated_at
     topic
@@ -242,13 +253,13 @@ export default {
         count(columns: detail)
       }
     }
-    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+    ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
         forum_id
         id
         score
         user_id
       }
-       ratings_aggregate {
+      ratings_aggregate(where: {user_id: {_eq: $userId}})  {
       aggregate {
         count(columns: id)
       }
@@ -257,6 +268,11 @@ export default {
 }
 
           `,
+          variables: {
+            
+            
+            userId:this.localeId
+          },
         })
 
         //TRY TO SEE IN console.log()
@@ -272,7 +288,7 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-         query getForumAll {
+         query getForumAll($userId:Int) {
   forum {
     updated_at
     topic
@@ -309,13 +325,13 @@ export default {
         count(columns: detail)
       }
     }
-    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+    ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
         forum_id
         id
         score
         user_id
       }
-       ratings_aggregate {
+      ratings_aggregate(where: {user_id: {_eq: $userId}})  {
       aggregate {
         count(columns: id)
       }
@@ -324,6 +340,11 @@ export default {
 }
 
           `,
+          variables: {
+            
+            
+            userId:this.localeId
+          },
         })
 
         //TRY TO SEE IN console.log()

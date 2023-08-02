@@ -10,6 +10,7 @@
           :object="selectedCard"
           @updateData="updateData"
           @save-status="saveStatus"
+          :userId="localeId"
            
           />
             <v-card-text class="mx-0 ma-0 pa-0 mt-4">
@@ -17,6 +18,7 @@
                 <v-row no-gutters>
                   <v-col cols="10">
                     <v-row no-gutters class="mt-2">
+                      <!-- <p>{{ localeId }}</p> -->
                       <v-avatar color="primary" size="43" class="mx-2">
                         <v-img
                           :src="image"
@@ -176,38 +178,7 @@
           { tab: "ແນະນຳ", content: "CancelHistory" },
           { tab: "ນິຍົມ", content: "CancelHistory2" },
         ],
-        posts: [
-          {
-            title: "ການສຶກສາ",
-            header: "ແບບຟອມການລົງທະບຽນເຂົ້າເສັງ ມຊ ຊື້ຢູ່ໃສ?",
-            date: "2 ມື້ກ່ອນ",
-            comment: 10,
-            post_by: "ໂດຍ ວຽງເທບ3344",
-            content:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet lobortis sem, et fringilla ligula tristique in.",
-            //cover: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg'
-          },
-          {
-            title: "ກິລາ",
-            header: "Game",
-            date: "3 ມື້ກ່ອນ",
-            comment: 20,
-            post_by: "ໂດຍ Toxin3344",
-            content:
-              "Sed eu odio ac felis tincidunt volutpat non vitae lacus. Aenean dapibus, tellus vitae ultrices luctus, purus felis volutpat ipsum, nec volutpat purus ex id justo.",
-            cover: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          },
-          {
-            title: "ເກມ",
-            header: "Song",
-            date: "4 ມື້ກ່ອນ",
-            comment: 30,
-            post_by: "ໂດຍ Bill3344",
-            content:
-              "Nunc accumsan libero non mauris laoreet, non lacinia lectus maximus. Etiam sagittis ipsum a volutpat auctor.",
-            cover: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          },
-        ],
+        localeId:null
       };
     },
     computed: {
@@ -225,6 +196,15 @@
     this.getDataAll()
     //this.queryData()
   },
+  created() {
+    // Get the data from Local Storage when the component is created
+   // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        // this.localeUsername = localStorage.getItem("userDataUserName");
+        // this.localeEmail = localStorage.getItem("userDataEmail");
+        // this.localeRole = localStorage.getItem("userDataRole");
+        
+  },
     methods: {
       InsertComment() {
          // console.log("test obid",this.object.id)
@@ -237,7 +217,7 @@
           
             forum_id:this.$route.query.id,
             detail:this.textComment,
-            user_id:1,
+            user_id:this.localeId,
          
           },
           fetchPolicy: "no-cache",
@@ -309,6 +289,7 @@
                 variables: {
             
             id: this.$route.query.id,
+            userId:this.localeId
           },
                 
               })

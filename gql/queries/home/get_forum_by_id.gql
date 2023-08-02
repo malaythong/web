@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 query MyQuery($id: Int) {
   forum(where: { id: { _eq: $id } }) {
+=======
+query MyQuery($id: Int,$userId:Int) {
+  forum(where: {id: {_eq: $id}}) {
+>>>>>>> origin/Toxin
     detail
     iamge
     id
@@ -35,7 +40,11 @@ query MyQuery($id: Int) {
         count(columns: detail)
       }
     }
+<<<<<<< HEAD
     ratings(where: { user_id: { _eq: 1 } }, limit: 1) {
+=======
+    ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
+>>>>>>> origin/Toxin
       forum_id
       id
       score

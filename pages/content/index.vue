@@ -11,7 +11,7 @@
                     <v-img
                       class="mt-0"
                       height="32"
-                      width="32"
+                      width="32" 
                       :src="pic(index)"
                     >
                     </v-img>

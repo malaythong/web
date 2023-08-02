@@ -1,4 +1,4 @@
-query getForumAll {
+query getForumAll($userId:Int) {
   forum {
     updated_at
     topic
@@ -35,7 +35,7 @@ query getForumAll {
         count(columns: detail)
       }
     }
-    ratings(where: {user_id: {_eq: 1}}, limit: 1) {
+    ratings(where: {user_id: {_eq: $userId}}, limit: 1) {
         forum_id
         id
         score
