@@ -1,7 +1,7 @@
 query MyQuery($id: Int, $userId: Int) {
   forum(where: {id: {_eq: $id}}) {
     detail
-    iamge
+    image
     id
     tag_id
     topic

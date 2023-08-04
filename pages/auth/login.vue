@@ -86,13 +86,13 @@
                 variables: { 
            
             password: this.password,
-            username: this.username.toUpperCase(),
+            username: this.username,
            // role:"user"
          
           },
               })
               .then((result) => {
-                console.log("run result gender",result.data.user[0]?.gender)
+                console.log("run result gender",result.data.user)
                 this.getUser = result.data.user
 
                 this.localeId = result.data.user[0]?.id;

@@ -1,0 +1,13 @@
+query MyQuery($userId: Int) {
+  tag_follows(where: {user_id: {_eq: $userId}}) {
+    user_id
+    tag_id
+    tag {
+      name
+      id
+      forum_details {
+        forum_id
+      }
+    }
+  }
+}

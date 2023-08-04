@@ -1,0 +1,5 @@
+mutation MyMutation2($objects: [forum_details_insert_input!] = {}) {
+  insert_forum_details(objects: $objects) {
+    affected_rows
+  }
+}

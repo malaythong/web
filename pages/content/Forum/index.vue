@@ -71,9 +71,9 @@
                 </v-row>
                   </v-col>
                 </v-row>
-                <v-row v-if="getData.iamge" no-gutters class="d-flex justify-center">
+                <v-row v-if="getData.image" no-gutters class="d-flex justify-center">
                   <v-col cols="10" sm="4">
-                    <v-img :src="getData.iamge" height="100%" width="100%"></v-img>
+                    <v-img :src="getData.image" height="100%" width="100%"></v-img>
                   </v-col>
                 </v-row>
                 <v-row no-gutters>

@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-card-title class="text-center">
-          <h2>ສ້າງກະທູ້ໃໝ່</h2>
+          <h2>ສ້າງກະທູ້ໃໝ່ {{ result }}</h2>
         </v-card-title>
         <v-card>
           <v-col>
@@ -54,7 +54,7 @@
           label="ຄົ້ນຫາແທັກ"
           multiple
           chips
-         
+        
           persistent-hint
         ></v-select>
             </v-col>
@@ -76,6 +76,7 @@
 
 <script>
 import insert_forum from "~/gql/mutations/insert/insert_forum.gql";
+import insert_forum_detail from "~/gql/mutations/insert/admin/insert_forum_detail.gql";
   import gql from 'graphql-tag'
 export default {
   // data: () => ({
@@ -90,7 +91,9 @@ export default {
         getTag:null,
         getCate:null,
         localeId:null,
-        cateId:null
+        cateId:null,
+        forum_detail:null,itemDetailIds:[],
+        forum_id:1
         
       }
     },
@@ -108,7 +111,53 @@ export default {
         // this.localeRole = localStorage.getItem("userDataRole");
         
   },
+  computed: {
+    forum_id1(){
+      return this.forum_id
+    },
+    result() {
+      if (this.tagSelected === null) {
+        return []; // Return an empty array if hat is null
+      }
+      return this.tagSelected.map(tag_id => ({ tag_id, forum_id: this.forum_id1 }));
+    },
+  },
   methods:{
+    tagForm(){
+   //   const data = this.tagSelected
+      this.itemDetailIds.push ({
+            tag_id: 4,
+            forum_id:1
+          });
+      
+    },
+    InsertForumDetail() {
+         // console.log("test obid",this.object.id)
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            ${insert_forum_detail.MyMutation2}
+          `,
+          variables: { 
+          
+            objects:this.result,
+         
+          },
+          fetchPolicy: "no-cache",
+          
+        }).then((result) => {
+           console.log("seccess")
+            
+            // this.goToForum(result.data.insert_forum.returning[0].id)
+            //this.$router.push('/content/Forum?id=' + id)
+          
+         
+           // this.$emit('updateData', result.data.forum)
+        })
+        .catch((error) => {
+     console.log(error)
+    });
+    },
     InsertComment() {
          // console.log("test obid",this.object.id)
       this.$apollo
@@ -128,7 +177,9 @@ export default {
           
         }).then((result) => {
             console.log("seccess",result.data.insert_forum.returning[0].id)
+            this.forum_id = result.data.insert_forum.returning[0].id
             this.goToForum(result.data.insert_forum.returning[0].id)
+            this.InsertForumDetail()
             //this.$router.push('/content/Forum?id=' + id)
           
          

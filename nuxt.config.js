@@ -32,8 +32,25 @@ export default {
 
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/pwa'],
 
-  modules: [ '@nuxtjs/apollo', '@nuxtjs/i18n'],
-
+  modules: [ '@nuxtjs/axios','@nuxtjs/apollo', '@nuxtjs/i18n'],
+  axios: {
+    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
+    //  baseURL: "/",
+    baseURL: "http://139.162.58.197:8000",
+    //baseURL: "https://api.msig-sokxay.com/api/v1",
+  },
+  // http: {
+  //   // Configure the proxy
+  // proxy: {
+  //   '/api': {
+  //     target: 'http://139.162.58.197:8000',
+  //     changeOrigin: true,
+  //     pathRewrite: {
+  //       '^/api': ''
+  //     }
+  //   }
+  // },
+  
   i18n: {
     // fallbackLocale: 'en',
     locales: [

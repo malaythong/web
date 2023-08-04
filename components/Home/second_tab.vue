@@ -1,6 +1,11 @@
 <template>
   <v-container>
     <v-row justify="center">
+      <v-btn class="mt-8" @click="getIdFor()">ass</v-btn>
+      <v-btn class="mt-4" @click="combinedArray1([4,5,6],[5,8])">run</v-btn>
+      <p>{{recommendations}}</p>
+      <p>{{  getIdForumTag  }}</p>
+      <p>{{ uniqueForumIds }}{{ combinedArray }}</p>
       <v-col cols="12" sm="12">
         <v-card elevation="0">
           <v-card elevation="1"> </v-card>
@@ -76,7 +81,7 @@
                 class="d-flex justify-center"
               >
                 <v-col cols="10" sm="4">
-                  <v-img :src="post.iamge" height="100%" width="100%"></v-img>
+                  <v-img :src="post.image" height="100%" width="100%"></v-img>
                 </v-col>
               </v-row>
               <v-row @click="goToForum(post.id)" no-gutters>
@@ -98,14 +103,17 @@
 </template>
 
 <script>
+import api from '~/plugins/api';
 //import ratingD from "~/components/rating.vue"
 import ratingDialog from '~/components/dialog_rating.vue'
+import axios from 'axios';
 //import { gql } from '@apollo/client/core';
 import gql from 'graphql-tag'
 export default {
   components: { ratingDialog },
   data() {
     return {
+      recommendations: [],
       selectedCard: null,
       // rating:null,
       dialog: false,
@@ -118,10 +126,29 @@ export default {
       ],
 
       ratingDialog: false,
+      getIdForumTag:null,
+      localeId:null,
+      combinedArray:null
+     // uniqueForumIds:[2]
     };
     
   },
   computed: {
+    uniqueForumIds() {
+      const forumIds = new Set();
+
+      // Check if jsonData is available before processing
+      if (this.getIdForumTag) {
+        for (const item of this.getIdForumTag) {
+          const forumDetails = item.tag.forum_details;
+          for (const detail of forumDetails) {
+            forumIds.add(detail.forum_id);
+          }
+        }
+      }
+
+      return Array.from(forumIds);
+    },
     image() {
       return require('@/assets/images/Group 32.png')
     },
@@ -129,11 +156,47 @@ export default {
       return require('@/assets/images/message-circle.png')
     },
   },
+  created() {
+    // Get the data from Local Storage when the component is created
+   // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        // this.localeUsername = localStorage.getItem("userDataUserName");
+        // this.localeEmail = localStorage.getItem("userDataEmail");
+        // this.localeRole = localStorage.getItem("userDataRole");
+        
+  },
   mounted(){
    //this.getDataAll()
-    this.queryData()
+    // this.queryData(),
+    this.getIdFor()
+    
   },
+  // created() {
+  //   // Assign the handleResponse function to the global context
+  //   window.handleResponse = this.handleResponse;
+  // },
+  // beforeDestroy() {
+  //   // Clean up the global function when the component is destroyed
+  //   delete window.handleResponse;
+  // },
   methods: {
+    async asyncData() {
+    try {
+      const response = await api.get('/recommendations', {
+        params: {
+          target_user: this.localeId,
+         
+        }
+      });
+      console.log("test recommendations",response.data)
+      return   [this.recommendations= response.data,this.combinedArray1(response.data,this.uniqueForumIds)]
+      ;
+    } catch (error) {
+     // console.error('Error fetching recommendations:', error);
+      
+      return  this.combinedArray1([],[]);
+    }
+  },
     saveStatus(newStatus) {
       if (this.selectedCard) {
         this.selectedCard.ratings_aggregate.aggregate.count = newStatus
@@ -173,6 +236,26 @@ export default {
       return daysDiff
     },
 
+    async getIdFor() {
+      console.log('run this.localeId',this.localeId)
+      await this.$apollo
+        .query({
+          query: require('~/gql/queries/home/get_forum_id_by_res.gql').MyQuery,
+          fetchPolicy: 'no-cache',
+          variables:{
+            userId:this.localeId
+          }
+        })
+        .then((result) => {
+          console.log('run result tag forum', result.data.tag_follows)
+          this.getIdForumTag = result.data.tag_follows
+          this.asyncData()
+          //  console.log("run",getData)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     async getDataAll() {
       console.log('run test')
       await this.$apollo
@@ -221,16 +304,17 @@ export default {
       this.$router.push('/content/Forum?id=' + id)
     },
     async queryData() {
+      console.log("test query")
       try {
         const res = await this.$apollo.query({
           query: gql`
-         query getForumAll {
-  forum (order_by: {ratings_aggregate: {count: asc}}) {
+         query getForumAll ($aId:[Int]){
+  forum (where: {id: {_in: $aId}}) {
     updated_at
     topic
     id
     tag_id
-    iamge
+    image
     detail
     created_at
     create_by
@@ -279,7 +363,7 @@ export default {
           variables: {
             
             
-            userId:this.localeId
+            aId:this.combinedArray
           },
         })
 
@@ -289,6 +373,13 @@ export default {
       } catch (e) {
         console.error(e)
       }
+    },
+    combinedArray1(A, B) {
+      const combinedArray = [...new Set([...A, ...B])];
+    //  return console.log("temp",combinedArray) 
+       this.combinedArray = combinedArray;
+       return this.queryData()
+
     },
     async updateData() {
       // console.log(`data tables:`, dataTables)
@@ -302,7 +393,7 @@ export default {
     topic
     id
     tag_id
-    iamge
+    image
     detail
     created_at
     create_by
@@ -348,11 +439,11 @@ export default {
 }
 
           `,
-          variables: {
+          // variables: {
             
             
-            userId:this.localeId
-          },
+          //   userId:this.localeId
+          // },
         })
 
         //TRY TO SEE IN console.log()
