@@ -114,6 +114,7 @@
           :headers="headers"
           :items="items"
           :search="search"
+          sort-by="id"
         ></v-data-table>
       </v-card>
     </div>

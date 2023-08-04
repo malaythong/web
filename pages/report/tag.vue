@@ -27,6 +27,7 @@
       <v-data-table
         :headers="headers"
         :items="data"
+        sort-by="id"
         :search="search"
       ></v-data-table>
     </v-card>
