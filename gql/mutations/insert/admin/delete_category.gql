@@ -1,0 +1,5 @@
+mutation UpdateCate($id:Int) {
+  update_categories(where: {id: {_eq: $id}}, _set: {status: 3}) {
+    affected_rows
+  }
+}

@@ -1,0 +1,15 @@
+query getTag {
+  tag(where: { status: { _gte: 1, _lte: 2 } }) {
+    id
+    name
+    category {
+      id
+      name
+    }
+    forum_details_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}

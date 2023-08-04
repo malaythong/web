@@ -1,0 +1,5 @@
+mutation deleteForum($id:Int) {
+  update_forum(where: {id: {_eq: $id}}, _set: {status: 3}) {
+    affected_rows
+  }
+}

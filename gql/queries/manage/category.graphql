@@ -1,0 +1,11 @@
+query MyQuery {
+  categories(where: {status: {_gte: 1, _lte: 2}}) {
+    id
+    name
+    tags_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}

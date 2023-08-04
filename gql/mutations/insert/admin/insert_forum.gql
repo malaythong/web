@@ -1,0 +1,5 @@
+mutation insertForum ($id: Int,$topic: String, $detail:String, $image:String){
+  insert_forum(objects: {topic: $topic, create_by: 1, detail: $detail, image: $image}) {
+    affected_rows
+  }
+}

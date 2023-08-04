@@ -4,7 +4,7 @@ export default {
   ssr: false,
   head: {
     titleTemplate: '%s',
-    title: 'nuxt2-boiler-hasura',
+    title: 'PanTho',
     htmlAttrs: {
       lang: 'en',
     },

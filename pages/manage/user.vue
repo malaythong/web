@@ -348,8 +348,7 @@ mounted(){
       }
     },
 
-    InsertUser() {
-       
+    InsertUser() { 
       this.$apollo
         .mutate({
           mutation: gql`

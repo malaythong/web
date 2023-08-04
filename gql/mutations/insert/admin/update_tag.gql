@@ -1,0 +1,5 @@
+mutation updateTag ($id:Int, $name:String, $category:Int){
+  update_tag(where: {id: {_eq: $id}}, _set: {name: $name, category_id: $category}){
+    affected_rows
+  }
+}

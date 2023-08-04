@@ -3,3 +3,4 @@ mutation updateUser ($id: Int, $profile: String, $gender: String, $email: String
     affected_rows
   }
 }
+ 

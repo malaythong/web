@@ -6,7 +6,7 @@
     <v-card>
       <v-card-title>
         <v-row>
-          <v-col cols="2">
+          <!-- <v-col cols="2">
             <v-menu
               ref="menu"
               v-model="menu"
@@ -82,8 +82,8 @@
                 >
               </v-date-picker>
             </v-menu>
-          </v-col>
-          <v-col cols="5">
+          </v-col> -->
+          <v-col cols="8">
             <!-- search bar -->
             <v-text-field
               v-model="search"
