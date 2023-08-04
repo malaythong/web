@@ -1,0 +1,8 @@
+mutation MyMutation($createBy: Int, $detail: String, $tagId: json,$topic:String) {
+  insert_forum(objects: {create_by: $createBy, detail: $detail, tag_id: $tagId, topic: $topic}) {
+    affected_rows
+     returning {
+      id
+    }
+  }
+}

@@ -1,0 +1,5 @@
+mutation MyMutation($userId: Int, $tagId: Int) {
+  delete_tag_follows(where: {user_id: {_eq: $userId}, tag_id: {_eq: $tagId}}) {
+    affected_rows
+  }
+}

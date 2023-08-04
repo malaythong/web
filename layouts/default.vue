@@ -9,7 +9,7 @@
     >
       <v-list>
         <v-list-item
-          v-for="(item, i) in items.slice(0, 13)"
+          v-for="(item, i) in contentMenu"
           :key="i"
           :to="item.to"
           router
@@ -24,11 +24,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
     <v-app-bar elevation="0" :clipped-left="clipped" fixed app>
-      <edit_profile v-model="dialog"></edit_profile>
-      <settingAccount v-model="dialogg"></settingAccount>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>{{ checkRole.title }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+
       <v-text-field
         label="Search"
         placeholder="ຊື່ກະທູ້, ຊື່ແທັກ, ໝວດໝູ່"
@@ -37,20 +38,30 @@
         solo
         dense
         class="custom-text-field"
+        :style="isAdmin === true ? 'display:none;' : ''"
       ></v-text-field>
-      <v-btn icon>
+      <v-btn icon :style="isAdmin === true ? 'display:none;' : ''">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
       <v-spacer />
 
-      <v-btn color="primary" text @click="createNewTopic">
+      <v-btn
+        color="primary"
+        text
+        @click="createNewTopic"
+        :style="isAdmin === true ? 'display:none;' : ''"
+      >
         <v-icon>mdi-comment-plus-outline</v-icon>
         <span>ສ້າງກະທູ້ໃໝ່</span>
       </v-btn>
-      <!-- <v-btn color="primary" icon>
+      <v-btn
+        color="primary"
+        icon
+        :style="isAdmin === true ? 'display:none;' : ''"
+      >
         <v-icon>mdi-bell</v-icon>
-      </v-btn> -->
+      </v-btn>
 
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
@@ -77,8 +88,10 @@
             @click="test(i)"
           >
             <v-list-item-title>
-              <span>{{ item.list }}</span>
-              <!-- <v-card  @click="test" v-if="item.list=='Manage Profile'">Manage Profile</v-card> -->
+              <span>{{ item.list }} {{ i }}</span>
+              <v-card @click="test" v-if="item.list == 'Manage Profile'"
+                >Manage Profile</v-card
+              >
             </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -88,6 +101,8 @@
       <v-container>
         <Nuxt />
       </v-container>
+      <settingAccount v-model="dialogg"></settingAccount>
+      <edit_profile v-model="dialog"></edit_profile>
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -98,6 +113,7 @@
 <script>
 import edit_profile from '~/components/edit_profile'
 import settingAccount from '~/components/settingAccount'
+import _ from 'lodash'
 export default {
   name: 'DefaultLayout',
   components: { edit_profile, settingAccount },
@@ -133,10 +149,6 @@ export default {
         },
         {
           list: 'ຈັດການບັນຊີ',
-          to: '',
-        },
-        {
-          list: 'ຕັ້ງຄ່າ',
           to: '',
         },
         {
@@ -218,45 +230,152 @@ export default {
           list: 'ຈັດການບັນຊີ',
           to: '',
         },
-        {
-          list: 'ຕັ້ງຄ່າ',
-          to: '',
-        },
+
         {
           list: 'ອອກຈາກລະບົບ',
           to: '/manage/setting',
         },
       ],
-      unknow:[],
+      unknow: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Report',
       dialog: false,
       dialogg: false,
-      localeId:null,
-      localeRole:null
+      localeId: null,
+      localeRole: null,
     }
   },
   created() {
     // Get the data from Local Storage when the component is created
-   // this.retrievedData = localStorage.getItem("userData");
-    this.localeId = localStorage.getItem("userDatId");
-        // this.localeUsername = localStorage.getItem("userDataUserName");
-        // this.localeEmail = localStorage.getItem("userDataEmail");
-     this.localeRole = localStorage.getItem("userDataRole");
-        
+    // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem('userDatId')
+    // this.localeUsername = localStorage.getItem("userDataUserName");
+    // this.localeEmail = localStorage.getItem("userDataEmail");
+    this.localeRole = localStorage.getItem('userDataRole')
   },
-  computed:{
-    checkRole(){
-      if(this.localeRole==="user"){
+  computed: {
+    checkRole() {
+      if (this.localeRole === 'user') {
         return this.itemsUser
-      }
-      else if(this.localeRole==="admin"){
+      } else if (this.localeRole === 'admin') {
         return this.items
-      } 
-      else {
+      } else {
         return this.unknow
+      }
+    },
+
+    isAdmin() {
+      const userRole = localStorage.getItem('userDataRole')
+      const isEmptyUserRole = _.isEmpty(_.trim(userRole))
+
+      if (isEmptyUserRole) {
+        return false
+      } else {
+        if (userRole.toString().toLowerCase() === 'admin') {
+          return true
+        } else if (userRole.toString().toLowerCase() === 'user') {
+          return false
+        } else {
+          return false
+        }
+      }
+    },
+
+    contentMenu() {
+      const userRole = localStorage.getItem('userDataRole')
+      const isEmptyUserRole = _.isEmpty(_.trim(userRole))
+      if (!isEmptyUserRole) {
+        if (userRole.toString().toLowerCase() === 'user') {
+          return [
+            {
+              icon: 'mdi-home',
+              title: 'ໜ້າຫຼັກ',
+              to: '/content',
+            },
+            {
+              icon: 'mdi-comment-plus',
+              title: 'ສ້າງກະທູ້ໃໝ່',
+              to: '/content/create',
+            },
+            {
+              icon: 'mdi-clock',
+              title: 'ປະຫວັດການເຂົ້າອ່ານ',
+              to: '/content/feed',
+            },
+            {
+              icon: 'mdi-tag',
+              title: 'ແທັກ',
+              to: '/info/tag',
+            },
+            {
+              icon: 'mdi-face-agent',
+              title: 'ຕິດຕໍ່ທີມງານ',
+              to: '/report/contact_admin',
+            },
+          ]
+        } else if (userRole.toString().toLowerCase() === 'admin') {
+          return [
+            {
+              icon: 'mdi-view-dashboard',
+              title: 'Dashboard',
+              to: '/report/dashboard',
+            },
+            {
+              icon: 'mdi-account-supervisor',
+              title: 'ຈັດການຂໍ້ມູນຜູ້ໃຊ້',
+              to: '/manage/user',
+            },
+            {
+              icon: 'mdi-forum',
+              title: 'ຈັດການຂໍ້ມູນກະທູ້',
+              to: '/manage/forum',
+            },
+            {
+              icon: 'mdi-tag',
+              title: 'ຈັດການຂໍ້ມູນແທັກ',
+              to: '/manage/tag',
+            },
+            {
+              icon: 'mdi-shape',
+              title: 'ຈັດການຂໍ້ມູນໝວດໝູ່',
+              to: '/manage/categories',
+            },
+            {
+              icon: 'mdi-forum-outline',
+              title: 'ລາຍງານຂໍ້ມູນກະທູ້',
+              to: '/report/forum',
+            },
+            {
+              icon: 'mdi-tag-outline',
+              title: 'ລາຍງານຂໍ້ມູນແທັກ',
+              to: '/report/tag',
+            },
+            {
+              icon: 'mdi-account-multiple-outline',
+              title: 'ລາຍງານມູນຜູ້ໃຊ້',
+              to: '/report/user',
+            },
+            {
+              list: 'ບັນຊີ',
+              to: '/info/profile',
+            },
+            {
+              list: 'ຈັດການບັນຊີ',
+              to: '',
+            },
+
+            {
+              list: 'ອອກຈາກລະບົບ',
+              to: '/manage/setting',
+            },
+          ]
+        } else {
+          return []
+        }
+      } else {
+        return []
       }
     },
   },

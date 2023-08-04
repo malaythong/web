@@ -1,0 +1,6 @@
+mutation MyMutation($userId: Int,$tagId:Int) {
+  insert_tag_follows(objects: {user_id: $userId, tag_id: $tagId}) {
+    affected_rows
+    
+  }
+}

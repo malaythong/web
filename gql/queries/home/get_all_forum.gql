@@ -4,7 +4,7 @@ query getForumAll($userId:Int) {
     topic
     id
     tag_id
-    iamge
+    image
     detail
     create_by
     created_at

@@ -13,7 +13,7 @@
                 <v-card-title>
                     <v-row>
                         <v-col class=" d-flex justify-center" no-gutters>
-                            <h3>ສິ່ງທີ່ສົນໃຈ {{ interest2 }}</h3>
+                            <h3>ສິ່ງທີ່ສົນໃຈ</h3>
                         </v-col>
                     </v-row>
                 </v-card-title>
@@ -25,7 +25,7 @@
 
                     <v-chip-group v-model="interest" column multiple>
                         <v-chip v-for="(interest, index) in getTag" :key="index" filter outlined @click="chipClicked(interest)">
-                            {{ interest.id }}
+                            {{ interest.name }}
                         </v-chip>
                     </v-chip-group>
                 </v-card-text>
@@ -92,13 +92,13 @@ export default {
         async getDataAll() {
       console.log("run test")
            await this.$apollo.query({
-                query: require('~/gql/queries/register/get_tag.gql')
+                query: require('~/gql/queries/home/get_cate.gql')
                   .MyQuery,
                 fetchPolicy: 'no-cache',
               })
               .then((result) => {
-                console.log("run result",result.data.tag)
-                this.getTag = result.data.tag
+                console.log("run result",result.data.categories)
+                this.getTag = result.data.categories
               //  console.log("run",getData)
              
                

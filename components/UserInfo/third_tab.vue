@@ -51,7 +51,7 @@
                 </v-row>
                 <v-row @click="goToForum(post.id)" no-gutters class="d-flex justify-center">
                     <v-col cols="10" sm="4">
-                    <v-img :src="post.iamge" height="100%" width="100%"></v-img>
+                    <v-img :src="post.image" height="100%" width="100%"></v-img>
                   </v-col>
                 </v-row>
                 <v-row @click="goToForum(post.id)" no-gutters>
@@ -267,7 +267,7 @@
       topic
       id
       tag_id
-      iamge
+      image
       detail
       created_at
       create_by
@@ -339,7 +339,7 @@
       topic
       id
       tag_id
-      iamge
+      image
       detail
       created_at
       create_by

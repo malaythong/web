@@ -1,31 +1,35 @@
 <template>
     <div>
-      <v-card class="my-1" v-for="(header, index) in selectedHeaderIds" :key="index">
+      <v-card class="my-1 mb-4" v-for="(header, index) in selectedHeaderIds" :key="index">
         <v-select
           class="mx-2 "
           outlined
           :items="availableHeaderOptions(index)"
           label="Select Header"
           v-model="selectedHeaders[index]"
+          @change="headerSelected(index)"
         >
         </v-select>
+       
+        <ul  v-if="selectedHeaders[index]">
+        
+          <v-card elevation="0" class="my-1 mr-4" v-for="(item,index2) in getSelectedHeaderItems(selectedHeaders[index])" :key="index2">
         <v-select
-          v-if="selectedHeaders[index]"
           class="mx-2 "
           outlined
           :items="availableItemOptions(selectedHeaders[index])"
           label="Select Item"
-          v-model="selectedItems[index]"
+          v-model="selectedItems[index][index2]"
+          item-text="name"
+                item-value="id"
         >
         </v-select>
-        <v-btn @click="addItemSelect(index)">Add V-Select Item</v-btn>
-        <ul v-if="selectedItems[index]">
-          <li v-for="item in getSelectedHeaderItems(selectedHeaders[index])" :key="item.id">
-            {{ item.name }}: {{ item.value }}
-          </li>
+       
+      </v-card>
+      <v-btn class="mb-4 " @click="addItemSelect(index)">Add V-Select Item</v-btn>
         </ul>
       </v-card>
-      <v-btn @click="addHeaderSelect">Add V-Select Header</v-btn>
+      <v-btn class="mt-4 blue" @click="addHeaderSelect">Add V-Select Header</v-btn>
     </div>
   </template>
   
@@ -42,6 +46,7 @@
             item: [
               { id: "L001", name: "item01", value: 1000 },
               { id: "L002", name: "item02", value: 2000 },
+              { id: "L003", name: "item08", value: 7000 },
             ],
           },
           {
@@ -60,7 +65,7 @@
             item: [
               { id: "L001", name: "item04", value: 1200 },
               { id: "L002", name: "item05", value: 2300 },
-              { id: "L003", name: "item07", value: 2300 },
+              { id: "L003", name: "item07", value: 2400 },
             ],
           },
         ],
@@ -73,6 +78,7 @@
       selectedHeaders: [], // Array to store selected header v-select values
       selectedItems: [], // Array to store selected item v-select values
       initialType: [1], // Array of initial types to auto-add v-select
+      testItem:null
       };
     },
     created() {
@@ -94,8 +100,33 @@
         this.selectedItems.push(''); // Push an empty string for the associated item v-select
       }
     },
+    headerSelected(index) {
+      const headerType = this.selectedHeaders[index];
+      const selectedItem = this.selectedItems[index];
+
+      if (headerType && selectedItem.length === 0) {
+        const selectedHeader = this.header.find((header) => header.type === headerType);
+        if (selectedHeader) {
+          const itemValues = selectedHeader.item.map((item) => item.id);
+          this.selectedItems[index] = itemValues;
+        }
+      }
+    },
     addItemSelect(index) {
-      this.selectedItems.splice(index + 1, 0, ''); // Add an empty string to create a new item v-select
+        // Get the selected header's item array
+        const selectedHeaderType = this.selectedHeaders[index];
+      const header = this.header.find((header) => header.type === selectedHeaderType);
+
+      // Make sure the header and items exist
+      if (header && header.item) {
+        // Create an array to hold the items for the selected header
+        if (!this.selectedItems[index]) {
+          this.selectedItems[index] = [];
+        }
+
+        // Add an empty string to create a new item v-select
+        this.selectedItems[index].push('');
+      }// Add an empty string to create a new item v-select
     },
     addSelectByType(type) {
       const headersWithType = this.header.filter((header) => header.type === type);
@@ -126,12 +157,16 @@
           option.value === this.selectedHeaders[index]
       );
     },
+    
     availableItemOptions(type) {
       const header = this.header.find((header) => header.type === type);
-      return header ? header.item : [];
+      // console.log("test item type",type)
+      // console.log("test item log",header ? header.item : [])
+      return  header ? header.item : [];
     },
     getSelectedHeaderItems(type) {
       const header = this.header.find((header) => header.type === type);
+
       return header ? header.item : [];
     },
     },

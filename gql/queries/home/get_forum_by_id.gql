@@ -1,7 +1,7 @@
-query MyQuery($id: Int,$userId:Int) {
+query MyQuery($id: Int, $userId: Int) {
   forum(where: {id: {_eq: $id}}) {
     detail
-    iamge
+    image
     id
     tag_id
     topic
@@ -46,7 +46,7 @@ query MyQuery($id: Int,$userId:Int) {
         count(columns: id)
       }
     }
-    comments(order_by: { created_at: desc }) {
+    comments(order_by: {created_at: desc}) {
       detail
       created_at
       forum_id
@@ -58,6 +58,9 @@ query MyQuery($id: Int,$userId:Int) {
         role
         username
       }
+    }
+    forum_histories(where: {user_id: {_eq: $userId}}) {
+      id
     }
   }
 }

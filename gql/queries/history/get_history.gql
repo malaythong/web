@@ -1,8 +1,8 @@
 query MyQuery($userId: Int) {
-  forum_histories(where: {user_id: {_eq: $userId}}) {
+  forum_histories(where: {user_id: {_eq: $userId}}, order_by: {created_at: desc}) {
     forum {
       detail
-      iamge
+      image
       id
       tag_id
       topic

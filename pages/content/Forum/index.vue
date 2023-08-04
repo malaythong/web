@@ -71,9 +71,9 @@
                 </v-row>
                   </v-col>
                 </v-row>
-                <v-row v-if="getData.iamge" no-gutters class="d-flex justify-center">
+                <v-row v-if="getData.image" no-gutters class="d-flex justify-center">
                   <v-col cols="10" sm="4">
-                    <v-img :src="getData.iamge" height="100%" width="100%"></v-img>
+                    <v-img :src="getData.image" height="100%" width="100%"></v-img>
                   </v-col>
                 </v-row>
                 <v-row no-gutters>
@@ -160,6 +160,7 @@
   
   <script>
   import insert_comment from "~/gql/mutations/insert/insert_comment.gql";
+  import insert_history from "~/gql/mutations/insert/insert_history.gql";
   import gql from 'graphql-tag'
   import ratingDialog from "~/components/dialog_rating.vue"
   export default {
@@ -234,6 +235,34 @@
      console.log(error)
     });
     },
+    InsertHistory() {
+         // console.log("test obid",this.object.id)
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            ${insert_history.MyMutation}
+          `,
+          variables: { 
+          
+            forumId:this.$route.query.id,
+         //   detail:this.textComment,
+            userId:this.localeId,
+         
+          },
+          fetchPolicy: "no-cache",
+          
+        }).then((result) => {
+            console.log("seccess record",result)
+           
+          
+          // this.getDataAll()
+          // this.textComment=null
+           // this.$emit('updateData', result.data.forum)
+        })
+        .catch((error) => {
+     console.log(error)
+    });
+    },
       saveStatus(newStatus) {
       if (this.selectedCard) {
         this.selectedCard.ratings_aggregate.aggregate.count = newStatus;
@@ -296,6 +325,12 @@
               .then((result) => {
                 console.log("run result",result.data.forum)
                 this.getData = result.data.forum[0]
+                if(result.data.forum[0].forum_histories.length==0){
+                  this.InsertHistory()
+                }else{
+                  console.log("not insert history")
+                }
+                
               //  console.log("run",getData)
                
                

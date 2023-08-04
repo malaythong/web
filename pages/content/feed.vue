@@ -139,7 +139,7 @@
                 </v-row>
                 <v-row @click="goToForum(post.forum.id)" no-gutters class="d-flex justify-center">
                   <v-col cols="10" sm="4">
-                    <v-img :src="post.forum.iamge" height="100%" width="100%"></v-img>
+                    <v-img :src="post.forum.image" height="100%" width="100%"></v-img>
                   </v-col>
                 </v-row>
                 <v-row @click="goToForum(post.forum.id)" no-gutters>
@@ -167,6 +167,7 @@
         selectedCard: null,
         dialog:false,
         getData:{},
+        localeId:null,
         items: [
           { tab: "ທັງໝົດ", content: "Policy" },
           { tab: "ແນະນຳ", content: "CancelHistory" },
@@ -186,6 +187,15 @@
     mounted(){
     this.getDataAll()
     //this.queryData()
+  },
+  created() {
+    // Get the data from Local Storage when the component is created
+   // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem("userDatId");
+        // this.localeUsername = localStorage.getItem("userDataUserName");
+        // this.localeEmail = localStorage.getItem("userDataEmail");
+        // this.localeRole = localStorage.getItem("userDataRole");
+        
   },
     methods: {
       saveStatus(newStatus) {
@@ -246,7 +256,7 @@
                 variables: {
             
             //id: this.$route.query.id,
-            userId:1,
+            userId:this.localeId,
           },
               })
               .then((result) => {
@@ -270,7 +280,7 @@
                 variables: {
             
             //id: this.$route.query.id,
-            userId:1,
+            userId:this.localeId,
           },
               })
               .then((result) => {
