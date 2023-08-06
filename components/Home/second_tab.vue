@@ -163,7 +163,7 @@ export default {
     this.localeId = localStorage.getItem("userDatId");
         // this.localeUsername = localStorage.getItem("userDataUserName");
         // this.localeEmail = localStorage.getItem("userDataEmail");
-        // this.localeRole = localStorage.getItem("userDataRole");
+         this.localeRole = localStorage.getItem("userDataRole");
         
   },
   mounted(){

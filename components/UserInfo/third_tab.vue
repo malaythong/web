@@ -95,7 +95,7 @@
           </v-list-item-avatar> -->
 
           <v-list-item-content no-gutters class="mx-0  ">
-            <v-col no-gutters  class="px-0 pa-0  " >
+            <v-col @click="goToForum(item.id)" no-gutters  class="px-0 pa-0  " >
                 <v-row class="mx-4  mb-3" no-gutters>
                 <!-- <v-list-item-title v-html="item.topic"></v-list-item-title> -->
                 <p>{{ item.topic }}</p>  <p class="ml-4" v-if="checkDate(item.created_at)  === 0" >.ມື້ນີ້</p>

@@ -71,7 +71,7 @@
   
   <script>
   import insert_forum_detail from "~/gql/mutations/insert/admin/insert_forum_detail.gql";
-  import Swal from "sweetalert2";
+  import Swal from "sweetalert2"; 
   import insert_new_user from "~/gql/mutations/insert/insert_new_user.gql";
   import genDialog from "~/components/selectGender.vue"
   import tagDialog from "~/components/interestItem.vue"
