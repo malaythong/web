@@ -1,17 +1,17 @@
 query getforum {
-  forum {
+  forum (where: { status: { _gte: 1, _lte: 2 } }){
     topic
-    comments_aggregate(order_by: {forum: {comments_aggregate: {count: desc}}}) {
+    comments_aggregate(order_by: {forum: {comments_aggregate: {count: desc}}} where: { status: { _gte: 1, _lte: 2 } }) {
       aggregate {
         count
       }
     }
-    forum_histories_aggregate(order_by: {forum: {forum_histories_aggregate: {count: desc}}}) {
+    forum_histories_aggregate(order_by: {forum: {forum_histories_aggregate: {count: desc}}} ) {
       aggregate {
         count
       }
     }
-    ratings_aggregate(order_by: {score: desc}) {
+    ratings_aggregate(order_by: {score: desc} ) {
       aggregate {
         count
       }

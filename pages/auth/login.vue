@@ -40,6 +40,8 @@
 export default {
   data() {
     return {
+      
+      userData:null,
       getUser: {},
       username: '',
       password: '',
@@ -78,7 +80,19 @@ export default {
   //       this.localeEmail = localStorage.getItem("userDataEmail");
   //       this.localeRole = localStorage.getItem("userDataRole");
   // },
+  mounted(){
+    this.logoutData()
+  },
   methods: {
+    logoutData() {
+    
+    // Save the data to Local Storage
+    localStorage.setItem("userData", null);
+    localStorage.setItem("userDatId", null);
+    localStorage.setItem("userDataUserName",null);
+    localStorage.setItem("userDataEmail", null);
+    localStorage.setItem("userDataRole", null);
+  },
     async getUserData() {
       console.log('run user')
       await this.$apollo
@@ -126,8 +140,12 @@ export default {
     },
     gotoMain() {
       //  this.$router.push("/content");
-
-      window.location.href = '/content'
+if(this.localeRole=="user"){
+  window.location.href = '/content'
+}else if(this.localeRole=="admin"){
+  window.location.href = '/report/dashboard'
+}
+      
     },
     login() {
       // Add your login logic here

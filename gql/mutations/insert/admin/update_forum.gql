@@ -1,5 +1,5 @@
-mutation updateTag ($id:Int, $topic:String, $detail:String, $image:String){
-  update_Tag(where: {id: {_eq: $id}}, _set: {name: $name}) {
+mutation updateForum($id:Int, $topic:String, $detail:String){
+  update_forum(where: {id: {_eq: $id}}, _set: {topic: $topic, detail: $detail}) {
     affected_rows
   }
 }

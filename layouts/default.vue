@@ -4,9 +4,11 @@
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
+      :search="searchQuery"
       fixed
       app
     >
+   
       <v-list>
         <v-list-item
           v-for="(item, i) in contentMenu"
@@ -32,21 +34,28 @@
 
       <v-text-field
         label="Search"
+        v-model="searchQuery"
         placeholder="ຊື່ກະທູ້, ຊື່ແທັກ, ໝວດໝູ່"
         outlined
         hide-details
         solo
         dense
         class="custom-text-field"
+        @input="updateSearch"
         :style="isAdmin === true ? 'display:none;' : ''"
       ></v-text-field>
       <v-btn icon :style="isAdmin === true ? 'display:none;' : ''">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
+    <!-- <search-bar :is-admin="localeRole === 'admin'" @perform-search="performSearch"></search-bar> -->
+
+    <!-- <router-view></router-view> -->
+
+
       <v-spacer />
 
-      <v-btn
+      <v-btn v-if="checkRole!=3"
         color="primary"
         text
         @click="createNewTopic"
@@ -55,23 +64,24 @@
         <v-icon>mdi-comment-plus-outline</v-icon>
         <span>ສ້າງກະທູ້ໃໝ່</span>
       </v-btn>
-      <v-btn
+      <!-- <v-btn
         color="primary"
         icon
         :style="isAdmin === true ? 'display:none;' : ''"
       >
         <v-icon>mdi-bell</v-icon>
-      </v-btn>
+      </v-btn> -->
 
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltipOn }">
               <v-avatar color="primary" dark v-on="{ ...tooltipOn, ...on }">
-                <img
+                <!-- <img
                   src="https://www.newshub.co.nz/home/lifestyle/2019/08/the-top-five-cat-memes-of-all-time-rated/_jcr_content/par/video/image.dynimg.1280.q75.jpg/v1565234972425/KNOWYOURMEME-sad-cat-crying-1120.jpg"
                   alt="John"
-                />
+                /> -->
+                
               </v-avatar>
             </template>
             <span>Profile</span>
@@ -88,7 +98,7 @@
             @click="test(i)"
           >
             <v-list-item-title>
-              <span>{{ item.list }} {{ i }}</span>
+              <span>{{ item.list }} </span>
               <v-card @click="test" v-if="item.list == 'Manage Profile'"
                 >Manage Profile</v-card
               >
@@ -114,9 +124,10 @@
 import edit_profile from '~/components/edit_profile'
 import settingAccount from '~/components/settingAccount'
 import _ from 'lodash'
+import SearchBar from "~/components/search.vue"
 export default {
   name: 'DefaultLayout',
-  components: { edit_profile, settingAccount },
+  components: { edit_profile, settingAccount,SearchBar, },
   data() {
     return {
       clipped: false,
@@ -153,7 +164,7 @@ export default {
         },
         {
           list: 'ອອກຈາກລະບົບ',
-          to: '/manage/setting',
+          to: '/auth/login',
         },
       ],
       items: [
@@ -236,7 +247,25 @@ export default {
           to: '/manage/setting',
         },
       ],
-      unknow: [],
+      unknow: [
+      {
+          icon: 'mdi-home',
+          title: 'ໜ້າຫຼັກ',
+          to: '/content',
+        },
+        {
+          list: 'ບັນຊີ',
+          to: '/info/profile',
+        },
+        {
+          list: 'ຈັດການບັນຊີ',
+          to: '',
+        },
+        {
+          list: 'ອອກຈາກລະບົບ',
+          to: '/auth/login',
+        },
+      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
@@ -245,6 +274,12 @@ export default {
       dialogg: false,
       localeId: null,
       localeRole: null,
+      localeId:null,
+      userData:null,
+      localeUsername:null,
+      localeRole:null,
+      localeEmail:null,
+      searchQuery: '',
     }
   },
   created() {
@@ -258,11 +293,11 @@ export default {
   computed: {
     checkRole() {
       if (this.localeRole === 'user') {
-        return this.itemsUser
+        return 1
       } else if (this.localeRole === 'admin') {
-        return this.items
+        return 2
       } else {
-        return this.unknow
+        return 3
       }
     },
 
@@ -288,7 +323,7 @@ export default {
       const isEmptyUserRole = _.isEmpty(_.trim(userRole))
       if (!isEmptyUserRole) {
         if (userRole.toString().toLowerCase() === 'user') {
-          return [
+          return [ 
             {
               icon: 'mdi-home',
               title: 'ໜ້າຫຼັກ',
@@ -309,11 +344,11 @@ export default {
               title: 'ແທັກ',
               to: '/info/tag',
             },
-            {
-              icon: 'mdi-face-agent',
-              title: 'ຕິດຕໍ່ທີມງານ',
-              to: '/report/contact_admin',
-            },
+            // {
+            //   icon: 'mdi-face-agent',
+            //   title: 'ຕິດຕໍ່ທີມງານ',
+            //   to: '/report/contact_admin',
+            // },
           ]
         } else if (userRole.toString().toLowerCase() === 'admin') {
           return [
@@ -372,7 +407,14 @@ export default {
             },
           ]
         } else {
-          return []
+          return [
+          {
+              icon: 'mdi-home',
+              title: 'ໜ້າຫຼັກ',
+              to: '/content',
+            },
+       
+          ]
         }
       } else {
         return []
@@ -380,6 +422,15 @@ export default {
     },
   },
   methods: {
+    saveData() {
+    
+      // Save the data to Local Storage
+      localStorage.setItem("userData", this.userData);
+      localStorage.setItem("userDatId", this.localeId);
+      localStorage.setItem("userDataUserName", this.localeUsername);
+      localStorage.setItem("userDataEmail", this.localeEmail);
+      localStorage.setItem("userDataRole", this.localeRole);
+    },
     test(i) {
       console.log('test log', i)
       if (i == 1) {
@@ -388,7 +439,8 @@ export default {
       }
       if (i == 2) {
         console.log('open dialogg')
-        this.dialogg = true
+        // this.dialogg = true
+        this.$router.push('/auth/login')
       }
     },
     onMenuItemClick(item) {
@@ -406,6 +458,9 @@ export default {
     createNewTopic() {
       console.log('Button clicked! Create a new topic here.')
       this.$router.push('/content/create')
+    },
+    updateSearch() {
+      this.$root.$emit('search-updated', this.searchQuery);
     },
   },
 }

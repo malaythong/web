@@ -89,18 +89,22 @@
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card id="card">
-            <v-row>
-              <v-col class="d-flex justify-center" no-gutters>
-                <h3 class="text-primary">ຢືນຢັນການລຶບຂໍ້ມູນ</h3>
-              </v-col>
-            </v-row>
+          <v-card>
+            <v-card-title>
+              <v-row>
+                <v-col class="d-flex justify-center" no-gutters>
+                  <h3 class="text-primary">ຢືນຢັນການລຶບຂໍ້ມູນ</h3>
+                </v-col>
+              </v-row>
+            </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
+              <v-btn color="red darken-1" text @click="closeDelete"
+                >ຍົກເລີກ</v-btn
               >
-              <v-btn color="error" text @click="DeleteCategory">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="DeleteCategory"
+                >ຕົກລົງ</v-btn
+              >
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>

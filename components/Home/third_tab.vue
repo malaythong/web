@@ -46,7 +46,7 @@
                   </v-row>
                 </v-col>
 
-                <v-col no-gutters cols="2">
+                <v-col v-if="checkRole2!=3" no-gutters cols="2">
                   <v-row no-gutters class="mt-2 d-flex justify-end">
                     <!-- <p>{{ post.ratings }}</p> -->
                     <v-icon
@@ -111,6 +111,7 @@ export default {
       dialog: false,
       getData: {},
       userTemp: 1,
+      localeId:null,
       items: [
         { tab: 'ທັງໝົດ', content: 'Policy' },
         { tab: 'ແນະນຳ', content: 'CancelHistory' },
@@ -121,6 +122,16 @@ export default {
     }
   },
   computed: {
+    checkRole2(){
+      if (this.localeRole === 'user') {
+        return 1
+      } else if (this.localeRole === 'admin') {
+        return 2
+      } else{
+        return 3
+      }
+    },
+    
     image() {
       return require('@/assets/images/Group 32.png')
     },
@@ -128,11 +139,29 @@ export default {
       return require('@/assets/images/message-circle.png')
     },
   },
+  created() {
+    // Get the data from Local Storage when the component is created
+    // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem('userDatId')
+    // this.localeUsername = localStorage.getItem("userDataUserName");
+    // this.localeEmail = localStorage.getItem("userDataEmail");
+     this.localeRole = localStorage.getItem("userDataRole");
+  },
   mounted() {
-    //this.getDataAll()
-    this.queryData()
+    // //this.getDataAll()
+    // this.queryData()
+    this.checkRole()
   },
   methods: {
+    checkRole(){
+      if (this.localeRole === 'user') {
+        return this.queryData()
+      } else if (this.localeRole === 'admin') {
+        return this.queryData()
+      } else {
+        return this.nullUser()
+      }
+    },
     saveStatus(newStatus) {
       if (this.selectedCard) {
         this.selectedCard.ratings_aggregate.aggregate.count = newStatus
@@ -223,7 +252,72 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-            query getForumAll {
+            query getForumAll($userId: Int) {
+              forum(order_by: { ratings_aggregate: { count: desc } }) {
+                updated_at
+                topic
+                id
+                tag_id
+                image
+                detail
+                created_at
+                create_by
+                user {
+                  email
+                  id
+                  profile
+                  username
+                  role
+                }
+                forum_details {
+                  id
+                  tag_id
+                  forum_id
+                  tag {
+                    id
+                    name
+                    created_at
+                    category_id
+                    category {
+                      id
+                      name
+                    }
+                  }
+                }
+                comments_aggregate {
+                  aggregate {
+                    count(columns: detail)
+                  }
+                }
+                ratings(where: { user_id: { _eq: $userId } }, limit: 1) {
+                  forum_id
+                  id
+                  score
+                  user_id
+                }
+                ratings_aggregate(where: { user_id: { _eq: $userId } }) {
+                  aggregate {
+                    count(columns: id)
+                  }
+                }
+              }
+            }
+          `,
+           variables: {
+            userId: this.localeId,
+          },
+        })
+        console.log(res.data.forum)
+        this.getData = res.data.forum
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async nullUser() {
+      try {
+        const res = await this.$apollo.query({
+          query: gql`
+            query getForumAll($userId: Int) {
               forum(order_by: { ratings_aggregate: { count: desc } }) {
                 updated_at
                 topic
@@ -266,7 +360,7 @@ export default {
                   score
                   user_id
                 }
-                ratings_aggregate {
+                ratings_aggregate(where: { user_id: { _eq: 1 } }) {
                   aggregate {
                     count(columns: id)
                   }
@@ -274,9 +368,8 @@ export default {
               }
             }
           `,
+          
         })
-
-        //TRY TO SEE IN console.log()
         console.log(res.data.forum)
         this.getData = res.data.forum
       } catch (e) {
@@ -289,7 +382,7 @@ export default {
       try {
         const res = await this.$apollo.query({
           query: gql`
-            query getForumAll {
+            query getForumAll($userId: Int) {
               forum(order_by: { ratings_aggregate: { count: desc } }) {
                 updated_at
                 topic
@@ -326,13 +419,13 @@ export default {
                     count(columns: detail)
                   }
                 }
-                ratings(where: { user_id: { _eq: 1 } }, limit: 1) {
+                ratings(where: { user_id: { _eq: $userId } }, limit: 1) {
                   forum_id
                   id
                   score
                   user_id
                 }
-                ratings_aggregate {
+                ratings_aggregate(where: { user_id: { _eq: $userId } }) {
                   aggregate {
                     count(columns: id)
                   }
@@ -340,6 +433,9 @@ export default {
               }
             }
           `,
+           variables: {
+            userId: this.localeId,
+          },
         })
 
         //TRY TO SEE IN console.log()

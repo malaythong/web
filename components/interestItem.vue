@@ -2,7 +2,9 @@
     <div>
 
         <v-dialog v-model="interestDialog" persistent max-width="500" >
+        
             <v-card id="card">
+             
                 <v-row>
                     <v-col class=" d-flex justify-end mr-3 pt-6">
                         <!-- <v-icon color="primary" @click="close">
@@ -31,7 +33,7 @@
                 </v-card-text>
                 <v-row class="mb-4">
                     <v-col class="d-flex justify-center ">
-                        <v-btn depressed color="primary" class="mt-12" @click="submitInterest">ຕົກລົງ
+                        <v-btn depressed color="primary" class="mt-12" @click="run">ຕົກລົງ
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -43,6 +45,7 @@
 <script>
 import gql from 'graphql-tag'
 import update_tag from "~/gql/mutations/update/update_tag.gql";
+import insert_tag from "~/gql/mutations/insert/insert_tag_user_all_in_one_time.gql"
 export default {
     props: {
       
@@ -55,14 +58,45 @@ export default {
            // interestDialog: true,
             interest: [],
             interest2: [],
-            interestOptions: ["ສາຍການຮຽນ", "ອາຊີບ", "ຄອບຄົວ", "ຄວາມຮັກ", "ການສຶກສາ"],
+            interestOptions: [],
         };
     },
     mounted(){
-   this.getDataAll()
+   this.getTagData()
     //this.queryData()
   },
     methods: {
+      run(){
+        return [this.InsertTag(),this.submitInterest()]
+      },
+      InsertTag() {
+         console.log("test array tag id",this.result)
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            ${insert_tag.MyMutation}
+          `,
+          variables: { 
+          
+            objects:this.result
+
+         
+          },
+          fetchPolicy: "no-cache",
+          
+        }).then((result) => {
+            console.log("seccess insert tag",result.data)
+          //  this.getUserTagData()
+           // this.goToForum(result.data.insert_forum.returning[0].id)
+            //this.$router.push('/content/Forum?id=' + id)
+          
+         
+           // this.$emit('updateData', result.data.forum)
+        })
+        .catch((error) => {
+     console.log(error)
+    });
+    },
         updateTag() {
          // console.log("test obid",this.object.id)
       this.$apollo
@@ -89,6 +123,29 @@ export default {
     
     });
     },
+    async getTagData() {
+      console.log("run test")
+           await this.$apollo.query({
+                query: require('~/gql/queries/register/get_tag.gql')
+                  .MyQuery,
+                fetchPolicy: 'no-cache',
+                variables: { 
+         id:this.cateId
+       
+        },
+              })
+              .then((result) => {
+                console.log("run result",result.data.tag)
+                this.getTag = result.data.tag
+              //  console.log("run",getData)
+             
+               
+              })
+              .catch((error) => {
+                console.log(error)
+               
+              })
+          },
         async getDataAll() {
       console.log("run test")
            await this.$apollo.query({
@@ -135,6 +192,12 @@ export default {
         },
     },
     computed:{
+      result() {
+      if (this.interestOptions === null) {
+        return []; // Return an empty array if hat is null
+      }
+      return this.interestOptions.map(tag_id => ({ tag_id, user_id: this.id }));
+    },
         interestDialog: {
         get() {
           return this.value;

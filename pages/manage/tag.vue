@@ -117,10 +117,12 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
+              <v-btn color="red darken-1" text @click="closeDelete"
+                >ຍົກເລີກ</v-btn
               >
-              <v-btn color="error" text @click="deleteUser">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteTag"
+                >ຕົກລົງ</v-btn
+              >
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -308,7 +310,7 @@ export default {
           console.log(error)
         })
     },
-    deleteUser(){
+    deleteTag(){
         this.$apollo
         .mutate({
           mutation: gql`

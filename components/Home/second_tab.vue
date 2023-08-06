@@ -1,11 +1,12 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-btn class="mt-8" @click="getIdFor()">ass</v-btn>
-      <v-btn class="mt-4" @click="combinedArray1([4,5,6],[5,8])">run</v-btn>
-      <p>{{recommendations}}</p>
+      <!-- <v-btn class="mt-8" @click="getIdFor()">ass</v-btn>
+      <v-btn class="mt-4" @click="combinedArray1([4,5,6],[5,8])">run</v-btn> -->
+      <!-- <p>{{recommendations}}</p>
       <p>{{  getIdForumTag  }}</p>
-      <p>{{ uniqueForumIds }}{{ combinedArray }}</p>
+      <p>{{ uniqueForumIds }}{{ combinedArray }}</p> -->
+   
       <v-col cols="12" sm="12">
         <v-card elevation="0">
           <v-card elevation="1"> </v-card>
@@ -166,7 +167,7 @@ export default {
         
   },
   mounted(){
-   //this.getDataAll()
+  //  this.getDataAll()
     // this.queryData(),
     this.getIdFor()
     
@@ -194,7 +195,7 @@ export default {
     } catch (error) {
      // console.error('Error fetching recommendations:', error);
       
-      return  this.combinedArray1([],[]);
+      return  this.combinedArray1([],this.uniqueForumIds);
     }
   },
     saveStatus(newStatus) {
@@ -361,8 +362,6 @@ export default {
 
           `,
           variables: {
-            
-            
             aId:this.combinedArray
           },
         })

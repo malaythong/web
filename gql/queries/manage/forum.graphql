@@ -1,5 +1,5 @@
 query allForum {
-  forum (where: { status: { _gte: 1, _lte: 2 } }){
+  forum(where: {status: {_gte: 1, _lte: 2}}) {
     id
     topic
     image
@@ -29,6 +29,16 @@ query allForum {
     }
     user {
       username
+    }
+    forum_details {
+      tag_id
+      tag {
+        id
+        name
+        category {
+          name
+        }
+      }
     }
   }
 }

@@ -166,11 +166,11 @@
             </v-row>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
+              <v-btn color="red darken-1" text @click="closeDelete"
+                >ຍົກເລີກ</v-btn
               >
               <v-btn color="blue darken-1" text @click="deleteUser"
-                >OK</v-btn
+                >ຕົກລົງ</v-btn
               >
               <v-spacer></v-spacer>
             </v-card-actions>
@@ -213,14 +213,14 @@ export default {
       avatar: null,
       defaultItem: {},
       headers: [
-        { text: 'Profile', value: 'profile', sortable: false },
-        { text: 'ID', value: 'id' },
-        { text: 'Username', value: 'username' },
-        { text: 'Gender', value: 'gender' },
-        { text: 'Email', value: 'email' },
-        { text: 'Password', value: 'password' },
+      { text: 'ລະຫັດ', value: 'id' },
+        { text: 'ໂປຣໄຟຣ', value: 'profile', sortable: false },
+        { text: 'ຊື່ຜູ້ໃຊ້', value: 'username' },
+        { text: 'ເພດ', value: 'gender' },
+        { text: 'ອີເມວ', value: 'email' },
+        // { text: 'Password', value: 'password' },
         { text: 'Role', value: 'role' },
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'ຈັດການ', value: 'actions', sortable: false },
       ],
       username: null,
       gender: null,

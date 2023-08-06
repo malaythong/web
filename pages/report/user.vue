@@ -150,8 +150,8 @@ data() {
 apollo: {
   data: {
     query: gql`
-      query allUser {
-        user {
+      query allUser  {
+        user (where: { status: { _gte: 1, _lte: 2 } }){
           id
           username
           email

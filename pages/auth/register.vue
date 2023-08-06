@@ -70,6 +70,7 @@
   </template>
   
   <script>
+  import insert_forum_detail from "~/gql/mutations/insert/admin/insert_forum_detail.gql";
   import Swal from "sweetalert2";
   import insert_new_user from "~/gql/mutations/insert/insert_new_user.gql";
   import genDialog from "~/components/selectGender.vue"
@@ -79,6 +80,7 @@
     components:{genDialog,tagDialog},
     data() {
       return {
+        tagSelected:null,
         valid: true,
         dialog:false,
         dialogTag:false,
@@ -109,7 +111,43 @@
         this.localeEmail = localStorage.getItem("userDataEmail");
         this.localeRole = localStorage.getItem("userDataRole");
   },
+  computed:{
+    result() {
+      if (this.tagSelected === null) {
+        return []; // Return an empty array if hat is null
+      }
+      return this.tagSelected.map(tag_id => ({ tag_id, forum_id: this.forum_id1 }));
+    },
+  },
     methods: {
+      
+      InsertForumDetail() {
+         // console.log("test obid",this.object.id)
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            ${insert_forum_detail.MyMutation2}
+          `,
+          variables: { 
+          
+            objects:this.result,
+         
+          },
+          fetchPolicy: "no-cache",
+          
+        }).then((result) => {
+           console.log("seccess")
+            
+            // this.goToForum(result.data.insert_forum.returning[0].id)
+            //this.$router.push('/content/Forum?id=' + id)
+          
+         
+           // this.$emit('updateData', result.data.forum)
+        })
+        .catch((error) => {
+     console.log(error)
+    });
+    },
       myMethod() {
       if (
         this.email === "" ||

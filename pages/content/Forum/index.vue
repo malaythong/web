@@ -41,7 +41,7 @@
                     <v-card-text>{{ post.date }}</v-card-text>
                   </v-col>
                   <v-col cols="4"> </v-col> -->
-                  <v-col no-gutters cols="2">
+                  <v-col v-if="checkRole2!=3" no-gutters cols="2">
                     <v-row no-gutters class="mt-2 d-flex justify-end">
                       <!-- <v-icon class="mr-4" @click=""
                         >mdi-thumb-up-outline</v-icon
@@ -164,9 +164,18 @@
   import gql from 'graphql-tag'
   import ratingDialog from "~/components/dialog_rating.vue"
   export default {
+    created() {
+    // Get the data from Local Storage when the component is created
+    // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem('userDatId')
+    // this.localeUsername = localStorage.getItem("userDataUserName");
+    // this.localeEmail = localStorage.getItem("userDataEmail");
+     this.localeRole = localStorage.getItem("userDataRole");
+  },
     components:{ratingDialog},
     data() {
       return {
+        localeRole:null,
         textComment:null,
         userTemp:1,
         dialog:false,
@@ -183,6 +192,15 @@
       };
     },
     computed: {
+      checkRole2(){
+      if (this.localeRole === 'user') {
+        return 1
+      } else if (this.localeRole === 'admin') {
+        return 2
+      } else{
+        return 3
+      }
+    },
       checkLike(){
         return this.getData?.ratings_aggregate?.aggregate?.count
       },
@@ -194,7 +212,7 @@
       },
     },
     mounted(){
-    this.getDataAll()
+    this.checkRole()
     //this.queryData()
   },
   created() {
@@ -207,6 +225,15 @@
         
   },
     methods: {
+      checkRole(){
+      if (this.localeRole === 'user') {
+        return this.getDataAll()
+      } else if (this.localeRole === 'admin') {
+        return this.getDataAll()
+      } else{
+        return this.getDataNull()
+      }
+    },
       InsertComment() {
          // console.log("test obid",this.object.id)
       this.$apollo
@@ -330,6 +357,32 @@
                 }else{
                   console.log("not insert history")
                 }
+                
+              //  console.log("run",getData)
+               
+               
+              })
+              .catch((error) => {
+                console.log(error)
+               
+              })
+          },
+          getDataNull() {
+      console.log("run test")
+            this.$apollo.query({
+                query: require('~/gql/queries/home/get_forum_by_null.gql')
+                  .MyQuery,
+                fetchPolicy: 'no-cache',
+                variables: {
+            
+            id: this.$route.query.id,
+          
+          },
+                
+              })
+              .then((result) => {
+                console.log("run result",result.data.forum)
+                this.getData = result.data.forum[0]
                 
               //  console.log("run",getData)
                
