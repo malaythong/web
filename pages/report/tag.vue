@@ -27,6 +27,7 @@
       <v-data-table
         :headers="headers"
         :items="data"
+        sort-by="id"
         :search="search"
       ></v-data-table>
     </v-card>
@@ -54,7 +55,7 @@ export default {
     data: {
       query: gql`
         query allTag {
-          tag {
+          tag (where: { status: { _gte: 1, _lte: 2 } }){
             id
             name
             category {

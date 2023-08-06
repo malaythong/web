@@ -91,22 +91,22 @@ export default {
     userCount: {
       query: gql`
         query Users {
-          user_aggregate {
+          user_aggregate (where: {status: {_gte: 1, _lte: 2}}){
             aggregate {
               count
             }
           }
-          tag_aggregate {
+          tag_aggregate (where: {status: {_gte: 1, _lte: 2}}){
             aggregate {
               count
             }
           }
-          forum_aggregate {
+          forum_aggregate (where: {status: {_gte: 1, _lte: 2}}){
             aggregate {
               count(distinct: false)
             }
           }
-          comment_aggregate {
+          comment_aggregate(where: {status: {_gte: 1, _lte: 2}}){
             aggregate {
               count
             }

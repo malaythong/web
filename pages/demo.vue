@@ -1,203 +1,108 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" max-width="500px">
-      <!-- Activator Button -->
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary ml-6 font-weight-bold"
-          dark
-          class="mb-2"
-          v-bind="attrs"
-          v-on="on"
-        >
-          + ເພີ່ມໃໝ່
-        </v-btn>
-      </template>
+    <h2>Forgot Password</h2>
+    <p>Enter your email address to reset your password.</p>
 
-      <!-- Dialog Content -->
-      <v-card id="card">
-        <v-row>
-          <v-col class="d-flex justify-end mr-3 pt-6">
-            <v-icon color="primary" @click="close">mdi-close</v-icon>
-          </v-col>
-        </v-row>
-        <v-card-title>
-          <v-row>
-            <v-col class="d-flex justify-center" no-gutters>
-              <h4>ເພິ່ມຂໍ້ມູນຜູ້ໃຊ້</h4>
-            </v-col>
-          </v-row>
-        </v-card-title>
-        <v-row>
-          <v-col class="d-flex justify-center" no-gutters>
-            <div>
-              <v-avatar size="70" @click="triggerFileInput">
-                <img v-if="avatar" :src="avatar" alt="Avatar" />
-                <v-icon v-else size="100">mdi-account-circle</v-icon>
-              </v-avatar>
-              <input
-                type="file"
-                ref="fileInput"
-                style="display: none"
-                accept="image/*"
-                @change="onFileChange"
-              />
-            </div>
-          </v-col>
-        </v-row>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="3" class="d-flex align-center" no-gutters>
-                <v-row>
-                  <v-subheader hide-details>Username:</v-subheader>
-                </v-row>
-              </v-col>
-              <v-col cols="9" sm="9">
-                <v-text-field
-                  hide-details="auto"
-                  single-line
-                  outlined
-                  v-model="username"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="3" class="d-flex align-center" no-gutters>
-                <v-row>
-                  <v-subheader hide-details>Gender:</v-subheader>
-                </v-row>
-              </v-col>
-              <v-col cols="9" sm="9">
-                <v-radio-group v-model="gender" row>
-                  <v-radio label="Female" value="Female"></v-radio>
-                  <v-radio label="Male" value="Male"></v-radio>
-                  <v-radio label="LGBTQ+" value="LGBTQ+"></v-radio>
-                </v-radio-group>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="3" class="d-flex align-center" no-gutters>
-                <v-row>
-                  <v-subheader hide-details>Email:</v-subheader>
-                </v-row>
-              </v-col>
-              <v-col cols="9" sm="9">
-                <v-text-field
-                  hide-details="auto"
-                  single-line
-                  outlined
-                  v-model="email"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="3" class="d-flex align-center" no-gutters>
-                <v-row>
-                  <v-subheader hide-details>Password:</v-subheader>
-                </v-row>
-              </v-col>
-              <v-col cols="9" sm="9">
-                <v-text-field
-                  hide-details="auto"
-                  single-line
-                  outlined
-                  v-model="password"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="3" class="d-flex align-center" no-gutters>
-                <v-row>
-                  <v-subheader hide-details>Role:</v-subheader>
-                </v-row>
-              </v-col>
-              <v-col cols="9" sm="9">
-                <v-radio-group v-model="role" row>
-                  <v-radio label="User" value="user"></v-radio>
-                  <v-radio label="Admin" value="admin"></v-radio>
-                </v-radio-group>
-                
-                <!-- <v-radio-group v-model="radioGroup">
-      <v-radio
-        v-for="n in 3"
-        :key="n"
-        :label="`Radio ${n}`"
-        :value="n"
-      ></v-radio>
-    </v-radio-group> -->
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col class="d-flex justify-center">
-                <v-btn
-                  depressed
-                  color="primary"
-                  class="mt-12"
-                  @click="InsertUser"
-                  >ຕົກລົງ</v-btn
-                >
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <!-- Your v-data-table code -->
-    <!-- ... -->
+    <v-text-field v-model="email" label="Email"></v-text-field>
+    <v-btn @click="resetPassword">Reset Password</v-btn>
+    <p v-if="message">{{ message }}</p>
   </div>
 </template>
-  
+
 <script>
-import gql from 'graphql-tag'
-import insert_user from '~/gql/mutations/insert/admin/insert_user.gql'
+import gql from 'graphql-tag';
+import update_user from '~/gql/mutations/insert/admin/update_user.gql';
+// const nodemailer = require('nodemailer'); // Import Nodemailer
 
 export default {
   data() {
     return {
-        avatar:null,
-        radioGroup: 1,
-      dialog: false,
-      username: null,
-      gender: null,
-      email: null,
-      password: null,
-      role: null,
-    }
+      email: '',
+      message: '',
+      localeId: null,
+      localeUsername: null,
+      localeEmail: null,
+      localeRole: null,
+    };
+  },
+  created() {
+    this.localeId = localStorage.getItem('userDatId');
+    this.localeUsername = localStorage.getItem('userDataUserName');
+    this.localeEmail = localStorage.getItem('userDataEmail');
+    this.localeRole = localStorage.getItem('userDataRole');
   },
   methods: {
-    onFileChange(){},
-    triggerFileInput(){},
-    close(){},
-    InsertUser() {
+    async resetPassword() {
+      try {
+        const response = await this.$apollo.mutate({
+          mutation: gql`
+            mutation ResetPassword($email: String!) {
+              resetPassword(email: $email) {
+                message
+              }
+            }
+          `,
+          variables: {
+            email: this.email,
+          },
+        });
+
+        this.message = response.data.resetPassword.message;
+
+        // Generate a new password and send email
+        if (response.data.resetPassword.message === 'Password reset successful.') {
+          const newPassword = generateRandomPassword();
+          this.UpdateUser(newPassword);
+          this.sendEmail(this.email, newPassword);
+        }
+      } catch (error) {
+        this.message = 'An error occurred. Please try again later.';
+      }
+    },
+
+    sendEmail(toEmail, newPassword) {
+      const transporter = nodemailer.createTransport({
+        service: 'your-email-service-provider',
+        auth: {
+          user: 'your-email@example.com',
+          pass: 'your-email-password',
+        },
+      });
+
+      const mailOptions = {
+        from: 'your-email@example.com',
+        to: toEmail,
+        subject: 'New Password',
+        text: `Your new password: ${newPassword}`,
+      };
+
+      try {
+        transporter.sendMail(mailOptions);
+        console.log('Email sent successfully');
+      } catch (error) {
+        console.error('Error sending email:', error);
+      }
+    },
+    UpdateUser(newPassword) {
       this.$apollo
         .mutate({
           mutation: gql`
-            ${insert_user.addUser}
+            ${update_user.updateUser}
           `,
           variables: {
-            username: this.username,
-            gender: this.gender,
-            email: this.email,
-            password: this.password,
-            role: this.role,
+            id: this.localeId,
+            password: newPassword,
           },
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('seccess', result)
+          console.log('success', result);
+          this.dialog = false;
         })
         .catch((error) => {
-          console.log(error)
-        })
+          console.log(error);
+        });
     },
-    UpdateUser() {
-        
-    }
   },
-}
+};
 </script>

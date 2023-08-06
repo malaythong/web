@@ -12,7 +12,7 @@
                 <v-card-title>
                     <v-row>
                         <v-col class=" d-flex justify-center" no-gutters>
-                            <h3>ກ່ຽວກັບທ່ານ {{ id }}</h3>
+                            <h3>ກ່ຽວກັບທ່ານ</h3>
                         </v-col>
                     </v-row>
                 </v-card-title>

@@ -1,0 +1,5 @@
+mutation MyMutation($objects: [tag_follows_insert_input!] = {}) {
+  insert_tag_follows(objects: $objects) {
+    affected_rows
+  }
+}

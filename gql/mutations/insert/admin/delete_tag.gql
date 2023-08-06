@@ -1,0 +1,5 @@
+mutation deleteTag($id:Int) {
+  update_tag(where: {id: {_eq: $id}}, _set: {status: 3}) {
+    affected_rows
+  }
+}

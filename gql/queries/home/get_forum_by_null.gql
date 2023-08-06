@@ -1,0 +1,66 @@
+query MyQuery($id: Int) {
+  forum(where: {id: {_eq: $id}}) {
+    detail
+    image
+    id
+    tag_id
+    topic
+    updated_at
+    created_at
+    create_by
+    user {
+      email
+      id
+      profile
+      username
+      role
+    }
+    forum_details {
+      id
+      tag_id
+      forum_id
+      tag {
+        id
+        name
+        created_at
+        category_id
+        category {
+          id
+          name
+        }
+      }
+    }
+    comments_aggregate {
+      aggregate {
+        count(columns: detail)
+      }
+    }
+    ratings(limit: 1) {
+      forum_id
+      id
+      score
+      user_id
+    }
+    ratings_aggregate {
+      aggregate {
+        count(columns: id)
+      }
+    }
+    comments(order_by: {created_at: desc}) {
+      detail
+      created_at
+      forum_id
+      id
+      user_id
+      user {
+        email
+        profile
+        role
+        username
+      }
+    }
+    forum_histories {
+      id
+    }
+  }
+}

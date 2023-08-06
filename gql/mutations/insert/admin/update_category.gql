@@ -1,0 +1,5 @@
+mutation updateCate ($id:Int, $name:String){
+  update_categories(where: {id: {_eq: $id}}, _set: {name: $name}) {
+    affected_rows
+  }
+}

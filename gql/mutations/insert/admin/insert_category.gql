@@ -1,0 +1,5 @@
+mutation MyMutation ($id: Int,$name: String){
+  insert_categories(objects: {name: $name, id: $id}) {
+    affected_rows
+  }
+}

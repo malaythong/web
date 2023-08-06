@@ -1,0 +1,5 @@
+mutation updateForum($id:Int, $topic:String, $detail:String){
+  update_forum(where: {id: {_eq: $id}}, _set: {topic: $topic, detail: $detail}) {
+    affected_rows
+  }
+}

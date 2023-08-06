@@ -285,6 +285,7 @@
               })
               .then((result) => {
                 console.log("run result",result.data.forum_histories)
+                console.log("run localeId",this.localeId)
                 this.getData = result.data.forum_histories
               //  console.log("run",getData)
                

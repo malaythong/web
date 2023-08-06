@@ -1,0 +1,44 @@
+query allForum {
+  forum(where: {status: {_gte: 1, _lte: 2}}) {
+    id
+    topic
+    image
+    updated_at
+    created_at
+    create_by
+    detail
+    comments_aggregate {
+      aggregate {
+        count
+      }
+    }
+    forum_details_aggregate {
+      aggregate {
+        count
+      }
+    }
+    forum_histories_aggregate {
+      aggregate {
+        count
+      }
+    }
+    ratings_aggregate {
+      aggregate {
+        count
+      }
+    }
+    user {
+      username
+    }
+    forum_details {
+      tag_id
+      tag {
+        id
+        name
+        category {
+          name
+        }
+      }
+    }
+  }
+}

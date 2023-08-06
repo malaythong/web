@@ -1,0 +1,5 @@
+mutation insertTag($name:String, $category:Int){
+    insert_tag(objects: {name: $name, category_id: $category}) {
+    affected_rows
+  }
+}

@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-card-title class="text-center">
-          <h2>ສ້າງກະທູ້ໃໝ່ {{ result }}</h2>
+          <h2>ສ້າງກະທູ້ໃໝ່</h2>
         </v-card-title>
         <v-card>
           <v-col>
@@ -13,9 +13,9 @@
                 <v-spacer />
                 <v-col class="d-flex" cols="12" sm="6">
                   <v-select
-                  v-model="cateId"
-                  item-text="name"
-                item-value="id"
+                    v-model="cateId"
+                    item-text="name"
+                    item-value="id"
                     :items="getCate"
                     label="ຄົ້ນຫາໝວດໝູ່"
                     dense
@@ -45,18 +45,17 @@
               <!-- <v-select :items="getTag" label="ຄົ້ນຫາແທັກ" dense solo 
               item-text="name"
                 item-value="id"></v-select> -->
-                <v-select
+              <v-select
                 solo
                 item-text="name"
                 item-value="id"
-         v-model="tagSelected"
-          :items="getTag"
-          label="ຄົ້ນຫາແທັກ"
-          multiple
-          chips
-        
-          persistent-hint
-        ></v-select>
+                v-model="tagSelected"
+                :items="getTag"
+                label="ຄົ້ນຫາແທັກ"
+                multiple
+                chips
+                persistent-hint
+              ></v-select>
             </v-col>
             <!-- <v-textarea
               solo
@@ -65,9 +64,10 @@
           </v-col>
           <v-col class="d-flex justify-end">
             <!-- <v-btn depressed color="primary" class="mr-4"> ຍົກເລີກ </v-btn> -->
-            <v-btn depressed color="primary" @click="InsertComment"> ສ້າງກະທູ້ໃໝ່ </v-btn>
+            <v-btn depressed color="primary" @click="InsertComment">
+              ສ້າງກະທູ້ໃໝ່
+            </v-btn>
           </v-col>
-          
         </v-card>
       </v-col>
     </v-row>
@@ -75,165 +75,153 @@
 </template>
 
 <script>
-import insert_forum from "~/gql/mutations/insert/insert_forum.gql";
-import insert_forum_detail from "~/gql/mutations/insert/admin/insert_forum_detail.gql";
-  import gql from 'graphql-tag'
+import insert_forum from '~/gql/mutations/insert/insert_forum.gql'
+import insert_forum_detail from '~/gql/mutations/insert/admin/insert_forum_detail.gql'
+import gql from 'graphql-tag'
 export default {
   // data: () => ({
   //   items: ["Foo", "Bar", "Fizz", "Buzz"],
   // }),
   data() {
-      return {
-        topic:null,
-        detail:null,
-        tagSelected:null,
-        items: ["Foo", "Bar", "Fizz", "Buzz"],
-        getTag:null,
-        getCate:null,
-        localeId:null,
-        cateId:null,
-        forum_detail:null,itemDetailIds:[],
-        forum_id:1
-        
-      }
-    },
-    mounted(){
-   //this.getDataAll()
-   //this.getTagAll()
+    return {
+      topic: null,
+      detail: null,
+      tagSelected: null,
+      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      getTag: null,
+      getCate: null,
+      localeId: null,
+      cateId: null,
+      forum_detail: null,
+      itemDetailIds: [],
+      forum_id: 1,
+    }
+  },
+  mounted() {
+    //this.getDataAll()
+    //this.getTagAll()
     this.getCateAll()
   },
   created() {
     // Get the data from Local Storage when the component is created
-   // this.retrievedData = localStorage.getItem("userData");
-    this.localeId = localStorage.getItem("userDatId");
-        // this.localeUsername = localStorage.getItem("userDataUserName");
-        // this.localeEmail = localStorage.getItem("userDataEmail");
-        // this.localeRole = localStorage.getItem("userDataRole");
-        
+    // this.retrievedData = localStorage.getItem("userData");
+    this.localeId = localStorage.getItem('userDatId')
+    // this.localeUsername = localStorage.getItem("userDataUserName");
+    // this.localeEmail = localStorage.getItem("userDataEmail");
+    // this.localeRole = localStorage.getItem("userDataRole");
   },
   computed: {
-    forum_id1(){
+    forum_id1() {
       return this.forum_id
     },
     result() {
       if (this.tagSelected === null) {
-        return []; // Return an empty array if hat is null
+        return [] // Return an empty array if hat is null
       }
-      return this.tagSelected.map(tag_id => ({ tag_id, forum_id: this.forum_id1 }));
+      return this.tagSelected.map((tag_id) => ({
+        tag_id,
+        forum_id: this.forum_id1,
+      }))
     },
   },
-  methods:{
-    tagForm(){
-   //   const data = this.tagSelected
-      this.itemDetailIds.push ({
-            tag_id: 4,
-            forum_id:1
-          });
-      
+  methods: {
+    tagForm() {
+      //   const data = this.tagSelected
+      this.itemDetailIds.push({
+        tag_id: 4,
+        forum_id: 1,
+      })
     },
     InsertForumDetail() {
-         // console.log("test obid",this.object.id)
+      // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`
             ${insert_forum_detail.MyMutation2}
           `,
-          variables: { 
-          
-            objects:this.result,
-         
+          variables: {
+            objects: this.result,
           },
-          fetchPolicy: "no-cache",
-          
-        }).then((result) => {
-           console.log("seccess")
-            
-            // this.goToForum(result.data.insert_forum.returning[0].id)
-            //this.$router.push('/content/Forum?id=' + id)
-          
-         
-           // this.$emit('updateData', result.data.forum)
+          fetchPolicy: 'no-cache',
+        })
+        .then((result) => {
+          console.log('seccess')
+
+          // this.goToForum(result.data.insert_forum.returning[0].id)
+          //this.$router.push('/content/Forum?id=' + id)
+
+          // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
-     console.log(error)
-    });
+          console.log(error)
+        })
     },
     InsertComment() {
-         // console.log("test obid",this.object.id)
+      // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`
             ${insert_forum.MyMutation}
           `,
-          variables: { 
-          
+          variables: {
             createBy: this.localeId,
-  detail: this.detail,
-  tagId: this.tagSelected,
-  topic: this.topic,
-         
+            detail: this.detail,
+            tagId: this.tagSelected,
+            topic: this.topic,
           },
-          fetchPolicy: "no-cache",
-          
-        }).then((result) => {
-            console.log("seccess",result.data.insert_forum.returning[0].id)
-            this.forum_id = result.data.insert_forum.returning[0].id
-            this.goToForum(result.data.insert_forum.returning[0].id)
-            this.InsertForumDetail()
-            //this.$router.push('/content/Forum?id=' + id)
-          
-         
-           // this.$emit('updateData', result.data.forum)
+          fetchPolicy: 'no-cache',
+        })
+        .then((result) => {
+          console.log('seccess', result.data.insert_forum.returning[0].id)
+          this.forum_id = result.data.insert_forum.returning[0].id
+          this.goToForum(result.data.insert_forum.returning[0].id)
+          this.InsertForumDetail()
+          //this.$router.push('/content/Forum?id=' + id)
+
+          // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
-     console.log(error)
-    });
+          console.log(error)
+        })
     },
     goToForum(id) {
       this.$router.push('/content/Forum?id=' + id)
     },
     async getCateAll() {
-      console.log("run test")
-           await this.$apollo.query({
-                query: require('~/gql/queries/home/get_cate.gql')
-                  .MyQuery,
-                fetchPolicy: 'no-cache',
-              })
-              .then((result) => {
-                console.log("run categories",result.data.categories)
-                this.getCate = result.data.categories
-              //  console.log("run",getData)
-             
-               
-              })
-              .catch((error) => {
-                console.log(error)
-               
-              })
-          },
+      console.log('run test')
+      await this.$apollo
+        .query({
+          query: require('~/gql/queries/home/get_cate.gql').MyQuery,
+          fetchPolicy: 'no-cache',
+        })
+        .then((result) => {
+          console.log('run categories', result.data.categories)
+          this.getCate = result.data.categories
+          //  console.log("run",getData)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     async getTagAll() {
-      console.log("run test")
-           await this.$apollo.query({
-                query: require('~/gql/queries/register/get_tag_by_id.gql')
-                  .MyQuery,
-                fetchPolicy: 'no-cache',
-                variables: { 
-         id:this.cateId
-       
-        },
-              })
-              .then((result) => {
-                console.log("run result",result.data.tag)
-                this.getTag = result.data.tag
-              //  console.log("run",getData)
-             
-               
-              })
-              .catch((error) => {
-                console.log(error)
-               
-              })
+      console.log('run test')
+      await this.$apollo
+        .query({
+          query: require('~/gql/queries/register/get_tag_by_id.gql').MyQuery,
+          fetchPolicy: 'no-cache',
+          variables: {
+            id: this.cateId,
           },
+        })
+        .then((result) => {
+          console.log('run result', result.data.tag)
+          this.getTag = result.data.tag
+          //  console.log("run",getData)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
   },
-};
+}
 </script>
