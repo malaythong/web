@@ -134,12 +134,12 @@ export default {
 
       items: [], // Initialize items as an empty array
       headers: [
-        { text: 'ID', value: 'id' },
-        { text: 'Topic', value: 'topic' },
-        { text: 'User', value: 'user' },
-        { text: 'Created At', value: 'created_at' },
-        { text: 'History Count', value: 'historyCount' },
-        { text: 'Rating Count', value: 'ratingCount' },
+        { text: 'ລະຫັດ', value: 'id' },
+        { text: 'ຫົວຂໍ້', value: 'topic' },
+        { text: 'ຜູ້ຂຽນ', value: 'user' },
+        { text: 'ວັນທີສ້າງ', value: 'created_at' },
+        { text: 'ການອ່ານ', value: 'historyCount' },
+        { text: 'ຄະແນນ', value: 'ratingCount' },
       ],
     }
   },

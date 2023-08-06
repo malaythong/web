@@ -1,0 +1,12 @@
+query BarChart {
+  forum_details(limit: 5, where: {forum: {status: {_gte: 1, _lte: 2}}}, order_by: {tag: {forum_details_aggregate: {count: desc}}}) {
+    tag {
+      forum_details_aggregate {
+        aggregate {
+          count
+        }
+      }
+      name
+    }
+  }
+}

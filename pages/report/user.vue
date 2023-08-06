@@ -139,10 +139,10 @@ data() {
     en_date: '',
     data: [], // Initialize data as an empty array
     headers: [
-      { text: 'ID', value: 'id' },
-      { text: 'Username', value: 'username' },
-      { text: 'Email', value: 'email' },
-      { text: 'Gender', value: 'gender' },
+      { text: 'ລະຫັດ', value: 'id' },
+      { text: 'ຊື່ຜູ້ໃຊ້', value: 'username' },
+      { text: 'ອີເມວ', value: 'email' },
+      { text: 'ເພດ', value: 'gender' },
       { text: 'Role', value: 'role' },
     ],
   };

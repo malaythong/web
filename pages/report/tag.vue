@@ -44,10 +44,10 @@ export default {
       data: [], // Initialize data as an empty array
       headers: [
         // Define table headers with label and corresponding value property
-        { text: 'ID', value: 'id' },
-        { text: 'Name', value: 'name' },
-        { text: 'Category Name', value: 'categoryName' },
-        { text: 'Count', value: 'count' },
+        { text: 'ລະຫັດ', value: 'id' },
+        { text: 'ຊື່ແທັກ', value: 'name' },
+        { text: 'ຊື່ໝວດໝູ່', value: 'categoryName' },
+        { text: 'ຈຳນວນການໃຊ້ງານ', value: 'count' },
       ],
     };
   },

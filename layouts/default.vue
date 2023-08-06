@@ -8,7 +8,6 @@
       fixed
       app
     >
-   
       <v-list>
         <v-list-item
           v-for="(item, i) in contentMenu"
@@ -32,7 +31,7 @@
       <v-toolbar-title>{{ checkRole.title }}</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-text-field
+      <!-- <v-text-field
         label="Search"
         v-model="searchQuery"
         placeholder="ຊື່ກະທູ້, ຊື່ແທັກ, ໝວດໝູ່"
@@ -46,16 +45,21 @@
       ></v-text-field>
       <v-btn icon :style="isAdmin === true ? 'display:none;' : ''">
         <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      </v-btn> -->
+      <v-row>
+        <v-col>
+          <SearchBar />
+        </v-col>
+      </v-row>
 
-    <!-- <search-bar :is-admin="localeRole === 'admin'" @perform-search="performSearch"></search-bar> -->
+      <!-- <search-bar :is-admin="localeRole === 'admin'" @perform-search="performSearch"></search-bar> -->
 
-    <!-- <router-view></router-view> -->
-
+      <!-- <router-view></router-view> -->
 
       <v-spacer />
 
-      <v-btn v-if="checkRole!=3"
+      <v-btn
+        v-if="checkRole != 3"
         color="primary"
         text
         @click="createNewTopic"
@@ -76,12 +80,13 @@
         <template v-slot:activator="{ on }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltipOn }">
-              <v-avatar color="primary" dark v-on="{ ...tooltipOn, ...on }">
-                <!-- <img
-                  src="https://www.newshub.co.nz/home/lifestyle/2019/08/the-top-five-cat-memes-of-all-time-rated/_jcr_content/par/video/image.dynimg.1280.q75.jpg/v1565234972425/KNOWYOURMEME-sad-cat-crying-1120.jpg"
-                  alt="John"
-                /> -->
-                
+              <v-avatar
+                color="primary"
+                class="avatar-text"
+                dark
+                v-on="{ ...tooltipOn, ...on }"
+              >
+                {{ getUsernameInitials(localeUsername) }}
               </v-avatar>
             </template>
             <span>Profile</span>
@@ -124,10 +129,10 @@
 import edit_profile from '~/components/edit_profile'
 import settingAccount from '~/components/settingAccount'
 import _ from 'lodash'
-import SearchBar from "~/components/search.vue"
+import SearchBar from '~/components/search.vue'
 export default {
   name: 'DefaultLayout',
-  components: { edit_profile, settingAccount,SearchBar, },
+  components: { edit_profile, settingAccount, SearchBar },
   data() {
     return {
       clipped: false,
@@ -248,7 +253,7 @@ export default {
         },
       ],
       unknow: [
-      {
+        {
           icon: 'mdi-home',
           title: 'ໜ້າຫຼັກ',
           to: '/content',
@@ -274,11 +279,11 @@ export default {
       dialogg: false,
       localeId: null,
       localeRole: null,
-      localeId:null,
-      userData:null,
-      localeUsername:null,
-      localeRole:null,
-      localeEmail:null,
+      localeId: null,
+      userData: null,
+      localeUsername: null,
+      localeRole: null,
+      localeEmail: null,
       searchQuery: '',
     }
   },
@@ -286,7 +291,7 @@ export default {
     // Get the data from Local Storage when the component is created
     // this.retrievedData = localStorage.getItem("userData");
     this.localeId = localStorage.getItem('userDatId')
-    // this.localeUsername = localStorage.getItem("userDataUserName");
+    this.localeUsername = localStorage.getItem('userDataUserName')
     // this.localeEmail = localStorage.getItem("userDataEmail");
     this.localeRole = localStorage.getItem('userDataRole')
   },
@@ -323,7 +328,7 @@ export default {
       const isEmptyUserRole = _.isEmpty(_.trim(userRole))
       if (!isEmptyUserRole) {
         if (userRole.toString().toLowerCase() === 'user') {
-          return [ 
+          return [
             {
               icon: 'mdi-home',
               title: 'ໜ້າຫຼັກ',
@@ -400,7 +405,6 @@ export default {
               list: 'ຈັດການບັນຊີ',
               to: '',
             },
-
             {
               list: 'ອອກຈາກລະບົບ',
               to: '/manage/setting',
@@ -408,12 +412,11 @@ export default {
           ]
         } else {
           return [
-          {
+            {
               icon: 'mdi-home',
               title: 'ໜ້າຫຼັກ',
               to: '/content',
             },
-       
           ]
         }
       } else {
@@ -422,14 +425,25 @@ export default {
     },
   },
   methods: {
+    getUsernameInitials(localeUsername) {
+      console.log('Username:', localeUsername)
+      if (!localeUsername) {
+        return '' // Handle the case where username is null or empty
+      }
+      const initials = localeUsername
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase())
+        .join('')
+      return initials
+    },
+
     saveData() {
-    
       // Save the data to Local Storage
-      localStorage.setItem("userData", this.userData);
-      localStorage.setItem("userDatId", this.localeId);
-      localStorage.setItem("userDataUserName", this.localeUsername);
-      localStorage.setItem("userDataEmail", this.localeEmail);
-      localStorage.setItem("userDataRole", this.localeRole);
+      localStorage.setItem('userData', this.userData)
+      localStorage.setItem('userDatId', this.localeId)
+      localStorage.setItem('userDataUserName', this.localeUsername)
+      localStorage.setItem('userDataEmail', this.localeEmail)
+      localStorage.setItem('userDataRole', this.localeRole)
     },
     test(i) {
       console.log('test log', i)
@@ -459,19 +473,24 @@ export default {
       console.log('Button clicked! Create a new topic here.')
       this.$router.push('/content/create')
     },
-    updateSearch() {
-      this.$root.$emit('search-updated', this.searchQuery);
-    },
   },
 }
 </script>
 
 <style scoped>
 @import url('https://fonts.cdnfonts.com/css/phetsarath');
+.search-row {
+  margin-top: 0; /* Adjust the margin-top value as needed */
+  margin-bottom: 0; /* Adjust the margin-bottom value as needed */
+}
 
 .custom-text-field {
   width: 50px;
   /* Adjust the width as needed */
+}
+.avatar-text {
+  color: white; /* Set the desired font color */
+  font-size: 14px; /* Optionally adjust the font size */
 }
 #app {
   font-family: 'Phetsarath', sans-serif;

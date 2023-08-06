@@ -41,7 +41,7 @@
       <v-col>
         <v-card class="primary">
           <v-card-title class="white--text font-weight-bold"
-            >ຈຳນວນຄວາມແທັກ</v-card-title
+            >ຈຳນວນແທັກ</v-card-title
           >
           <v-card-text>
             <!-- Content for Score Card 3 -->
