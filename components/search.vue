@@ -1,53 +1,3 @@
-<!-- <template>
-  <div>
-    <v-text-field
-      v-model="search"
-      label="Search"
-      outlined
-      hide-details
-      solo
-      dense
-      class="custom-text-field"
-      @input="handleSearchInput"
-    ></v-text-field>
-    <v-card v-if="showResults" class="search-results">
-      <v-list>
-        <v-list-item v-for="result in searchResults" :key="result.id">
-          <v-list-item-title>{{ result.name }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-card>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      search: '',
-      showResults: false,
-      searchResults: [],
-    };
-  },
-  methods: {
-    handleSearchInput() {
-      if (this.search.length > 0) {
-        // Simulate search results (replace with actual search logic)
-        this.searchResults = [
-          { id: 1, name: "Result 1" },
-          { id: 2, name: "Result 2" },
-          { id: 3, name: "Result 3" },
-          // ...
-        ];
-        this.showResults = true;
-      } else {
-        this.searchResults = [];
-        this.showResults = false;
-      }
-    },
-  },
-};
-</script> -->
 <template>
   <div>
     <v-row>
@@ -78,17 +28,14 @@ export default {
           dark
           v-bind="attrs"
           v-on="on"
-          v-if="searchResults.length > 0"
-        >
+          v-if="searchResults.length > 0">
           Show Search Results
         </v-btn>
       </template>
       <v-list v-if="searchResults.length > 0" >
         <v-list-item
           v-for="(result, i) in searchResults" 
-          :key="i"
-          
-        >
+          :key="i">
           <v-list-item-title>{{ result.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -137,19 +84,15 @@ export default {
             searchText: `%${this.search}%`,
           },
         });
-
         const forumResults = response.data.forum.map(item => ({
           title: item.topic,
         }));
-
         const tagResults = response.data.tag.map(item => ({
           title: item.name,
         }));
-
         const categoryResults = response.data.categories.map(item => ({
           title: item.name,
         }));
-
         this.searchResults = [...forumResults, ...tagResults, ...categoryResults];
         this.showResults = true;
       } catch (error) {
@@ -159,8 +102,6 @@ export default {
   },
 };
 </script>
-
-
 <style scoped>
 .search-results {
   position: absolute;

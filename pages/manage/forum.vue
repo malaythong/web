@@ -3,8 +3,7 @@
     :headers="headers"
     :items="data"
     sort-by="id"
-    class="elevation-1"
-  >
+    class="elevation-1">
     <template v-slot:[`item.comment`]="{ item }">
       <p class="mt-4">
         {{ item.comments_aggregate.aggregate.count }}
@@ -15,11 +14,6 @@
         {{ item.forum_histories_aggregate.aggregate.count }}
       </p>
     </template>
-    <!-- <template v-slot:[`item.tag`]="{ item }">
-      <p class="mt-4">
-        {{ item.forum_details.tag.name }}
-      </p>
-    </template> -->
     <template v-slot:[`item.creater`]="{ item }">
       <p class="mt-4">
         {{ item.user.username }}
@@ -27,11 +21,8 @@
     </template>
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title style="color: primary" class="font-weight-black"
-          >ຈັດການຂໍ້ມູນກະທູ້</v-toolbar-title
-        >
+        <v-toolbar-title style="color: primary" class="font-weight-black">ຈັດການຂໍ້ມູນກະທູ້</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -40,9 +31,7 @@
               class="mb-2"
               v-bind="attrs"
               v-on="on"
-              @click="newForum"
-            >
-              + ເພີ່ມໃໝ່
+              @click="newForum">+ ເພີ່ມໃໝ່
             </v-btn>
           </template>
           <v-card id="card">
@@ -58,23 +47,9 @@
                 </v-col>
               </v-row>
             </v-card-title>
-
             <v-card-text>
               <v-container>
                 <v-row>
-                  <!-- <v-row>
-                    <v-col cols="3">
-                      <v-subheader>ລະຫັດກະທູ້:</v-subheader>
-                    </v-col>
-                    <v-col cols="12" sm="8">
-                      <v-text-field
-                        single-line
-                        outlined
-                        v-model="editedItem.id"
-                        label="0001"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row> -->
                   <v-row clasee="text-center">
                     <v-col>
                       <h4>ຊື່ຫົວຂໍ້ກະທູ້</h4>
@@ -88,8 +63,8 @@
                           label="ຄົ້ນຫາໝວດໝູ່"
                           dense
                           solo
-                          @change="getTagAll()"
-                        ></v-select>
+                          @change="getTagAll()">
+                        </v-select>
                       </v-col>
                     </v-col>
                   </v-row>
@@ -115,8 +90,8 @@
                         single-line
                         outlined
                         v-model="detail"
-                        label="Text"
-                      ></v-textarea>
+                        label="Text">
+                      </v-textarea>
                     </v-col>
                     <v-col>
                       <h4>ເລືອກແທັກທີ່ກ່ຽວຂ້ອງກັບກະທູ້</h4>
@@ -130,30 +105,14 @@
                           label="ຄົ້ນຫາແທັກ"
                           multiple
                           chips
-                          persistent-hint
-                        ></v-select>
+                          persistent-hint>
+                        </v-select>
                       </v-col>
-                      <!-- <v-textarea
-              solo
-              name="input-7-4"
-            ></v-textarea> -->
                     </v-col>
-                    <!-- <v-col cols="3">
-                      <v-subheader>ຮູບພາບ:</v-subheader>
-                    </v-col>
-                    <v-col cols="6" md="9" class="d-flex align-center">
-                      <input
-                        type="file"
-                        ref="fileInput"
-                        accept="image/*"
-                        @change="image"
-                      />
-                    </v-col> -->
                   </v-row>
                 </v-row>
               </v-container>
             </v-card-text>
-
             <v-card-actions>
               <v-col class="d-flex justify-center">
                 <v-btn v-if="typeCheck==false"
@@ -161,15 +120,13 @@
                       color="primary"
                       class="mt-12"
                       @click="InsertForum"
-                      >ຕົກລົງ</v-btn
-                    >
+                      >ຕົກລົງ</v-btn>
                     <v-btn v-else
                       depressed
                       color="primary"
                       class="mt-12"
-                      @click="UpdateForum"
-                      >ບັນທຶກ</v-btn
-                    >
+                      @click="UpdateForum">ບັນທຶກ
+                    </v-btn>
               </v-col>
             </v-card-actions>
           </v-card>
@@ -183,12 +140,8 @@
             </v-row>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text @click="closeDelete"
-                >ຍົກເລີກ</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="DeleteForum"
-                >ຕົກລົງ</v-btn
-              >
+              <v-btn color="red darken-1" text @click="closeDelete">ຍົກເລີກ</v-btn>
+              <v-btn color="blue darken-1" text @click="DeleteForum">ຕົກລົງ</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -203,8 +156,7 @@
         :src="item.image"
         :alt="item.text"
         max-width="50"
-        max-height="50"
-      />
+        max-height="50"/>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon small class="mr-2" @click="UpdateDialogForum(item)">
@@ -222,7 +174,6 @@
 </template>
 <script>
 import gql from 'graphql-tag'
-// import insert_forum from '~/gql/mutations/insert/admin/insert_forum.gql'
 import insert_forum from '~/gql/mutations/insert/insert_forum.gql'
 import insert_forum_detail from '~/gql/mutations/insert/admin/insert_forum_detail.gql'
 import delete_forum from '~/gql/mutations/insert/admin/delete_forum.gql'
@@ -243,11 +194,8 @@ export default {
       },
       { text: 'ຫົວຂໍ້ກະທູ້', value: 'topic' },
       { text: 'ລາຍລະອຽດ', value: 'detail' },
-      // { text: 'ຮູບພາບ', value: 'image' },
       { text: 'ຄຳຄິດເຫັນ', value: 'comment' },
       { text: 'ການອ່ານ', value: 'read' },
-      // { text: 'ແທັກ', value: 'tag' },
-      // { text: 'ໝວດໝູ່', value: 'cate' },
       { text: 'ຜູ້ສ້າງ', value: 'creater' },
       { text: 'ສ້າງວັນທີ', value: 'created_at' },
       { text: 'ເຄື່ອນໄຫວລ້າສຸດ', value: 'updated_at' },
@@ -300,7 +248,7 @@ export default {
     },
     result() {
       if (this.tagSelected === null) {
-        return [] // Return an empty array if hat is null
+        return []
       }
       return this.tagSelected.map((tag_id) => ({
         tag_id,
@@ -335,24 +283,24 @@ export default {
         })
         .then((res) => {
           this.data = res?.data?.forum
-          console.log(
-            '🚀 ~ file: forum.vue:182 ~ getData ~  this.data:',
-            this.data
-          )
+          // console.log(
+          //   '🚀 ~ file: forum.vue:182 ~ getData ~  this.data:',
+          //   this.data
+          // )
         })
         .catch((err) => {
           console.log(err)
         })
     },
     async getCateAll() {
-      console.log('run test')
+      // console.log('run test')
       await this.$apollo
         .query({
           query: require('~/gql/queries/home/get_cate.gql').MyQuery,
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('run categories', result.data.categories)
+          // console.log('run categories', result.data.categories)
           this.getCate = result.data.categories
         })
         .catch((error) => {
@@ -360,7 +308,7 @@ export default {
         })
     },
     async getTagAll() {
-      console.log('run test')
+      // console.log('run test')
       await this.$apollo
         .query({
           query: require('~/gql/queries/register/get_tag_by_id.gql').MyQuery,
@@ -370,12 +318,12 @@ export default {
           },
         })
         .then((result) => {
-          console.log('run result', result.data.tag)
+          // console.log('run result', result.data.tag)
           this.getTag = result.data.tag
           //  console.log("run",getData)
         })
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
         })
     },
     limit(string = '', limit = 50) {
@@ -454,7 +402,7 @@ export default {
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('seccess', result.data.insert_forum.returning[0].id)
+          // console.log('seccess', result.data.insert_forum.returning[0].id)
           this.forum_id = result.data.insert_forum.returning[0].id
           this.InsertForumDetail()
           this.getData()
@@ -476,7 +424,7 @@ export default {
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('seccess')
+          // console.log('seccess')
         })
         .catch((error) => {
           console.log(error)
@@ -505,7 +453,7 @@ export default {
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('seccess', result)
+          // console.log('seccess', result)
           this.getData()
           this.dialog = false
         })
@@ -525,7 +473,7 @@ export default {
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('seccess', result)
+          // console.log('seccess', result)
           this.getData()
           this.dialogDelete = false
         })

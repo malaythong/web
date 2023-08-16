@@ -4,13 +4,8 @@
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
           <v-card>
-            <genDialog v-model="dialog" :id="localeId" @openTag="openTag" />
-            <tagDialog
-              v-model="dialogTag"
-              :id="localeId"
-              @gotoMain="gotoMain"/>
             <v-card-title class="text-center">
-              <h2>ລົງທະບຽນ</h2>
+              <h2>ປ່ຽນລະຫັດຜ່ານ</h2>
             </v-card-title>
             <v-card-text>
               <v-form @submit="ລົງທະບຽນ">
@@ -22,19 +17,22 @@
                 <v-text-field
                   :rules="[rules.required]"
                   v-model="username"
-                  label="ຊື່ຜູ້ໃຊ້">
-                </v-text-field>
+                  label="ຊື່ຜູ້ໃຊ້"
+                ></v-text-field>
+
                 <v-text-field
                   :rules="[rules.required]"
                   v-model="password"
-                  label="ລະຫັດຜ່ານ"
+                  label="ລະຫັດຜ່ານໃຫມ່"
                 ></v-text-field>
                 <v-text-field
                   :rules="[rules.required]"
                   v-model="confirmPassword"
-                  label="ໃສ່ລະຫັດຜ່ານອີກຄັ້ງ">
-                </v-text-field>
-                <v-btn color="primary" block @click="myMethod()">ດຳເນີນການຕໍ່</v-btn>
+                  label="ໃສ່ລະຫັດຜ່ານອີກຄັ້ງ"
+                ></v-text-field>
+                <v-btn color="primary" block @click="myMethod()"
+                  >ດຳເນີນການຕໍ່</v-btn
+                >
                 <center>
                   <h4 v-if="valid == false" class="red--text mt-2">
                     !! ກະລຸນາຕື່ມຂໍ້ມູນໃຫ້ຄົບຖ້ວນ !!
@@ -51,10 +49,11 @@
     </v-form>
   </v-container>
 </template>
-<script>
-import insert_forum_detail from '~/gql/mutations/insert/admin/insert_forum_detail.gql'
+  
+  <script>
 import Swal from 'sweetalert2'
 import insert_new_user from '~/gql/mutations/insert/insert_new_user.gql'
+import reset_password from '~/gql/mutations/update/update_password.gql'
 import genDialog from '~/components/selectGender.vue'
 import tagDialog from '~/components/interestItem.vue'
 import gql from 'graphql-tag'
@@ -62,7 +61,6 @@ export default {
   components: { genDialog, tagDialog },
   data() {
     return {
-      tagSelected: null,
       valid: true,
       dialog: false,
       dialogTag: false,
@@ -89,36 +87,7 @@ export default {
     this.localeEmail = localStorage.getItem('userDataEmail')
     this.localeRole = localStorage.getItem('userDataRole')
   },
-  computed: {
-    result() {
-      if (this.tagSelected === null) {
-        return [] // Return an empty array if hat is null
-      }
-      return this.tagSelected.map((tag_id) => ({
-        tag_id,
-        forum_id: this.forum_id1,
-      }))
-    },
-  },
   methods: {
-    InsertForumDetail() {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            ${insert_forum_detail.MyMutation2}
-          `,
-          variables: {
-            objects: this.result,
-          },
-          fetchPolicy: 'no-cache',
-        })
-        .then((result) => {
-          console.log('seccess')
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
     myMethod() {
       if (this.email === '' || this.password === '' || this.username === '') {
         console.log('0111')
@@ -143,26 +112,24 @@ export default {
       this.$apollo
         .mutate({
           mutation: gql`
-            ${insert_new_user.MyMutation}
+            ${reset_password.MyMutation}
           `,
           variables: {
-            email: this.email.toUpperCase(),
+            email: this.email,
             password: this.password,
-            username: this.username.toUpperCase(),
-            role: 'user',
+            userName: this.username,
           },
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log(result.data.insert_user.returning[0])
-          this.userData = result.data.insert_user.returning[0]
-          ;(this.localeId = result.data.insert_user.returning[0].id),
+          console.log('reset data', result.data.update_user.returning[0])
+          this.userData = result.data.update_user.returning[0]
+          ;(this.localeId = result.data.update_user.returning[0].id),
             (this.localeUsername =
-              result.data.insert_user.returning[0].username),
-            (this.localeEmail = result.data.insert_user.returning[0].email),
-            (this.localeRole = result.data.insert_user.returning[0].role)
+              result.data.update_user.returning[0].username),
+            (this.localeEmail = result.data.update_user.returning[0].email),
+            (this.localeRole = result.data.update_user.returning[0].role)
           this.saveData()
-          this.dialog = true
         })
         .catch((error) => {
           console.log(error)
@@ -189,6 +156,7 @@ export default {
       localStorage.setItem('userDataUserName', this.localeUsername)
       localStorage.setItem('userDataEmail', this.localeEmail)
       localStorage.setItem('userDataRole', this.localeRole)
+      this.gotoLogin()
     },
   },
 }

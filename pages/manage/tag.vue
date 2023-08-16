@@ -3,8 +3,7 @@
     :headers="headers"
     :items="getData"
     sort-by="id"
-    class="elevation-1"
-  >
+    class="elevation-1">
     <template v-slot:[`item.used`]="{ item }">
       <p class="mt-4">
         {{ item.forum_details_aggregate.aggregate.count }}
@@ -18,10 +17,8 @@
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title style="color: primary" class="font-weight-black"
-          >ຈັດການຂໍ້ມູນແທັກ</v-toolbar-title
-        >
+          >ຈັດການຂໍ້ມູນແທັກ</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -31,8 +28,7 @@
               v-bind="attrs"
               v-on="on"
               @click="newTag"
-              @focus="GetCategory"
-            >
+              @focus="GetCategory">
               + ເພີ່ມໃໝ່
             </v-btn>
           </template>
@@ -49,7 +45,6 @@
                 </v-col>
               </v-row>
             </v-card-title>
-
             <v-card-text>
               <v-container>
                 <v-row>
@@ -90,16 +85,14 @@
                       color="primary"
                       class="mt-12"
                       @click="InsertTag"
-                      >ຕົກລົງ</v-btn
-                    >
+                      >ຕົກລົງ</v-btn>
                     <v-btn
                       v-else
                       depressed
                       color="primary"
                       class="mt-12"
                       @click="UpdateTag"
-                      >ບັນທຶກ</v-btn
-                    >
+                      >ບັນທຶກ</v-btn>
                   </v-col>
                 </v-row>
               </v-container>
@@ -117,12 +110,8 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text @click="closeDelete"
-                >ຍົກເລີກ</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="deleteTag"
-                >ຕົກລົງ</v-btn
-              >
+              <v-btn color="red darken-1" text @click="closeDelete">ຍົກເລີກ</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteTag">ຕົກລົງ</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -159,7 +148,7 @@ export default {
       { text: 'ຈັດການ', value: 'actions', sortable: false },
     ],
     select: null,
-    items: ['Programming', 'Design', 'Vue', 'Vuetify'],
+    // items: ['Programming', 'Design', 'Vue', 'Vuetify'],
     name: null,
     namecate: null,
     category: null,
@@ -180,7 +169,6 @@ export default {
       tagUsed: 0,
     },
   }),
-
   computed: {
     formTitle() {
       return this.typeCheck == false ? 'ເພີ່ມຂໍ້ມູນແທັກ' : 'ແກ້ໄຂຂໍ້ມູນແທັກ'
@@ -189,7 +177,6 @@ export default {
   mounted() {
     this.getDataAll()
   },
-
   methods: {
     async getDataAll() {
       console.log('run test')
@@ -229,7 +216,6 @@ export default {
         this.dialogDelete = true
         this.id = item.id
     },
-
     close() {
       this.dialog = false
       this.$nextTick(() => {
@@ -237,22 +223,12 @@ export default {
         this.editedIndex = -1
       })
     },
-
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      } else {
-        this.desserts.push(this.editedItem)
-      }
-      this.close()
     },
     newTag() {
       this.typeCheck = false

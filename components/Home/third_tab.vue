@@ -46,7 +46,7 @@
                   </v-row>
                 </v-col>
 
-                <v-col v-if="checkRole2!=3" no-gutters cols="2">
+                <v-col v-if="checkRole2 != 3" no-gutters cols="2">
                   <v-row no-gutters class="mt-2 d-flex justify-end">
                     <!-- <p>{{ post.ratings }}</p> -->
                     <v-icon
@@ -111,7 +111,7 @@ export default {
       dialog: false,
       getData: {},
       userTemp: 1,
-      localeId:null,
+      localeId: null,
       items: [
         { tab: 'ທັງໝົດ', content: 'Policy' },
         { tab: 'ແນະນຳ', content: 'CancelHistory' },
@@ -122,16 +122,16 @@ export default {
     }
   },
   computed: {
-    checkRole2(){
+    checkRole2() {
       if (this.localeRole === 'user') {
         return 1
       } else if (this.localeRole === 'admin') {
         return 2
-      } else{
+      } else {
         return 3
       }
     },
-    
+
     image() {
       return require('@/assets/images/Group 32.png')
     },
@@ -145,7 +145,7 @@ export default {
     this.localeId = localStorage.getItem('userDatId')
     // this.localeUsername = localStorage.getItem("userDataUserName");
     // this.localeEmail = localStorage.getItem("userDataEmail");
-     this.localeRole = localStorage.getItem("userDataRole");
+    this.localeRole = localStorage.getItem('userDataRole')
   },
   mounted() {
     // //this.getDataAll()
@@ -153,7 +153,18 @@ export default {
     this.checkRole()
   },
   methods: {
-    checkRole(){
+    getUsernameInitials(localeUsername) {
+      console.log('Username:', localeUsername)
+      if (!localeUsername) {
+        return '' // Handle the case where username is null or empty
+      }
+      const initials = localeUsername
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase())
+        .join('')
+      return initials
+    },
+    checkRole() {
       if (this.localeRole === 'user') {
         return this.queryData()
       } else if (this.localeRole === 'admin') {
@@ -166,7 +177,6 @@ export default {
       if (this.selectedCard) {
         this.selectedCard.ratings_aggregate.aggregate.count = newStatus
       }
-      // this.closeDialog();
     },
     openDialog(post) {
       this.selectedCard = post
@@ -182,7 +192,6 @@ export default {
         .toLocaleDateString('en-GB')
         .split('/')
       if (dateParts.length !== 3) {
-        // Handle invalid date format
         this.result = null
         return
       }
@@ -253,7 +262,7 @@ export default {
         const res = await this.$apollo.query({
           query: gql`
             query getForumAll($userId: Int) {
-              forum(order_by: { ratings_aggregate: { count: desc } }) {
+              forum(order_by: { ratings_aggregate: { count: desc } },where: { status: { _gte: 1, _lte: 2 } }) {
                 updated_at
                 topic
                 id
@@ -303,7 +312,7 @@ export default {
               }
             }
           `,
-           variables: {
+          variables: {
             userId: this.localeId,
           },
         })
@@ -318,7 +327,10 @@ export default {
         const res = await this.$apollo.query({
           query: gql`
             query getForumAll($userId: Int) {
-              forum(order_by: { ratings_aggregate: { count: desc } }) {
+              forum(
+                order_by: { ratings_aggregate: { count: desc } }
+                where: { forum: { status: { _gte: 1, _lte: 2 } } }
+              ) {
                 updated_at
                 topic
                 id
@@ -368,7 +380,6 @@ export default {
               }
             }
           `,
-          
         })
         console.log(res.data.forum)
         this.getData = res.data.forum
@@ -383,7 +394,10 @@ export default {
         const res = await this.$apollo.query({
           query: gql`
             query getForumAll($userId: Int) {
-              forum(order_by: { ratings_aggregate: { count: desc } }) {
+              forum(
+                where: { status: { _gte: 1, _lte: 2 } }
+                order_by: { ratings_aggregate: { count: desc } }
+              ) {
                 updated_at
                 topic
                 id
@@ -433,7 +447,7 @@ export default {
               }
             }
           `,
-           variables: {
+          variables: {
             userId: this.localeId,
           },
         })

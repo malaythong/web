@@ -3,8 +3,7 @@
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
-      :clipped="clipped"
-      :search="searchQuery"
+      :clipped="clipped"  
       fixed
       app
     >
@@ -30,32 +29,11 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>{{ checkRole.title }}</v-toolbar-title>
       <v-spacer></v-spacer>
-
-      <!-- <v-text-field
-        label="Search"
-        v-model="searchQuery"
-        placeholder="ຊື່ກະທູ້, ຊື່ແທັກ, ໝວດໝູ່"
-        outlined
-        hide-details
-        solo
-        dense
-        class="custom-text-field"
-        @input="updateSearch"
-        :style="isAdmin === true ? 'display:none;' : ''"
-      ></v-text-field>
-      <v-btn icon :style="isAdmin === true ? 'display:none;' : ''">
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn> -->
       <v-row>
-        <v-col>
+        <v-col v-if="checkRole != 3" :style="isAdmin === true ? 'display:none;' : ''">
           <SearchBar />
         </v-col>
       </v-row>
-
-      <!-- <search-bar :is-admin="localeRole === 'admin'" @perform-search="performSearch"></search-bar> -->
-
-      <!-- <router-view></router-view> -->
-
       <v-spacer />
 
       <v-btn
@@ -68,14 +46,6 @@
         <v-icon>mdi-comment-plus-outline</v-icon>
         <span>ສ້າງກະທູ້ໃໝ່</span>
       </v-btn>
-      <!-- <v-btn
-        color="primary"
-        icon
-        :style="isAdmin === true ? 'display:none;' : ''"
-      >
-        <v-icon>mdi-bell</v-icon>
-      </v-btn> -->
-
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-tooltip bottom>
@@ -285,6 +255,7 @@ export default {
       localeRole: null,
       localeEmail: null,
       searchQuery: '',
+      username: null,
     }
   },
   created() {
@@ -294,6 +265,7 @@ export default {
     this.localeUsername = localStorage.getItem('userDataUserName')
     // this.localeEmail = localStorage.getItem("userDataEmail");
     this.localeRole = localStorage.getItem('userDataRole')
+    
   },
   computed: {
     checkRole() {

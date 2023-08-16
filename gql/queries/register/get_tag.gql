@@ -1,5 +1,5 @@
 query MyQuery {
-  tag {
+  tag (where: {status: {_gte: 1, _lte: 2}}){
     id
     name
     category_id

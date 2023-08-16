@@ -1,7 +1,7 @@
 query getforum {
   forum (where: { status: { _gte: 1, _lte: 2 } }){
     topic
-    comments_aggregate(order_by: {forum: {comments_aggregate: {count: desc}}} where: { status: { _gte: 1, _lte: 2 } }) {
+    comments_aggregate(order_by: {forum: {comments_aggregate: {count: desc}}}){
       aggregate {
         count
       }

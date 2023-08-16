@@ -32,18 +32,15 @@
                             <v-icon color="primary"> mdi-tag-outline </v-icon>
                           </v-row> </v-col
                         ><v-col>
-                          <v-list-item-title v-text="item.tag.name" ></v-list-item-title>
-                          <!-- <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle> -->
+                          <v-list-item-title>{{ item.tag.name }}</v-list-item-title>
                         </v-col>
                       </v-row>
                     </v-list-item-content>
-
                     <v-list-item-action>
                       <v-btn
                         depressed
                         @click="DeleteTag(item.tag.id)"
-                        color="error"
-                        >ຍົກເລີກຕິດຕາມ
+                        color="error">ຍົກເລີກຕິດຕາມ
                       </v-btn>
                     </v-list-item-action>
                   </template>
@@ -52,7 +49,6 @@
             </v-list-item-group>
           </v-list>
         </v-card>
-
         <v-card elevation="0">
           <v-toolbar flat color="primary" dark>
             <v-toolbar-title>ແທັກທັງໝົດ</v-toolbar-title>
@@ -67,16 +63,13 @@
                         <v-col sm="1" class="d-flex align-center">
                           <v-row class="d-flex justify-center">
                             <v-icon color="primary"> mdi-tag-outline </v-icon>
-                          </v-row> </v-col
-                        ><v-col>
-                          <v-list-item-title
-                            v-text="item.name"
-                          ></v-list-item-title>
-                          <!-- <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle> -->
+                          </v-row> 
+                        </v-col>
+                        <v-col>
+                          <v-list-item-title>{{ item.name }}</v-list-item-title>
                         </v-col>
                       </v-row>
                     </v-list-item-content>
-
                     <v-list-item-action>
                       <v-btn
                         depressed
@@ -103,61 +96,7 @@ import gql from 'graphql-tag'
 export default {
   data() {
     return {
-      posts: [
-        {
-          title: 'First Post',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque aliquet lobortis sem, et fringilla ligula tristique in.',
-          //cover: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg'
-        },
-        {
-          title: 'Second Post',
-          content:
-            'Sed eu odio ac felis tincidunt volutpat non vitae lacus. Aenean dapibus, tellus vitae ultrices luctus, purus felis volutpat ipsum, nec volutpat purus ex id justo.',
-          cover: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
-        },
-        {
-          title: 'Third Post',
-          content:
-            'Nunc accumsan libero non mauris laoreet, non lacinia lectus maximus. Etiam sagittis ipsum a volutpat auctor.',
-          cover: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
-        },
-      ],
       selected: [2],
-      items: [
-        {
-          action: '15 min',
-          headline: 'Brunch this weekend?',
-          subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-          title: 'Ali Connors',
-        },
-        {
-          action: '2 hr',
-          headline: 'Summer BBQ',
-          subtitle: `Wish I could come, but I'm out of town this weekend.`,
-          title: 'me, Scrott, Jennifer',
-        },
-        {
-          action: '6 hr',
-          headline: 'Oui oui',
-          subtitle: 'Do you have Paris recommendations? Have you ever been?',
-          title: 'Sandra Adams',
-        },
-        {
-          action: '12 hr',
-          headline: 'Birthday gift',
-          subtitle:
-            'Have any ideas about what we should get Heidi for her birthday?',
-          title: 'Trevor Hansen',
-        },
-        {
-          action: '18hr',
-          headline: 'Recipe to try',
-          subtitle:
-            'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
-          title: 'Britta Holt',
-        },
-      ],
       getTagAll: null,
       localeId: null,
       getUserTagAll: null,
@@ -192,7 +131,6 @@ export default {
   },
   methods: {
     InsertTag(id) {
-      // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`
@@ -207,17 +145,12 @@ export default {
         .then((result) => {
           console.log('seccess', result.data)
           this.getUserTagData()
-          // this.goToForum(result.data.insert_forum.returning[0].id)
-          //this.$router.push('/content/Forum?id=' + id)
-
-          // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
           console.log(error)
         })
     },
     DeleteTag(id) {
-      // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`
@@ -232,10 +165,6 @@ export default {
         .then((result) => {
           console.log('seccess', result.data)
           this.getUserTagData()
-          // this.goToForum(result.data.insert_forum.returning[0].id)
-          //this.$router.push('/content/Forum?id=' + id)
-
-          // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
           console.log(error)
@@ -254,7 +183,6 @@ export default {
         .then((result) => {
           console.log('run result', result.data.tag)
           this.getTagAll = result.data.tag
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)
@@ -273,7 +201,6 @@ export default {
         .then((result) => {
           console.log('run result tag', result.data.tag_follows)
           this.getUserTagAll = result.data.tag_follows
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)

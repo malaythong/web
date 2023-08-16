@@ -38,7 +38,7 @@
             </v-tabs-items>
           </div>
         </v-card>
-        <first :search-query="search"></first>
+        <!-- <first :search-query="search"></first> -->
       </v-col>
     </v-row>
   </v-container>
@@ -48,13 +48,13 @@
 import First from "~/components/Home/first_tab.vue";
 import Second from "~/components/Home/second_tab.vue";
 import Third from "~/components/Home/third_tab.vue";
-import Search from "~/components/search.vue";
+// import Search from "~/components/search.vue";
 export default {
   components: {
     First,
     Second,
     Third,
-    Search,
+    // Search,
   },
   data() {
     return {
@@ -74,7 +74,7 @@ export default {
       localeEmail: null,
       localeRole: null,
       localeGender: null,
-      searchQuery: '', // Store the search query here
+     
     };
   },
   created() {

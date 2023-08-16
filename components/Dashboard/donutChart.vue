@@ -1,11 +1,9 @@
 <template>
   <div>
-    <h3 class="d-flex justify-center ">ສັກສ່ວນຜູ້ໃຊ້</h3>
+    <h3 class="d-flex justify-center ">ສັດສ່ວນຜູ້ໃຊ້</h3>
     <apexchart type="donut" height="350" :options="chartOptions" :series="series"></apexchart>
   </div>
-  
 </template>
-
 <script>
 import VueApexCharts from 'vue-apexcharts'
 
@@ -35,7 +33,6 @@ export default {
       },
     }
   },
-
   components: {
     apexchart: VueApexCharts,
   },

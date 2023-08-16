@@ -7,7 +7,6 @@
       <v-card-title>
         <v-row>
           <v-col cols="2">
-            <!-- Start Date Picker -->
             <v-menu
               ref="menu"
               v-model="menu"
@@ -41,9 +40,7 @@
                 </v-btn>
               </v-date-picker>
             </v-menu>
-            <!-- End Date Picker -->
           </v-col>
-
           <v-col cols="2">
             <v-menu
               ref="menu2"
@@ -132,7 +129,7 @@ export default {
       s_date: '',
       en_date: '',
 
-      items: [], // Initialize items as an empty array
+      items: [],
       headers: [
         { text: 'ລະຫັດ', value: 'id' },
         { text: 'ຫົວຂໍ້', value: 'topic' },
@@ -147,7 +144,7 @@ export default {
     items: {
       query: gql`
         query allForum {
-          forum (where: { status: { _gte: 1, _lte: 2 } }){
+          forum(where: { status: { _gte: 1, _lte: 2 } }) {
             id
             topic
             created_at
@@ -181,61 +178,55 @@ export default {
     },
   },
   methods: {
-    searchForum() {
-      // Implement search functionality here if needed
-      // For example, filter the 'items' array based on the 'search' term
-    },
     searchDate() {
-  console.log(this.s_date);
-  console.log(this.en_date);
-  try {
-    this.$apollo
-      .query({
-        query: gql`
-          query allForum($startDate: timestamptz!) {
-            forum(where: { created_at: { _gte: $startDate } }) {
-              id
-              topic
-              created_at
-              forum_histories_aggregate {
-                aggregate {
-                  count
+      console.log(this.s_date)
+      console.log(this.en_date)
+      try {
+        this.$apollo
+          .query({
+            query: gql`
+              query allForum($startDate: timestamptz!) {
+                forum(where: { created_at: { _gte: $startDate } }) {
+                  id
+                  topic
+                  created_at
+                  forum_histories_aggregate {
+                    aggregate {
+                      count
+                    }
+                  }
+                  ratings_aggregate {
+                    aggregate {
+                      count
+                    }
+                  }
+                  user {
+                    username
+                  }
                 }
               }
-              ratings_aggregate {
-                aggregate {
-                  count
-                }
-              }
-              user {
-                username
-              }
-            }
-          }
-        `,
-        variables: {
-          startDate: this.s_date,
-        },
-      })
-      .then((response) => {
-        // Process the GraphQL query result to create the items data
-        this.items = response.data.forum.map((forum) => ({
-          id: forum.id,
-          topic: forum.topic,
-          user: forum.user.username,
-          created_at: this.formatDateTime(forum.created_at),
-          historyCount: forum.forum_histories_aggregate.aggregate.count,
-          ratingCount: forum.ratings_aggregate.aggregate.count,
-        }));
-      })
-      .catch((error) => {
-        console.error('Error performing search:', error);
-      });
-  } catch (e) {
-    console.error(e);
-  }
-},
-
+            `,
+            variables: {
+              startDate: this.s_date,
+            },
+          })
+          .then((response) => {
+            this.items = response.data.forum.map((forum) => ({
+              id: forum.id,
+              topic: forum.topic,
+              user: forum.user.username,
+              created_at: this.formatDateTime(forum.created_at),
+              historyCount: forum.forum_histories_aggregate.aggregate.count,
+              ratingCount: forum.ratings_aggregate.aggregate.count,
+            }))
+          })
+          .catch((error) => {
+            console.error('Error performing search:', error)
+          })
+      } catch (e) {
+        console.error(e)
+      }
+    },
     downloadExcel() {
       // Create a new workbook
       const workbook = [
@@ -301,7 +292,6 @@ export default {
       const year = String(dateObj.getFullYear())
       const hours = String(dateObj.getHours()).padStart(2, '0')
       const minutes = String(dateObj.getMinutes()).padStart(2, '0')
-      // return `${day}-${month}-${year} ${hours}:${minutes}`
       return `${year}-${month}-${day} ${hours}:${minutes}`
     },
   },

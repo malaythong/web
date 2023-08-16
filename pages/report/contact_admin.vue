@@ -5,11 +5,9 @@
         <h2 class="mb-5">ຕິດຕໍ່ທີມງານ</h2>
         <v-card elevation="1" class="mb-5"><v-card-text>
             <div class="text-h6 text--primary">ໝາຍເຫດ:</div>
-
             <p>ທ່ານສາມາດຕິດຕໍ່ເພື່ອແຈ້ງປັນຫາການໃຊ້ງານ, ແຈ້ງຂໍ້ຜິດພາດຕ່າງໆ ໃນລະບົບ ສະເໜີຄວາມຄິດເຫັນເພື່ອປັບປຸງລະບົບ
               ໂດຍກົງຜ່ານໜ້ານີ້</p>
           </v-card-text></v-card>
-
         <v-card elevation="1"><v-card-text>
             <v-row>
               <v-col cols="2">
@@ -27,7 +25,6 @@
                 <v-row>
                   <v-subheader hide-details>ອີເມວຜູ້ສົ່ງ:</v-subheader>
                 </v-row>
-
               </v-col>
               <v-col cols="9" sm="9">
                 <v-text-field hide-details="auto" single-line outlined></v-text-field>
@@ -50,11 +47,6 @@
               <v-col cols="6" md="9" class="d-flex align-center">
                 <input type="file" ref="fileInput"  accept="image/*" @change="onFileChange" />
               </v-col>
-              
-              <!-- <v-btn outlined @click="triggerFileInput" class="mt-3">
-                <v-icon left>mdi-camera</v-icon>
-                Select Avatar
-              </v-btn> -->
             </v-row>
             <v-row>
               <v-col cols="9" md="9" class="d-flex justify-end">
@@ -68,19 +60,14 @@
               </v-col>
             </v-row>
           </v-card-text></v-card>
-
       </v-col>
     </v-row>
   </div>
 </template>
-
 <script>
 export default {
   data() {
-    return {
-      
-    };
-
+    return {     };
   },
   methods: {
     triggerFileInput() {
@@ -89,11 +76,9 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
-
       reader.onload = (e) => {
         this.avatar = e.target.result;
       };
-
       if (file) {
         reader.readAsDataURL(file);
       }

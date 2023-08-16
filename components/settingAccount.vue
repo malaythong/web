@@ -62,7 +62,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-
             <v-row>
               <v-col cols="2" class="d-flex align-center" no-gutters>
                 <v-row>
@@ -77,7 +76,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-
             <v-row>
               <v-col class="d-flex justify-center">
                 <v-btn
@@ -95,7 +93,6 @@
     </v-dialog>
   </v-row>
 </template>
-  
 <script>
 import gql from 'graphql-tag'
 const MY_QUERY = gql`
@@ -104,14 +101,12 @@ const MY_QUERY = gql`
     description
   }
 `
-
 export default {
   data: () => ({
     row: null,
     avatar: null,
   }),
   props: {
-    // dialog: false,
     value: Boolean,
   },
   methods: {
@@ -121,11 +116,9 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0]
       const reader = new FileReader()
-
       reader.onload = (e) => {
         this.avatar = e.target.result
       }
-
       if (file) {
         reader.readAsDataURL(file)
       }
@@ -147,8 +140,6 @@ export default {
   },
 }
 </script>
-
-
 <style scoped>
 #card {
   overflow-y: hidden;

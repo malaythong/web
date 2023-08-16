@@ -6,85 +6,7 @@
     <v-card>
       <v-card-title>
         <v-row>
-          <!-- <v-col cols="2">
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="s_date"
-                  label="ວັນທີເລີ່ມຕົ້ນ"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="s_date"
-                @input="$refs.menu.save(s_date)"
-                locale="la"
-                no-title
-                scrollable
-              >
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="$refs.menu.save(s_date)"
-                  >OK</v-btn
-                >
-              </v-date-picker>
-            </v-menu>
-          </v-col>
-
-          <v-col cols="2">
-            <v-menu
-              ref="menu2"
-              v-model="menu2"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="en_date"
-                  label="ວັນທີ່ສິ້ນສຸດ"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  outlined
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-model="en_date"
-                @input="$refs.menu2.save(en_date)"
-                locale="la"
-                no-title
-                scrollable
-              >
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu2 = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  text
-                  color="primary
-                  "
-                  @click="$refs.menu2.save(en_date)"
-                  >OK</v-btn
-                >
-              </v-date-picker>
-            </v-menu>
-          </v-col> -->
           <v-col cols="8">
-            <!-- search bar -->
             <v-text-field
               v-model="search"
               label="Search"
@@ -93,26 +15,22 @@
               hide-details
             ></v-text-field>
           </v-col>
-
-          <v-col
-            ><v-btn
+          <v-col>
+            <v-btn
               height="55"
               outlined
               color="primary mr-4"
-              @click="searchDate"
-            >
-              <v-icon> mdi-magnify</v-icon> ຄົ້ນຫາ</v-btn
-            ></v-col
-          >
+              @click="searchDate">
+              <v-icon> mdi-magnify</v-icon> ຄົ້ນຫາ
+            </v-btn>
+          </v-col>
           <v-col align="end">
             <v-btn
               @click="downloadExcel"
               height="55"
               outlined
-              color="primary"
-            >
-              <v-icon> mdi-tray-arrow-down</v-icon> ດາວໂຫລດ</v-btn
-            >
+              color="primary">
+              <v-icon> mdi-tray-arrow-down</v-icon> ດາວໂຫລດ</v-btn>
           </v-col>
         </v-row>
 
@@ -189,7 +107,6 @@ methods: {
       '<Worksheet ss:Name="Sheet1">',
       '<Table>',
     ]
-
     // Add the table headers
     const headers = Object.keys(this.data[0])
     workbook.push('<Row>')
@@ -197,7 +114,6 @@ methods: {
       workbook.push(`<Cell><Data ss:Type="String">${header}</Data></Cell>`)
     })
     workbook.push('</Row>')
-
     // Add the table data
     this.data.forEach((data) => {
       workbook.push('<Row>')
@@ -213,10 +129,8 @@ methods: {
       })
       workbook.push('</Row>')
     })
-
     // Close the workbook
     workbook.push('</Table></Worksheet></Workbook>')
-
     // Convert the workbook to a binary Excel file
     const excelFile = workbook.join('')
 

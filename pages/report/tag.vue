@@ -15,7 +15,6 @@
               hide-details
             ></v-text-field>
           </v-col>
-
           <v-col>
             <v-btn height="55" outlined color="primary" @click="searchDate">
               <v-icon>mdi-magnify</v-icon> ຄົ້ນຫາ
@@ -33,17 +32,14 @@
     </v-card>
   </div>
 </template>
-
 <script>
 import gql from 'graphql-tag';
-
 export default {
   data() {
     return {
       search: '',
       data: [], // Initialize data as an empty array
       headers: [
-        // Define table headers with label and corresponding value property
         { text: 'ລະຫັດ', value: 'id' },
         { text: 'ຊື່ແທັກ', value: 'name' },
         { text: 'ຊື່ໝວດໝູ່', value: 'categoryName' },
@@ -70,7 +66,6 @@ export default {
         }
       `,
       result({ data }) {
-
         this.data = data.tag.map((tag) => ({
           id: tag.id,
           name: tag.name,

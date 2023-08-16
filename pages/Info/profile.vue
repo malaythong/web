@@ -13,7 +13,6 @@
                 <v-col cols="2" class="d-flex align-center ml-6">
                   <v-img :src="post.cover" height="80%" width="100%"></v-img>
                 </v-col>
-
                 <v-col cols="8">
                   <v-card-text class="custom-line-spacing">
                     <p>ຊື່ຜູ້ໃຊ້:{{ localeUsername }}</p>
@@ -30,26 +29,17 @@
         </v-card>
       </v-col>
     </v-row>
-
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
         <v-card>
           <v-tabs  v-model="tab" fixed-tabs background-color="indigo" dark>
               <v-tab v-for="(item, index) in items" :key="index">
-                <v-col no-gutters>
-                 
+                <v-col no-gutters>                
                   <h5 style="font-weight: normal !important">{{ item.tab }}</h5>
                 </v-col>
               </v-tab>
             </v-tabs>
-          <!-- <v-tabs fixed-tabs background-color="indigo" dark>
-            <v-tab> ກະທູ້ທີ່ຕັ້ງ </v-tab>
-            <v-tab> ກະທູ້ທີ່ມັກ </v-tab>
-            <v-tab> ປະຫວັດການເຂົ້າອ່ານ </v-tab>
-            <v-tab> ແທັກທີ່ຕິດຕາມ </v-tab>
-          </v-tabs> -->
-        </v-card>
-       
+        </v-card>       
             <v-tabs-items v-model="tab">
               <v-tab-item v-for="(item, index) in items" :key="index">
                 <div class="ma-0 mt-0 pa-0 " >
@@ -58,13 +48,11 @@
                   </v-row>
                 </div>
               </v-tab-item>
-            </v-tabs-items>
-         
+            </v-tabs-items>         
       </v-col>
     </v-row>
   </v-container>
 </template>
-
 <script>
 import editprofile from "~/components/edit_profile"
 import First from "~/components/UserInfo/first_tab.vue";
@@ -100,8 +88,6 @@ export default {
     };
   },
   created() {
-    // Get the data from Local Storage when the component is created
-   // this.retrievedData = localStorage.getItem("userData");
     this.localeId = localStorage.getItem("userDatId");
         this.localeUsername = localStorage.getItem("userDataUserName");
         this.localeEmail = localStorage.getItem("userDataEmail");
@@ -114,7 +100,6 @@ export default {
   }
 };
 </script>
-
 <style>
 .custom-line-spacing p {
   margin-bottom: 6px; /* Adjust the margin-bottom value as needed */

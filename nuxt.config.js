@@ -86,21 +86,16 @@ export default {
             notifyOnNetworkStatusChange: true,
           },
         },
-        // httpLinkOptions: {
-        //   credentials: 'same-origin',
-        // },
         httpLinkOptions: {
                   headers: {
                     'content-type': 'application/json',
                     'x-hasura-admin-secret': 'TYsSW0j8voCC0607NUQNQU70nrQxHske5ipcUJX8sumBwwlyHQoYR8WukbDoznx5',
-                    // 'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET,PUT,PATCH,OPTIONS,DELETE,POST',
                   },
                 },
         tokenName: 'token',
         authenticationType: 'Bearer',
         persisting: false,
-        // websocketsOnly: true,
       },
     },
   },

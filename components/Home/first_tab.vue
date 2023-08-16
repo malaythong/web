@@ -12,7 +12,6 @@
             @save-status="saveStatus"
             :userId="localeId"
           />
-          <!-- <Rating v-model="ratingDialog" /> -->
           <v-card-text class="mx-0 ma-0 pa-0 mt-12">
             <v-card v-for="(post, index) in getData" :key="index" class="mb-3">
               <v-row no-gutters>
@@ -22,8 +21,8 @@
                       <v-img
                         :src="image"
                         alt="Uploaded Image"
-                        class="uploaded-image rounded-lg"
-                      ></v-img>
+                        class="uploaded-image rounded-lg">
+                      </v-img>
                     </v-avatar>
                     <p class="ml-2 mt-2">
                       {{ post.forum_details[0]?.tag?.category?.name }}
@@ -31,40 +30,31 @@
                     <p class="ml-6 mt-2">ໂດຍ {{ post.user?.username }}</p>
                     <p
                       class="ml-6 mt-2"
-                      v-if="checkDate(post.created_at) === 0"
-                    >
-                      ມື້ນີ້.
+                      v-if="checkDate(post.created_at) === 0">ມື້ນີ້.
                     </p>
                     <p
                       class="ml-6 mt-2"
-                      v-else-if="checkDate(post.created_at) === 1"
-                    >
-                      1 ມື້ກ່ອນ.
+                      v-else-if="checkDate(post.created_at) === 1">1 ມື້ກ່ອນ.
                     </p>
                     <p class="ml-6 mt-2" v-else>
                       {{ checkDate(post.created_at) }} ມື້ກ່ອນ.
                     </p>
                   </v-row>
                 </v-col>
-
                 <v-col v-if="checkRole2!=3" no-gutters cols="2">
                   <v-row no-gutters class="mt-2 d-flex justify-end">
-                    <!-- <p>{{ post.ratings }}</p> -->
-                    <!-- <p>{{ post.ratings.length }}</p> -->
                     <v-icon
                       v-if="post.ratings_aggregate.aggregate.count != 0"
                       color="primary"
                       class="mr-4"
-                      >mdi-thumb-up-outline</v-icon
-                    >
-
+                      >mdi-thumb-up-outline
+                    </v-icon>
                     <v-icon
                       v-else
                       class="mr-4"
-                      @click=";[openDialog(post), getUserId(post.id)]"
-                      >mdi-thumb-up-outline</v-icon
-                    ></v-row
-                  >
+                      @click=";[openDialog(post), getUserId(post.id)]">mdi-thumb-up-outline
+                    </v-icon>
+                  </v-row>
                 </v-col>
               </v-row>
               <v-row @click="goToForum(post.id)" no-gutters>
@@ -75,8 +65,7 @@
               <v-row
                 @click="goToForum(post.id)"
                 no-gutters
-                class="d-flex justify-center"
-              >
+                class="d-flex justify-center">
                 <v-col cols="10" sm="4">
                   <v-img :src="post.image" height="100%" width="100%"></v-img>
                 </v-col>
@@ -98,18 +87,14 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
-//import ratingD from "~/components/rating.vue"
 import ratingDialog from '~/components/dialog_rating.vue'
-//import { gql } from '@apollo/client/core';
 import gql from 'graphql-tag'
 export default {
   components: { ratingDialog },
   data() {
     return {
       selectedCard: null,
-      // rating:null,
       dialog: false,
       getData: {},
       userTemp: 1,
@@ -143,15 +128,6 @@ export default {
         post.forum_details[0]?.tag?.category?.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
-    // checkRole(){
-    //   if (this.localeRole === 'user') {
-    //     return this.queryData()
-    //   } else if (this.localeRole === 'admin') {
-    //     return this.queryData()
-    //   } else {
-    //     return this.nullUser()
-    //   }
-    // },
     image() {
       return require('@/assets/images/Group 32.png')
     },
@@ -160,7 +136,6 @@ export default {
     },
   },
   mounted() {
-    //this.getDataAll()
     this.checkRole()
   },
   created() {
@@ -185,7 +160,6 @@ export default {
       if (this.selectedCard) {
         this.selectedCard.ratings_aggregate.aggregate.count = newStatus
       }
-      // this.closeDialog();
     },
     openDialog(post) {
       this.selectedCard = post
@@ -201,7 +175,6 @@ export default {
         .toLocaleDateString('en-GB')
         .split('/')
       if (dateParts.length !== 3) {
-        // Handle invalid date format
         this.result = null
         return
       }
@@ -230,7 +203,6 @@ export default {
         .then((result) => {
           console.log('run result', result.data.forum)
           this.getData = result.data.forum
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)
@@ -247,33 +219,20 @@ export default {
         .then((result) => {
           console.log('run result', result.data.forum)
           this.getData = result.data.forum
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)
         })
     },
-    // Swal.fire({
-    //   icon: 'info',
-    //   title: 'Something went wrong!',
-    //   text: 'Please try again later',
-    //   confirmButtonText: 'Reload',
-    //   confirmButtonColor: '#08b89d',
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     window.location.href = '/'
-    //   }
-    // })
-  
     goToForum(id) {
       this.$router.push('/content/Forum?id=' + id)
     },
-    async queryData() {
+    async queryData() { 
       try {
         const res = await this.$apollo.query({
           query: gql`
             query getForumAll($userId: Int) {
-              forum {
+              forum (where: { status: { _gte: 1, _lte: 2 } }){
                 updated_at
                 topic
                 id
@@ -327,8 +286,6 @@ export default {
             userId: this.localeId,
           },
         })
-
-        //TRY TO SEE IN console.log()
         console.log(res.data.forum)
         this.getData = res.data.forum
       } catch (e) {
@@ -340,7 +297,7 @@ export default {
         const res = await this.$apollo.query({
           query: gql`
             query getForumAll {
-              forum {
+              forum (where: { status: { _gte: 1, _lte: 2 } }){
                 updated_at
                 topic
                 id
@@ -392,22 +349,20 @@ export default {
           `,
          
         })
-
-        //TRY TO SEE IN console.log()
         console.log(res.data.forum)
         this.getData = res.data.forum
       } catch (e) {
         console.error(e)
       }
     },
-    async updateData(dataTables) {
+    async updateData(dataTables) { //allforum
       console.log(`data tables:`, dataTables)
       this.data = dataTables
       try {
         const res = await this.$apollo.query({
           query: gql`
             query getForumAll($userId: Int) {
-              forum {
+              forum (where: { status: { _gte: 1, _lte: 2 } }){
                 updated_at
                 topic
                 id
@@ -461,8 +416,6 @@ export default {
             userId: this.localeId,
           },
         })
-
-        //TRY TO SEE IN console.log()
         console.log(res.data.forum)
         this.getData = res.data.forum
       } catch (e) {
@@ -470,7 +423,6 @@ export default {
       }
     },
     goToCreatePost() {
-      // Add your navigation logic to the create post page here
       console.log('Create Post clicked')
     },
     ratingF() {

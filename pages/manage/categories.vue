@@ -3,13 +3,10 @@
     :headers="headers"
     :items="getData"
     sort-by="id"
-    class="elevation-1"
-  >
+    class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title style="color: primary" class="font-weight-black"
-          >ຈັດການຂໍ້ມູນໝວດໝູ່</v-toolbar-title
-        >
+        <v-toolbar-title style="color: primary" class="font-weight-black">ຈັດການຂໍ້ມູນໝວດໝູ່</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
@@ -18,9 +15,7 @@
               dark
               class="mb-2"
               v-bind="attrs"
-              v-on="on"
-            >
-              + ເພີ່ມໃໝ່
+              v-on="on">+ ເພີ່ມໃໝ່
             </v-btn>
           </template>
           <v-card id="card">
@@ -39,18 +34,6 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <!-- <v-row>
-                    <v-col cols="4">
-                      <v-subheader>ລະຫັດໝວດໝູ່:</v-subheader>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="mx-auto">
-                      <v-text-field
-                        single-line
-                        outlined
-                        v-model="id"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row> -->
                   <v-row>
                     <v-col cols="4">
                       <v-subheader>ຊື່ໝວດໝູ່:</v-subheader>
@@ -99,12 +82,8 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red darken-1" text @click="closeDelete"
-                >ຍົກເລີກ</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="DeleteCategory"
-                >ຕົກລົງ</v-btn
-              >
+              <v-btn color="red darken-1" text @click="closeDelete">ຍົກເລີກ</v-btn>
+              <v-btn color="blue darken-1" text @click="DeleteCategory">ຕົກລົງ</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -144,7 +123,6 @@ export default {
     ],
     id: null,
     name: null,
-    desserts: [],
     editedIndex: -1,
     editedItem: {
       categoryId: '',
@@ -170,62 +148,20 @@ export default {
       val || this.closeDelete()
     },
   },
-
-  created() {
-    this.initialize()
-  },
-
   mounted() {
     this.getDataAll()
   },
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          categoryId: '1',
-          categoryName: 'ການສຶກສາ',
-        },
-        {
-          categoryId: '2',
-          categoryName: 'ອາຊີບ',
-        },
-        {
-          categoryId: '3',
-          categoryName: 'ຄອບຄົວ',
-        },
-        {
-          categoryId: '4',
-          categoryName: 'ຄວາມຮັກ',
-        },
-        {
-          categoryId: '5',
-          categoryName: 'ສຸຂະພາບ',
-        },
-      ]
-    },
     newCategory() {
       this.typeCheck = true
       this.id = item.id
       this.name = item.id
       this.dialog = true
     },
-
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
-
     deleteItem(item) {
       this.dialogDelete = true
       this.id = item.id
     },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1)
-      this.closeDelete()
-    },
-
     close() {
       this.dialog = false
       this.$nextTick(() => {
@@ -242,15 +178,6 @@ export default {
       })
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      } else {
-        this.desserts.push(this.editedItem)
-      }
-      this.close()
-    },
-
     async getDataAll() {
       console.log('run test')
       await this.$apollo
@@ -259,9 +186,8 @@ export default {
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('run result', result.data.categories)
+          // console.log('run result', result.data.categories)
           this.getData = result.data.categories
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)
@@ -280,7 +206,7 @@ export default {
           fetchPolicy: 'no-cache',
         })
         .then((result) => {
-          console.log('seccess', result)
+          // console.log('seccess', result)
           this.getDataAll()
           this.dialog = false
         })

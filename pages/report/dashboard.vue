@@ -19,7 +19,6 @@
     </v-row>
   </div>
 </template>
-
 <script>
 import VueApexCharts from 'vue-apexcharts'
 import ScoreChart from '~/components/Dashboard/scoreChart.vue'
@@ -30,9 +29,7 @@ import ForumData from '~/components/Dashboard/forumData.vue'
 
 export default {
   data() {
-    return {
-      
-    }
+    return {       }
   },
   components: {
     apexchart: VueApexCharts,

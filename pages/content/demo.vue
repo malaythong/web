@@ -1,4 +1,3 @@
-<!-- ForumCard.vue -->
 <template>
     <div class="forum-card">
       <h2 class="post-title">{{ post.title }}</h2>
@@ -7,7 +6,6 @@
       <p class="post-content">{{ post.content }}</p>
     </div>
   </template>
-  
   <script>
   export default {
     props: {
@@ -18,7 +16,6 @@
     },
   };
   </script>
-  
   <style>
   .forum-card {
     border: 1px solid #ccc;

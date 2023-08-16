@@ -26,8 +26,7 @@
                 ref="fileInput"
                 style="display: none"
                 accept="image/*"
-                @change="onFileChange"
-              />
+                @change="onFileChange"/>
             </div>
           </v-col>
         </v-row>
@@ -109,7 +108,6 @@
     </v-dialog>
   </v-row>
 </template>
-  
 <script>
 import gql from 'graphql-tag'
 import settingAccount from './settingAccount.vue'
@@ -119,7 +117,6 @@ const MY_QUERY = gql`
     description
   }
 `
-
 export default {
   components: { settingAccount },
   data: () => ({
@@ -132,12 +129,9 @@ export default {
     localeGender: null,
   }),
   props: {
-    // dialog: false,
     value: Boolean,
   },
   created() {
-    // Get the data from Local Storage when the component is created
-    // this.retrievedData = localStorage.getItem("userData");
     this.localeId = localStorage.getItem('userDatId')
     this.localeUsername = localStorage.getItem('userDataUserName')
     this.localeEmail = localStorage.getItem('userDataEmail')
@@ -151,11 +145,9 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0]
       const reader = new FileReader()
-
       reader.onload = (e) => {
         this.avatar = e.target.result
       }
-
       if (file) {
         reader.readAsDataURL(file)
       }
@@ -164,7 +156,6 @@ export default {
       this.dialog = false
       this.$emit('update:edit_profile', false)
     },
-
     settingaccount() {
       this.dialog = false
       this.settingAccount = true
@@ -182,8 +173,6 @@ export default {
   },
 }
 </script>
-
-
 <style scoped>
 #card {
   overflow-y: hidden;

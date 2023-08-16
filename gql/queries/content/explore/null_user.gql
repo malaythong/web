@@ -1,0 +1,50 @@
+query getForumAll {
+              forum (where: { status: { _gte: 1, _lte: 2 } }){
+                updated_at
+                topic
+                id
+                tag_id
+                image
+                detail
+                created_at
+                create_by
+                user {
+                  email
+                  id
+                  profile
+                  username
+                  role
+                }
+                forum_details {
+                  id
+                  tag_id
+                  forum_id
+                  tag {
+                    id
+                    name
+                    created_at
+                    category_id
+                    category {
+                      id
+                      name
+                    }
+                  }
+                }
+                comments_aggregate {
+                  aggregate {
+                    count(columns: detail)
+                  }
+                }
+                ratings(where: { user_id: { _eq: 1 } }, limit: 1) {
+                  forum_id
+                  id
+                  score
+                  user_id
+                }
+                ratings_aggregate(where: { user_id: { _eq: 1 } }) {
+                  aggregate {
+                    count(columns: id)
+                  }
+                }
+              }
+            }

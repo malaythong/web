@@ -4,10 +4,8 @@
     <apexchart type="line" height="350" :options="chartOptions" :series="chartSeries" />
   </div>
 </template>
-
 <script>
 import VueApexCharts from 'vue-apexcharts';
-
 export default {
   data() {
     return {
@@ -16,7 +14,7 @@ export default {
           id: 'apexchart-example',
         },
         xaxis: {
-          categories: ['20/07', '21/07', '22/07', '23/07', '24/07', '25/07', '26/07'],
+          categories: ['01-08-2023', '02-08-2023', '03-08-2023', '04-07-2023', '05-08-2023', '06-08-2023', '07-08-2023'],
         },
       },
       chartSeries: [
@@ -27,17 +25,11 @@ export default {
       ],
       series: [{
             data: [0, 1, 3, 2, 5, 3, 4, 6, 7, 3]
-          }],
-          
+          }],    
     }
-
   },
   components: {
     apexchart: VueApexCharts,
   },
 };
 </script>
-
-<style>
-
-</style>

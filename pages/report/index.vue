@@ -4,7 +4,6 @@
     <v-btn @click="test">test</v-btn>
   </div>
 </template>
-
 <script>
 export default {
   name: "InspirePage",

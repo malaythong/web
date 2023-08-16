@@ -5,7 +5,6 @@
         <v-card>
           <v-card-title>
             <h2>ລົງຊື່ເຂົ້າໃຊ້</h2>
-            <!-- <p> {{ localeId }} : {{ localeUsername }} : {{ localeEmail }} : {{ localeRole }}</p> -->
           </v-card-title>
           <v-card-text>
             <v-form @submit="login">
@@ -25,10 +24,12 @@
               >
             </v-form>
           </v-card-text>
-          <v-card-actions>
+          <v-card-actions class="d-flex justify-between">
             <router-link to="/auth/register"
               >ຍັງບໍ່ມີບັນຊີ? ລົງທະບຽນ</router-link
             >
+            <v-spacer></v-spacer>
+            <router-link to="/auth/reset">ລືມລະຫັດຜ່ານ</router-link>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -40,8 +41,7 @@
 export default {
   data() {
     return {
-      
-      userData:null,
+      userData: null,
       getUser: {},
       username: '',
       password: '',
@@ -54,7 +54,6 @@ export default {
     }
   },
   created() {
-    // Get the data from Local Storage when the component is created
     this.retrievedData = localStorage.getItem('userData')
     this.localeId = localStorage.getItem('userDatId')
     this.localeUsername = localStorage.getItem('userDataUserName')
@@ -62,37 +61,17 @@ export default {
     this.localeRole = localStorage.getItem('userDataRole')
     this.localeGender = localStorage.getItem('userDataGender')
   },
-  // saveData() {
-  //   console.log("test use locale storage", this.userData)
-  //   // Save the data to Local Storage
-  //   localStorage.setItem("userData", this.userData);
-  //   localStorage.setItem("userDatId", this.localeId);
-  //   localStorage.setItem("userDataUserName", this.localeUsername);
-  //   localStorage.setItem("userDataEmail", this.localeEmail);
-  //   localStorage.setItem("userDataRole", this.localeRole);
-  //   localStorage.setItem("userDataGender", this.localeGender);
-  // },
-  //   created() {
-  //   // Get the data from Local Storage when the component is created
-  //   this.retrievedData = localStorage.getItem("userData");
-  //   this.localeId = localStorage.getItem("userDatId");
-  //       this.localeUsername = localStorage.getItem("userDataUserName");
-  //       this.localeEmail = localStorage.getItem("userDataEmail");
-  //       this.localeRole = localStorage.getItem("userDataRole");
-  // },
-  mounted(){
+  mounted() {
     this.logoutData()
   },
   methods: {
     logoutData() {
-    
-    // Save the data to Local Storage
-    localStorage.setItem("userData", null);
-    localStorage.setItem("userDatId", null);
-    localStorage.setItem("userDataUserName",null);
-    localStorage.setItem("userDataEmail", null);
-    localStorage.setItem("userDataRole", null);
-  },
+      localStorage.setItem('userData', null)
+      localStorage.setItem('userDatId', null)
+      localStorage.setItem('userDataUserName', null)
+      localStorage.setItem('userDataEmail', null)
+      localStorage.setItem('userDataRole', null)
+    },
     async getUserData() {
       console.log('run user')
       await this.$apollo
@@ -102,7 +81,6 @@ export default {
           variables: {
             password: this.password,
             username: this.username,
-            // role:"user"
           },
         })
         .then((result) => {
@@ -114,13 +92,6 @@ export default {
           this.localeEmail = result.data.user[0]?.email
           this.localeRole = result.data.user[0]?.role
           this.localeGender = result.data.user[0]?.gender
-          //       this.userData = result.data.insert_user.returning[0]
-          // this.localeId = result.data.insert_user.returning[0].id,
-          // this.localeUsername = result.data.insert_user.returning[0].username,
-          // this.localeEmail = result.data.insert_user.returning[0].email,
-          // this.localeRole = result.data.insert_user.returning[0].role
-          //  console.log("run",getData)
-
           this.saveData()
         })
         .catch((error) => {
@@ -129,7 +100,6 @@ export default {
     },
     saveData() {
       console.log('test use locale storage', this.localeGender)
-      // Save the data to Local Storage
       localStorage.setItem('userData', this.userData)
       localStorage.setItem('userDatId', this.localeId)
       localStorage.setItem('userDataUserName', this.localeUsername)
@@ -139,22 +109,18 @@ export default {
       this.gotoMain()
     },
     gotoMain() {
-      //  this.$router.push("/content");
-if(this.localeRole=="user"){
-  window.location.href = '/content'
-}else if(this.localeRole=="admin"){
-  window.location.href = '/report/dashboard'
-}
-      
+      if (this.localeRole == 'user') {
+        window.location.href = '/content'
+      } else if (this.localeRole == 'admin') {
+        window.location.href = '/report/dashboard'
+      }
     },
     login() {
-      // Add your login logic here
       console.log('Login clicked')
       console.log('Username:', this.username)
       console.log('Password:', this.password)
     },
     register() {
-      // Add your register logic here
       console.log('Register clicked')
     },
   },

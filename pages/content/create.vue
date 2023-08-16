@@ -25,10 +25,8 @@
                 </v-col>
               </v-col>
             </v-row>
-
             <v-text-field solo dense v-model="topic"></v-text-field>
           </v-col>
-
           <v-col>
             <h4>2.ເນື້ອຫາກະທູ້</h4>
             <v-textarea
@@ -42,9 +40,6 @@
           <v-col>
             <h4>3.ເລືອກແທັກທີ່ກ່ຽວຂ້ອງກັບກະທູ້</h4>
             <v-col class="d-flex" cols="12" sm="12">
-              <!-- <v-select :items="getTag" label="ຄົ້ນຫາແທັກ" dense solo 
-              item-text="name"
-                item-value="id"></v-select> -->
               <v-select
                 solo
                 item-text="name"
@@ -57,13 +52,8 @@
                 persistent-hint
               ></v-select>
             </v-col>
-            <!-- <v-textarea
-              solo
-              name="input-7-4"
-            ></v-textarea> -->
           </v-col>
           <v-col class="d-flex justify-end">
-            <!-- <v-btn depressed color="primary" class="mr-4"> ຍົກເລີກ </v-btn> -->
             <v-btn depressed color="primary" @click="InsertComment">
               ສ້າງກະທູ້ໃໝ່
             </v-btn>
@@ -98,17 +88,10 @@ export default {
     }
   },
   mounted() {
-    //this.getDataAll()
-    //this.getTagAll()
     this.getCateAll()
   },
   created() {
-    // Get the data from Local Storage when the component is created
-    // this.retrievedData = localStorage.getItem("userData");
     this.localeId = localStorage.getItem('userDatId')
-    // this.localeUsername = localStorage.getItem("userDataUserName");
-    // this.localeEmail = localStorage.getItem("userDataEmail");
-    // this.localeRole = localStorage.getItem("userDataRole");
   },
   computed: {
     forum_id1() {
@@ -126,14 +109,12 @@ export default {
   },
   methods: {
     tagForm() {
-      //   const data = this.tagSelected
       this.itemDetailIds.push({
         tag_id: 4,
         forum_id: 1,
       })
     },
     InsertForumDetail() {
-      // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`
@@ -146,18 +127,12 @@ export default {
         })
         .then((result) => {
           console.log('seccess')
-
-          // this.goToForum(result.data.insert_forum.returning[0].id)
-          //this.$router.push('/content/Forum?id=' + id)
-
-          // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
           console.log(error)
         })
     },
     InsertComment() {
-      // console.log("test obid",this.object.id)
       this.$apollo
         .mutate({
           mutation: gql`
@@ -176,9 +151,6 @@ export default {
           this.forum_id = result.data.insert_forum.returning[0].id
           this.goToForum(result.data.insert_forum.returning[0].id)
           this.InsertForumDetail()
-          //this.$router.push('/content/Forum?id=' + id)
-
-          // this.$emit('updateData', result.data.forum)
         })
         .catch((error) => {
           console.log(error)
@@ -197,7 +169,6 @@ export default {
         .then((result) => {
           console.log('run categories', result.data.categories)
           this.getCate = result.data.categories
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)
@@ -216,7 +187,6 @@ export default {
         .then((result) => {
           console.log('run result', result.data.tag)
           this.getTag = result.data.tag
-          //  console.log("run",getData)
         })
         .catch((error) => {
           console.log(error)
